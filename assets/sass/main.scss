@@ -114,6 +114,7 @@
 		@include breakpoint('<=small') {
 			@include html-grid((1.25em, 1.25em), 'small');
 		}
+		
 	}
 
 /* Basic */
@@ -443,7 +444,7 @@
 		padding-left: 1em;
 
 		li {
-			padding-left: 0.5em;
+			padding-center: 0.5em;
 		}
 
 	}
@@ -453,7 +454,7 @@
 		padding-left: 1.25em;
 
 		li {
-			padding-left: 0.25em;
+			padding-center: 0.25em;
 		}
 	}
 
