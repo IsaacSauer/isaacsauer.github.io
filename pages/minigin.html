@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<!--
+	Astral by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Mingin Game Engine</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<link rel="stylesheet" href="../assets/css/responsive.css"/>
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper-->
+			<div id="wrapper">
+
+				<!-- Nav -->
+				<nav id="nav">
+					<a href="../index.html#" class="icon solid fa-home"><span>Home</span></a>
+					<a href="../index.html#projects" class="icon solid fa-code"><span>Projects</span></a>
+					<a href="../art.html#art" class="icon solid fa-paint-brush"><span>Art</span></a>
+					<a href="../music.html#music" class="icon solid fa-headphones"><span>Music</span></a>
+					<a href="https://www.linkedin.com/in/isaacsauer/" class="icon brands fa-linkedin-in"><span>LinkedIn</span></a>
+				</nav>
+				
+				<div id="main">
+					<article id="projects" class="panel">
+				
+						<header>
+							<h1>Mingin Game Engine</h1>
+							<p>Game Engine - Programming 4 @ DAE</p>
+							<hr>
+						</header>
+									
+						<h3>Trailer</h3>
+						<iframe width="1060" height="596" src="https://www.youtube.com/embed/qDLBfyyX3-E" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
+						class="mobile"></iframe>
+						<h3>-Introduction</h3><p>
+						For the course <b>Programming 4</b> in my <b>2nd year at DAE Howest</b>,
+						I had to make a <b>Game Engine</b> and with that game engine make the game <b>qbert</b>.
+						</p>
+						
+						<a href="https://github.com/IsaacSauer/2DAE08_Minigin_Engine_Isaac_Sauer">Repository</a>
+						
+						<hr>
+						<h3>-Game Engine specifics and design choices:</h3>
+						
+						<hr>
+						<b>Command:</b>
+						<p>
+						The Input System uses commands to execute its assigned events. You set this up by either overriding the “Command” and “Execute” functions. Or by using the “CommandFunc” and passing a function pointer to it with return type ‘void’ and no parameters. If you want parameters already assigned you can bind them when creating the CommandFunc.
+						</p>
+						
+						<hr>
+						<b>Flyweight:</b>
+						<p>
+						The flyweight technique is used in Resource Management. When you request a Texture2D you pass the file path as a parameter, which then returns the desired Texture (if it exists). Internally it holds a map with file paths as key, and the resource as value. This way there is always one allocation of that resource. Saving up heap memory.
+						</p>
+						
+						<hr>
+						<b>Observer:</b>
+						<p>
+						If you want to add listeners to certain objects without needing to have them call you directly. You can add a subject to that object. You first inherit from Observer, add your event methods, that class is used with the Subject templated class. When you want to notify you to call notify on the subject with the observer's self-defined function as an object. Because these are member methods you bind a placeholder for the “this pointer”, after that you can bind more parameters.
+						</p>
+						
+						<hr>
+						<b>Singleton:</b>
+						<p>
+						I have 2 types of singletons. A normal one uses a static allocation of that type on the stack. And a singleton using a static smart pointer for allocation on the heap. This enabled me to use singletons in a more friendly way. And not having to free the instance myself.
+						</p>
+						
+						<hr>
+						<b>State:</b>
+						<p>
+						The state machine I added uses an object-oriented implementation. You define an inherited class from “State” and choose which functions you want to implement. Options are: “Enter”, "Exit", “HandleInput”, “Update”, “FixedUpdate”. For Initialization, you instantiate your state machine. Then you make instances from your desired overwritten state objects. This uses the state machine and the GameObject user as parameters. And finally, you start your state machine using the “Initialize” methods on the state machine. You pass the start state as a parameter. In the update method of your component, you call “HandleInput” and “Update”, and in your component’s “FixedUpdate” you call “FixedUpdate” of the currentState from the state machine.
+						</p>
+						
+						<hr>
+						<b>Game Loop:</b>
+						<p>
+						For the Game loop, I used the “Play catch up” pattern. This way I could have a Fixed Update good for physics and networking. And a normal Update each frame.
+						</p>
+						
+						<hr>
+						<b>Component:</b>
+						<p>
+						Each GameObject can have components attached to it. You can add unique logic to a component. This enables the possibility to encapsulate implementations and use it as a modular piece, which you can use on other game objects as well. And still, be functional. The Parent Gameobject will call each Component’s “Initialize”, “LateInitialize”, “Start”, “Update”, “FixedUpdate” at the required time.
+						<br>
+						Initialize and LateInitialize are only called once for a component. The start is called each time an object has become active. E.g. you set another scene active.
+						</p>
+						
+						<hr>
+						<b>Update Method:</b>
+						<p>
+						Each scene can have a collection of GameObject which can also have Child Gameobject and components attached to them. Since the game loop calls the Update and the FixedUpdate in the SceneManager, this enables the possibility to have a dedicated Update/Fixed Update method for each component in a scene.
+						</p>
+						
+						<hr>
+						<b>Event Queue:</b>
+						<p>
+						Currently, there is not a standalone Event Queue type that you could use. I do use it in the SoundSystem. Because allocating and playing audio files requires a lot of CPU time compared to the rest of the program. I do this on a separate thread. When requesting to play an audio file, this will create a task containing the required information. And add it to the queue. Since the thread the audio queue is handled is locked with a condition variable. I notify it to tell it that there are pending items in the queue. When the queue is empty, the condition variable waits until it gets notified again.
+						</p>
+						
+						<hr>
+						<b>Service Locator:</b>
+						<p>
+						I used a service locator for the sound system implementation. Currently, I use SDL to play sound. But there are plenty of other options out there. Because I don’t want to make a new system for every option. That is where a Service locator comes in handy. This enables the possibility to switch between services without having to change the already existing code using the sound system.
+						</p>
+						
+						<hr>
+						<b>Dirty Flag:</b>
+						<p>
+						Last but not least, I added the Dirty flag pattern as an optimization extension to the already existing GameObject hierarchy. Because each Gameobject only holds its local transform. There has to be a way to get an object’s world transform. Previously I went down from the root and added all the transformations in a recursive way. But this was happening each time I requested the transform of a GameObject. By using the Dirty Flag pattern I am able to store a copy of that world transform. And every time I update that transform I set the flag to false. Knowing this, the next time I request that the transform. I recalculate the world transform from the root up, Cache it, and set the flag to true.
+						</p>
+						
+						<a href="https://github.com/IsaacSauer/2DAE08_Minigin_Engine_Isaac_Sauer">Repository</a>
+
+					</article>
+				</div>
+				
+				<!-- Footer -->
+				<div id="footer">
+					<ul class="copyright">
+						<li>&copy; 2021 Isaac Sauer </li><!--<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>-->
+					</ul>
+				</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="widget.js"></script>
+
+	</body>
+</html>					
+					
+					
+					
+					
+					
