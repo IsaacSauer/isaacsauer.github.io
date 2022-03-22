@@ -35,15 +35,23 @@
 							<p>Gradwork</p>
 							<hr>
 						</header>
-						
-						<h3>Trailer</h3>
-						<!-- <iframe width="1060" height="596" src="https://www.youtube.com/embed/Wh_rlE3rpng" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen 
-						class="mobile"></iframe>					 -->
-						
+
+						<iframe width="1060" height="596" src="https://youtu.be/2bc5L7RZ1i8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen 
+						class="mobile"></iframe>
+
+						<hr>
+
 						<p>
-							-
+							Because the given project could only play Tetris, a lot had to be done before the emulator could supports more games. By using an opcode tester, it was possible to quickly and effectively test the opcodes to see if they worked. Because this was done quickly, the implementation of missing opcodes and failed opcodes could proceed more quickly. The use of test ROMS also made it easy to test the opcodes in a realistic environment. As a result, all opcode functions worked except for the timer implementation.
+							Since multiple games need to be supported, a memory bank controller implementation was added. This allowed not only ROMONLY games to run, but also games that had an MBC chip. The MBCs that were implemented were eventually MBC1 & MBC5. Eventually many more games could be emulated such as Legend of Zelda - Link's Awakening and Hoshi no Kirby.
+							Because there is a new implementation of the sprite rendering, which makes sure that more games are supported, the program does run a little slower than before. But this could be optimized in the future.
 						</p>
-						
+
+						<iframe width="1060" height="596" src="https://youtu.be/HsLH8Jg_2xU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen 
+						class="mobile"></iframe>
+						<iframe width="1060" height="596" src="https://youtu.be/OWSOsolaPH0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen 
+						class="mobile"></iframe>
+
 						<a href="https://github.com/IsaacSauer/GameboyEmulator" target="_blank" rel="noopener noreferrer">Repository</a>
 						<br>
 						<a href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/GW_2122_Isaac_Sauer_NL_Executable.zip" target="_blank" rel="noopener noreferrer">Download Executable</a>						
