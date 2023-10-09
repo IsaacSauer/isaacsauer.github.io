@@ -94,13 +94,13 @@
                 <tr>
                     <td>
                         <label for="iban" title="Account number of the beneficiary according to the IBAN numbering system.">IBAN</label>
-                        <input type="text" id="iban" name="iban" onblur="validate();" value="BE" maxlength="36" oninput="this.value = 'BE' + this.value.replace(/[^0-9|' ']/g, '');">
+                        <input type="text" id="iban" name="iban" onblur="validate();" value="BE" maxlength="36" oninput="this.value = 'BE' + this.value.replace(/[^0-9|' ']/g, '');" inputmode="decimal">
                     </td>
                 </tr>
             </table>
             <div id="euro-container">
                 <span>EUR</span>
-                <input type="text" id="euro" name="euro" onblur="validate();" value="" maxlength="12" oninput="this.value = this.value.replace(/[^0-9|','|'.']/g, '');" inputmode="numeric">
+                <input type="text" id="euro" name="euro" onblur="validate();" value="" maxlength="12" oninput="this.value = this.value.replace(/[^0-9|','|'.']/g, '');" inputmode="decimal">
             </div>
 
             <div id="cell-rgso">
