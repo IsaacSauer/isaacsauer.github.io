@@ -1,0 +1,392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/vnd.microsoft.icon" />
+    <title>Free SCT QR code generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Online fully integratable SCT-EPC QR code generator" />
+    <meta name="keywords"
+        content="Online, SCT, EPC, QR, code, generator, bank, app, acceptgiro, new, alternatief, electronisch, digitaal, factuur, betaalinstructie, nieuw, QR code, gratis, API, cookie free" />
+    <meta name="google-site-verification" content="Gxeaf-vq6f_Byb1o9FPrDUynaajoPO95aHSRu95EndU" />
+
+
+    <style type="text/css">
+        label {
+            display: table;
+            padding-top: 1.1em;
+            font: 0.8em arial;
+        }
+
+        input[type=text]:disabled {
+            background: #dddddd;
+        }
+
+        tr.kop {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <table style="font-family: Helvetica,Arial,sans-serif; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+            <tr class="kop" title="Home" onclick="document.location = 'https://epc-qr.eu';">
+                <td style="text-align: center; background-color: #113472; color: white; font-size: 250%;"><img
+                        src="images/HP_influence.png" /><br>Online SEPA Credit Transfer<br>QR-code generator<br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+
+                    <table style="font-family: Helvetica,Arial,sans-serif; width: 100%;" border="0" cellpadding="0"
+                        cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td id="cell-lnks" valign="top" rowspan="2"
+                                    style="text-align: left; background-color: #e0e0ff; color: black; font-size: 100%; margin-left: 5%; width: 75%">
+                                    <label for="bname" title="Name which belongs to the beneficiary bank account."
+                                        style="margin-left: 1%;">Name of the Beneficiary<br></label>
+                                    <input type="text" id="bname" name="bname" onblur="validate();"
+                                        style="margin-left: 1%; background-color: white;" value="" maxlength="70"
+                                        size="70"><br>
+                                    <label for="iban"
+                                        title="Account number of the beneficiary according the IBAN numbering system."
+                                        style="margin-left: 1%; ">Account number of the Beneficiary<br></label>
+                                    <input type="text" id="iban" name="iban" onblur="validate();"
+                                        style="margin-left: 1%; background-color: white;" value="" maxlength="34"
+                                        size="34"><br>
+                                    <label for="euro"
+                                        title="Amount to be transferred to the beneficiary in euros. Comma or point both accepted."
+                                        style="margin-left: 1%;">Amount of the Credit Transfer<br></label>
+                                    <span style="margin-left: 1%;">EUR</span><input type="text" id="euro" name="euro"
+                                        onblur="validate();" style="background-color: white;" value="" maxlength="12"
+                                        size="12"><br>
+                                    <br>
+
+                                    <table
+                                        style="margin-left: 1%; font-family: Helvetica,Arial,sans-serif; width: 100%;"
+                                        border="0" cellpadding="0" cellspacing="0">
+                                        <tbody>
+                                            <tr>
+                                                <td valign="top" style="text-align: left; width: 1%; height: 20px;">
+                                                    <br><input type="radio" id="dscacc" name="desc" value="acc"
+                                                        tabindex="-1" onchange="infoChange();" onfocus="infoChange();"
+                                                        style="background-color: white;">
+                                                </td>
+                                                <td valign="top" style="text-align: left;">
+                                                    <label for="acc"
+                                                        title="Reference without ISO 11649 encoding. It will be calculated.">Bare
+                                                        Reference<br></label>
+                                                    <input type="text" id="acc" name="acc" vale="" maxlength="31"
+                                                        size="31" onblur="validate();">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top" style="text-align: left; height: 20px;">
+                                                    <br><input type="radio" id="dscref" name="desc" value="ref"
+                                                        tabindex="-1" onchange="infoChange();" onfocus="infoChange();"
+                                                        style="background-color: white;">
+                                                </td>
+                                                <td valign="top" style="text-align: left;">
+                                                    <label for="ref"
+                                                        title="Reference with valid ISO 11649 encoding.">Creditor
+                                                        Reference<br></label>
+                                                    <input type="text" id="ref" name="ref" vale="" maxlength="35"
+                                                        size="35" onblur="validate();">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top" style="text-align: left; height: 20px;">
+                                                    <br><input type="radio" id="dscinf" name="desc" value="inf"
+                                                        tabindex="-1" onchange="infoChange();" onfocus="infoChange();"
+                                                        style="background-color: white;" checked>
+                                                </td>
+                                                <td valign="top" style="text-align: left;">
+                                                    <label for="inf"
+                                                        title="Free format information about the transfer.">Information<br></label>
+                                                    <input type="text" id="inf" name="inf" vale="" maxlength="140"
+                                                        size="100" onblur="validate();">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <br>
+                                    <div
+                                        style="text-align: center; font-size: 70%; color: #606060; border-top: 1px solid #808080; letter-spacing: 10px;">
+                                        optional&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;optional&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;optional
+                                    </div>
+
+
+                                    <table style="font-family: Helvetica,Arial,sans-serif; width: 100%;" border="0"
+                                        cellpadding="0" cellspacing="0">
+                                        <tbody>
+                                            <tr>
+                                                <td valign="top" style="text-align: left; width: 50%;">
+                                                    <label for="bic"
+                                                        title="BIC of the Beneficiary Bank. Optional with version 2."
+                                                        style="margin-left: 2%;">BIC of the Beneficiary Bank<br></label>
+                                                    <input type="text" id="bic" name="bic" onblur="validate();"
+                                                        style="margin-left: 2%; background-color: white;" value=""
+                                                        maxlength="11" size="11"><br>
+                                                    <label for="pps"
+                                                        title="Optional 4 character Purpose of the Credit Transfer."
+                                                        style="margin-left: 2%;">Purpose of the Credit
+                                                        Transfer<br></label>
+                                                    <input type="text" id="pps" name="pps" onblur="validate();"
+                                                        style="margin-left: 2%; background-color: white;" value=""
+                                                        maxlength="4" size="4"><br>
+                                                    <label for="orig"
+                                                        title="Optional beneficiary to originator information."
+                                                        style="margin-left: 2%;">Beneficiary to originator
+                                                        information<br></label>
+                                                    <input type="text" id="orig" name="orig" onblur="validate();"
+                                                        style="margin-left: 2%; background-color: white;" value=""
+                                                        maxlength="70" size="70"><br>
+                                                </td>
+                                                <td valign="top" style="text-align: left;">
+                                                    <label for="party"
+                                                        title="Optional number to equally divide the amount to split the bill for a party."
+                                                        style="margin-left: 2%;">Party number<br></label>
+                                                    <input type="number" id="party" name="party" onblur="validate();"
+                                                        onchange="validate();"
+                                                        style="margin-left: 2%; background-color: white;" value=""
+                                                        maxlength="3" size="3" min="1"><br>
+                                                    <label for="char"
+                                                        title="Character set to be used for the name and reference."
+                                                        style="margin-left: 2%;">Character set<br></label>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 95px; margin-left: 2%; margin-right: 5px; display:block; float: left;">
+                                                        <input type="radio" id="chr1" name="char" value="1"
+                                                            onblur="validate();" checked>UTF-8</span>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 95px; margin-left: 2%; margin-right: 5px; display:block; float: left;">
+                                                        <input type="radio" id="chr2" name="char" value="2"
+                                                            onblur="validate();">ISO 8859-1</span>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 95px; margin-left: 2%; margin-right: 5px; display:block; float: left;">
+                                                        <input type="radio" id="chr3" name="char" value="3"
+                                                            onblur="validate();">ISO 8859-2</span>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 95px; margin-left: 2%; margin-right: 5px; display:block; float: left;">
+                                                        <input type="radio" id="chr4" name="char" value="4"
+                                                            onblur="validate();">ISO 8859-4</span><br>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 95px; margin-left: 2%; margin-right: 5px; display:block; float: left;">
+                                                        <input type="radio" id="chr5" name="char" value="5"
+                                                            onblur="validate();">ISO 8859-5</span>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 95px; margin-left: 2%; margin-right: 5px; display:block; float: left;">
+                                                        <input type="radio" id="chr6" name="char" value="6"
+                                                            onblur="validate();">ISO 8859-7</span>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 95px; margin-left: 2%; margin-right: 5px; display:block; float: left;">
+                                                        <input type="radio" id="chr7" name="char" value="7"
+                                                            onblur="validate();">ISO 8859-10</span>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 95px; margin-left: 2%; margin-right: 5px; display:block; float: left;">
+                                                        <input type="radio" id="chr8" name="char" value="8"
+                                                            onblur="validate();">ISO 8859-15</span>
+                                                    <br><br>
+                                                    <label for="ver" title="SCT version as defined by SEPA."
+                                                        style="margin-left: 2%;">SCT version<br></label>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 50px; margin-left: 2%; margin-right: 10px; display:block; float: left;">
+                                                        <input type="radio" id="ver1" name="ver" value="1"
+                                                            onblur="validate();">1</span>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 50px; margin-right: 10px; display:block; float: left;">
+                                                        <input type="radio" id="ver2" name="ver" value="2"
+                                                            onblur="validate();" checked>2</span>
+                                                    <br>
+                                                    <label for="cut" title="Cut away the text around the QR-code."
+                                                        style="margin-left: 2%;">Cut away<br></label>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 50px; margin-left: 2%; margin-right: 10px; display:block; float: left;">
+                                                        <input type="checkbox" id="top" name="cut" value="T"
+                                                            onblur="validate();">Top</span>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 50px; margin-right: 10px; display:block; float: left;">
+                                                        <input type="checkbox" id="left" name="cut" value="L"
+                                                            onblur="validate();">Left</span>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 50px; margin-left: 2%; margin-right: 10px; display:block; float: left;">
+                                                        <input type="checkbox" id="right" name="cut" value="R"
+                                                            onblur="validate();">Right</span>
+                                                    <span
+                                                        style="font-size: 80%; min-width: 50px; margin-right: 10px; display:block; float: left;">
+                                                        <input type="checkbox" id="bottom" name="cut" value="B"
+                                                            onblur="validate();">Bottom</span>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </td>
+                                <td id="cell-rgsb" valign="top"
+                                    style="text-align: left; background-color: #e6f0ff; color: black; font-size: 80%; width: 25%; height: 300px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="cell-rgso" style="text-align: center; background-color: white; height: 300px;">
+                                </td>
+                            </tr>
+            </tr>
+
+
+            <tr>
+                <td id="cell-bottom" colspan="2" valign="top"
+                    style="text-align: left; background-color: #e6f0ff; color: black; width: 100%; ">
+                    <div
+                        style="text-align: center; font-size: 70%; color: #606060; border-top: 1px solid #808080; letter-spacing: 15px;">
+                        output&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output
+                    </div>
+                    <label for="url" title="Click in the text to get the URL copied to the clipboard."
+                        style="margin-left: 1%;">URL to be used. Click in the text to get it copied to the
+                        clipboard.<br></label>
+                    <input type="text" id="url" name="url" readonly onfocus="klik();"
+                        style="margin-left: 1%; background-color: white;" value="" maxlength="400" size="150"><br>
+                    <br>
+                    <div style="text-align: left; color: #606060;">
+                        click on the header logo for the start page<br>
+                    </div>
+                </td>
+            </tr>
+
+
+        </tbody>
+    </table>
+
+    </td>
+    </tr>
+
+    <div
+        style="opacity:0.4; padding: 10px; z-index: 10; position: absolute; background-color: white;  top: 10px; left: 10px;">
+        <div style="text-align: left;"><span style="font-family: Helvetica,Arial,sans-serif;">Interactive form</span>
+        </div>
+    </div>
+
+
+    <script>
+        var knoppen = ["acc", "ref", "inf"];
+        infoChange();
+        document.getElementById("bname").focus();
+
+
+        function wauw() {
+
+            var copyPic = document.getElementById("cell-rgso");
+            range = document.createRange();
+            range.selectNode(copyPic);
+            window.getSelection().addRange(range);
+            document.execCommand("copy");
+        }
+
+        function klik() {
+
+            var copyText = document.getElementById("url");
+            copyText.select();
+            document.execCommand("copy");
+            document.getElementById("url").value = "Okay, the URL is now in your clipboard!";
+            document.getElementById("url").style.backgroundColor = "#ffe0ff";
+        }
+
+        function validate() {
+            var i;
+            var tot;
+            var komma;
+            var tots;
+            var tekst;
+            var bcut;
+
+            if (document.getElementById("bname").value === "" || document.getElementById("iban").value === "" || document.getElementById("euro").value === "") {
+                document.getElementById("url").style.backgroundColor = "white";
+                document.getElementById("url").value = '';
+                document.getElementById("cell-rgsb").innerHTML = 'Fill in the 3 required fields left first!<br>Click in the header to get help.';
+                document.getElementById("cell-rgso").innerHTML = '<picture><img src="images/first.png" height=300 /></picture>';
+                return
+            }
+            tekst = "bname=" + encodeURIComponent(document.getElementById("bname").value);
+            tekst += "&iban=" + encodeURIComponent(document.getElementById("iban").value);
+            if (document.getElementById("party").value === "") {
+                tekst += "&euro=" + document.getElementById("euro").value;
+            } else {
+                tot = document.getElementById("euro").value;
+                komma = tot.indexOf(",");
+                if (komma > -1) {
+                    tot = tot.replace(",", ".");
+                }
+                tot = 100 * tot / document.getElementById("party").value;
+                tot = Math.round(tot) / 100;
+                tots = tot.toString();
+                if (komma > -1) {
+                    tots = tots.replace(".", ",");
+                }
+                tekst += "&euro=" + tots;
+            }
+            if (document.getElementById("acc").disabled == false) {
+                if (document.getElementById("acc").value !== "") { tekst += "&acc=" + document.getElementById("acc").value }
+            }
+            if (document.getElementById("ref").disabled == false) {
+                if (document.getElementById("ref").value !== "") { tekst += "&ref=" + document.getElementById("ref").value }
+            }
+            if (document.getElementById("inf").disabled == false) {
+                if (document.getElementById("inf").value !== "") { tekst += "&info=" + encodeURIComponent(document.getElementById("inf").value) }
+            }
+            if (document.getElementById("bic").value !== "") { tekst += "&bic=" + document.getElementById("bic").value }
+            if (document.getElementById("pps").value !== "") { tekst += "&pp=" + document.getElementById("pps").value }
+            if (document.getElementById("orig").value !== "") { tekst += "&orig=" + encodeURIComponent(document.getElementById("orig").value) }
+            if (document.getElementById("ver1").checked) { tekst += "&ver=1" }
+            if (!document.getElementById("chr1").checked) {
+                for (i = 2; i <= 8; i++) {
+                    if (document.getElementById("chr" + i).checked) { tekst += "&char=" + i }
+                }
+            }
+            bcut = "";
+            if (document.getElementById("top").checked) { bcut += "t" }
+            if (document.getElementById("left").checked) { bcut += "l" }
+            if (document.getElementById("right").checked) { bcut += "r" }
+            if (document.getElementById("bottom").checked) { bcut += "b" }
+            if (bcut != "") { tekst += "&cut=" + bcut }
+            document.getElementById("url").style.backgroundColor = "#e0ffff";
+            document.getElementById("url").value = 'https://epc-qr.eu/?' + tekst;
+            document.getElementById("cell-rgsb").innerHTML = '<embed src="https://epc-qr.eu/?' + tekst + '&type=html" height=300 />';
+            document.getElementById("cell-rgso").innerHTML = '<picture><img src="https://epc-qr.eu/?' + tekst + '&type=pic" height=300 /></picture>';
+        }
+
+        function infoChange() {
+
+            knoppen.forEach(setTextfromRadio)
+        }
+
+        function setTextfromRadio(item, index) {
+
+            if (document.getElementById("dsc" + item).checked) {
+                document.getElementById(item).disabled = false;
+                document.getElementById(item).focus();
+            } else {
+                document.getElementById(item).disabled = true;
+            }
+            validate();
+        }
+
+    </script>
+
+    <tr>
+        <td style="text-align: right; background-color: white; color: black; font-size: 70%;">
+            <br>
+            <br>
+            <a href=".?history">Last change : 2023 October 8</a>
+            <br>
+            <br>
+        </td>
+    </tr>
+    </tbody>
+    </table>
+    <br>
+</body>
+
+</html>
