@@ -115,15 +115,14 @@
         </article>
     </div>
     <script>
-        document.getElementById("bname").focus();
-
+        // Function to validate and save the form data
         function validate() {
             var bname = document.getElementById("bname").value;
             var iban = document.getElementById("iban").value;
             var euro = document.getElementById("euro").value;
 
             if (!bname || !iban || !euro) {
-                document.getElementById("cell-rgsb").innerHTML = 'Fill in the 3 required fields first!<br>Click in the header to get help.';
+                document.getElementById("cell-rgsb").innerHTML = 'Niet alle fields zijn ingevuld.';
                 document.getElementById("cell-rgso").innerHTML = '<img src="images/first.png" height="300" />';
                 document.getElementById("qr-code-container").style.display = "none";
             } else {
@@ -133,7 +132,34 @@
                 document.getElementById("cell-rgsb").innerHTML = qrCodeEmbed;
                 document.getElementById("cell-rgso").innerHTML = '<img src="https://epc-qr.eu/?' + queryString + '&type=pic" height="300" />';
                 document.getElementById("qr-code-container").style.display = "block";
+
+                // Store the form data in localStorage
+                localStorage.setItem("bname", bname);
+                localStorage.setItem("iban", iban);
+                localStorage.setItem("euro", euro);
             }
+        }
+
+        // Load the saved form data from localStorage when the page loads
+        window.onload = function() {
+            var savedBname = localStorage.getItem("bname");
+            var savedIban = localStorage.getItem("iban");
+            var savedEuro = localStorage.getItem("euro");
+
+            if (savedBname) {
+                document.getElementById("bname").value = savedBname;
+            }
+
+            if (savedIban) {
+                document.getElementById("iban").value = savedIban;
+            }
+
+            if (savedEuro) {
+                document.getElementById("euro").value = savedEuro;
+            }
+
+            // Trigger validation on page load to update the UI accordingly
+            validate();
         }
     </script>
     <script src="assets/js/jquery.min.js"></script>
