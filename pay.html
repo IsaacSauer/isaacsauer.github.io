@@ -100,7 +100,7 @@
             </table>
             <div id="euro-container">
                 <span>EUR</span>
-                <input type="text" id="euro" name="euro" value="" maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, '');" inputmode="numeric">
+                <input type="text" id="euro" name="euro" onblur="validate();" value="" maxlength="12" oninput="this.value = this.value.replace(/[^0-9|','|'.']/g, '');" inputmode="numeric">
             </div>
 
             <div id="cell-rgso">
