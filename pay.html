@@ -94,7 +94,7 @@
                 <tr>
                     <td>
                         <label for="iban" title="Account number of the beneficiary according to the IBAN numbering system.">IBAN</label>
-                        <input type="text" id="iban" name="iban" onblur="validate();" value="" maxlength="34">
+                        <input type="text" id="iban" name="iban" onblur="validate();" value="BE" maxlength="36" oninput="this.value = 'BE' + this.value.replace(/[^0-9|' ']/g, '');">
                     </td>
                 </tr>
             </table>
