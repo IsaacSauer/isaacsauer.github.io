@@ -54,13 +54,17 @@
         }
 
         .button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
+            background-color: #5a2a2a;
             border: none;
-            border-radius: 4px;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
             cursor: pointer;
+            border-radius: 4px;
         }
 
         .button:hover {
@@ -78,30 +82,41 @@
             background-color: #d4edda;
             color: #155724;
         }
+
+        /* Define a CSS class for Consolas font */
+        .consolas-text {
+            font-family: Consolas, monospace;
+            font-size: 14px; /* You can adjust the font size as needed */
+        }
     </style>
 </head>
 
 <body class="is-preload">
     <div id="main">
         <article class="panel" id="home">
-            <table>
-                <tr>
-                    <td>
-                        <label for="bname" title="Name which belongs to the beneficiary bank account.">Kaarthouder</label>
-                        <input type="text" id="bname" name="bname" onblur="validate();" value="" maxlength="70">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="iban" title="Account number of the beneficiary according to the IBAN numbering system.">IBAN</label>
-                        <input type="text" id="iban" name="iban" onblur="validate();" value="BE" maxlength="36" oninput="this.value = 'BE' + this.value.replace(/[^0-9|' ']/g, '');" inputmode="numeric">
-                    </td>
-                </tr>
-            </table>
-            <div id="euro-container">
-                <span>EUR</span>
-                <input type="text" id="euro" name="euro" onblur="validate();" value="" maxlength="12" oninput="this.value = this.value.replace(/[^0-9|','|'.']/g, '');" inputmode="decimal">
-            </div>
+            <form onsubmit="return validate();">
+                <table>
+                    <tr>
+                        <td>
+                            <label for="bname" title="Name which belongs to the beneficiary bank account.">Kaarthouder</label>
+                            <input type="text" id="bname" name="bname" value="" maxlength="70">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="iban" title="Account number of the beneficiary according to the IBAN numbering system.">IBAN</label>
+                            <input type="text" id="iban" name="iban" value="BE" maxlength="36" oninput="this.value = 'BE' + this.value.replace(/[^0-9|' ']/g, '');" inputmode="numeric">
+                        </td>
+                    </tr>
+                    <div id="euro-container">
+                        <td>
+                            <label for="euro" title="Euro">EUR</label>
+                            <input type="text" id="euro" name="euro" maxlength="12" oninput="this.value = this.value.replace(/[^0-9|','|'.']/g, '');" inputmode="decimal">
+                        </td>
+                    </div>
+                </table>
+                <button class="button" onclick="validate();">Generate</button>
+            </form>
             <div id="cell-rgso">
                 <img src="images/first.png" height="300" />
             </div>
@@ -115,35 +130,60 @@
     </div>
     <script>
         // Function to validate and save the form data
-        function validate() {
+        function validate()
+        {
             var bname = document.getElementById("bname").value;
             var iban = document.getElementById("iban").value;
             var euro = document.getElementById("euro").value;
 
-            if (!bname || !iban || !euro) {
+            if (bname == "" || iban == "" || euro == "")
+            {
                 document.getElementById("cell-rgsb").innerHTML = 'Niet alle fields zijn ingevuld.';
                 document.getElementById("cell-rgso").innerHTML = '<img src="images/first.png" height="300" />';
                 document.getElementById("qr-code-container").style.display = "none";
-            } else {
-                var queryString = `bname=${encodeURIComponent(bname)}&iban=${encodeURIComponent(iban)}&euro=${euro}`;
-                var qrCodeEmbed = `<embed src="https://epc-qr.eu/?${queryString}&type=html" height="300" />`;
+                
+                var queryString = "";
+                //Update url
+                var count = 0;
+                if(bname != "") count++; queryString = `bname=${encodeURIComponent(bname)}`;
+                if(iban != "") count++; queryString += count == 0 ? '' : '&' + `iban=${encodeURIComponent(iban)}`;
+                if(euro != "") queryString += count == 0 ? '' : '&' + `euro=${euro}`;
 
                 // Update the URL with the query string
-                window.history.replaceState({}, '', '?' + queryString);
-                
-                document.getElementById("cell-rgsb").innerHTML = qrCodeEmbed;
-                document.getElementById("cell-rgso").innerHTML = '<img src="https://epc-qr.eu/?' + queryString + '&type=pic" height="300" />';
-                document.getElementById("qr-code-container").style.display = "block";
+                if(queryString != "") window.history.replaceState({}, '', '?' + queryString);
 
                 // Store the form data in localStorage
-                localStorage.setItem("bname", bname);
-                localStorage.setItem("iban", iban);
-                localStorage.setItem("euro", euro);
+                if(bname != "") localStorage.setItem("bname", bname);
+                if(iban != "") localStorage.setItem("iban", iban);
+                if(euro != "") localStorage.setItem("euro", euro);
+
+                return false; // Prevent form submission
             }
+
+            //This creates this: BCD%0A002%0A1%0ASCT%0A%0AIsaac%20Sauer%0ABE81734041682424%0AEURO1.00
+            var queryText = "BCD\n002\n1\nCST\n\n" + bname + '\n' + iban + '\nEURO' + euro;
+            var queryUri = encodeURIComponent("BCD\n002\n1\nCST\n\n" + bname + '\n' + iban + '\nEURO' + euro);
+            console.log('<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + queryUri + '/>');
+
+            document.getElementById("cell-rgsb").innerHTML = `<p class="consolas-text">${queryText}</p>`;
+            document.getElementById("cell-rgso").innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + queryUri + '" style="max-width: 100%;" height="auto"/>';
+            document.getElementById("qr-code-container").style.display = "block";
+            
+            // Update the URL with the query string
+            var queryString = `bname=${encodeURIComponent(bname)}&iban=${encodeURIComponent(iban)}&euro=${euro}`;
+            if(queryString) window.history.replaceState({}, '', '?' + queryString);
+
+            // Store the form data in localStorage
+            localStorage.setItem("bname", bname);
+            localStorage.setItem("iban", iban);
+            localStorage.setItem("euro", euro);
+
+            return true;
         }
 
         // Function to parse URL query parameters
-        function getUrlParameter(name) {
+        function getUrlParameter(name)
+        {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
             var results = regex.exec(location.search);
@@ -151,22 +191,26 @@
         }
 
         // Load the saved form data from localStorage when the page loads
-        window.onload = function() {
+        window.onload = function() 
+        {
             var savedBname = localStorage.getItem("bname");
             var savedIban = localStorage.getItem("iban");
             var savedEuro = localStorage.getItem("euro");
+
             var bnameParam = getUrlParameter('bname');
             var ibanParam = getUrlParameter('iban');
             var euroParam = getUrlParameter('euro');
 
-            if (savedBname || bnameParam)
-                document.getElementById("bname").value = bnameParam == "" ? bnameParam : savedBname;
+            if (savedBname != "" || bnameParam != "")
+                document.getElementById("bname").value = bnameParam != "" ? bnameParam : savedBname;
 
-            if (savedIban || ibanParam)
-                document.getElementById("iban").value = ibanParam == "" ? ibanParam : savedIban;
+            if (savedIban != "" || ibanParam != "")
+                document.getElementById("iban").value = ibanParam != "" ? ibanParam : savedIban;
+            //else
+             //   document.getElementById("iban").value = "BE";
 
-            if (savedEuro || euroParam)
-                document.getElementById("euro").value = euroParam == "" ? euroParam : savedEuro;
+            if (savedEuro != "" || euroParam != "")
+                document.getElementById("euro").value = euroParam != "" ? euroParam : savedEuro;
 
             // Trigger validation on page load to update the UI accordingly
             validate();
