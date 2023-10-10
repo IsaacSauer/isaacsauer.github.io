@@ -128,6 +128,9 @@
                 var queryString = `bname=${encodeURIComponent(bname)}&iban=${encodeURIComponent(iban)}&euro=${euro}`;
                 var qrCodeEmbed = `<embed src="https://epc-qr.eu/?${queryString}&type=html" height="300" />`;
 
+                // Update the URL with the query string
+                window.history.replaceState({}, '', '?' + queryString);
+                
                 document.getElementById("cell-rgsb").innerHTML = qrCodeEmbed;
                 document.getElementById("cell-rgso").innerHTML = '<img src="https://epc-qr.eu/?' + queryString + '&type=pic" height="300" />';
                 document.getElementById("qr-code-container").style.display = "block";
@@ -139,23 +142,31 @@
             }
         }
 
+        // Function to parse URL query parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
         // Load the saved form data from localStorage when the page loads
         window.onload = function() {
             var savedBname = localStorage.getItem("bname");
             var savedIban = localStorage.getItem("iban");
             var savedEuro = localStorage.getItem("euro");
+            var bnameParam = getUrlParameter('bname');
+            var ibanParam = getUrlParameter('iban');
+            var euroParam = getUrlParameter('euro');
 
-            if (savedBname) {
-                document.getElementById("bname").value = savedBname;
-            }
+            if (savedBname || bnameParam)
+                document.getElementById("bname").value = savedBname ?? bnameParam;
 
-            if (savedIban) {
-                document.getElementById("iban").value = savedIban;
-            }
+            if (savedIban || ibanParam)
+                document.getElementById("iban").value = savedIban ?? ibanParam;
 
-            if (savedEuro) {
-                document.getElementById("euro").value = savedEuro;
-            }
+            if (savedEuro || euroParam)
+                document.getElementById("euro").value = savedEuro ?? euroParam;
 
             // Trigger validation on page load to update the UI accordingly
             validate();
