@@ -161,8 +161,8 @@
             }
 
             //This creates this: BCD%0A002%0A1%0ASCT%0A%0AIsaac%20Sauer%0ABE81734041682424%0AEURO1.00
-            var queryText = "BCD\n002\n1\nCST\n\n" + bname + '\n' + iban + '\nEURO' + euro;
-            var queryUri = encodeURIComponent("BCD\n002\n1\nCST\n\n" + bname + '\n' + iban + '\nEURO' + euro);
+            var queryText = "BCD\n002\n1\nSCT\n\n" + bname + '\n' + iban + '\nEURO' + euro;
+            var queryUri = encodeURIComponent("BCD\n002\n1\nSCT\n\n" + bname + '\n' + iban + '\nEURO' + euro);
             console.log('<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + queryUri + '/>');
 
             document.getElementById("cell-rgsb").innerHTML = `<p class="consolas-text">${queryText}</p>`;
