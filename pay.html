@@ -160,13 +160,13 @@
             var euroParam = getUrlParameter('euro');
 
             if (savedBname || bnameParam)
-                document.getElementById("bname").value = bnameParam ?? savedBname;
+                document.getElementById("bname").value = bnameParam == "" ? bnameParam : savedBname;
 
             if (savedIban || ibanParam)
-                document.getElementById("iban").value = ibanParam ?? savedIban;
+                document.getElementById("iban").value = ibanParam == "" ? ibanParam : savedIban;
 
             if (savedEuro || euroParam)
-                document.getElementById("euro").value = euroParam ?? savedEuro;
+                document.getElementById("euro").value = euroParam == "" ? euroParam : savedEuro;
 
             // Trigger validation on page load to update the UI accordingly
             validate();
