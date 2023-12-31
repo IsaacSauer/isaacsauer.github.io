@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Pay</title>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport" />
+    <link href="assets/css/main.css" rel="stylesheet" />
+    <link href="assets/css/responsive.css" rel="stylesheet" />
+    <noscript>
+        <link href="assets/css/noscript.css" rel="stylesheet" />
+    </noscript>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        #main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        #euro-container {
+            margin-top: -5%;
+        }
+
+        #cell-rgsb,
+        #cell-rgso {
+            text-align: center;
+        }
+
+        .button {
+            background-color: #5a2a2a;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            background-color: #ffe0ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        /* Define a CSS class for Consolas font */
+        .consolas-text {
+            font-family: Consolas, monospace;
+            font-size: 14px; /* You can adjust the font size as needed */
+        }
+    </style>
+</head>
+
+<body class="is-preload">
+    <div id="main">
+        <article class="panel" id="home">
+            <form onsubmit="return validate();">
+                <table>
+                    <tr>
+                        <td>
+                            <label for="ssid" title="SSID of the wifi network">SSID</label>
+                            <input type="text" id="ssid" name="ssid" value="" maxlength="70">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="password" title="The password">Password</label>
+                            <input type="text" id="password" name="password">
+                        </td>
+                    </tr>
+                </table>
+                <button class="button" onclick="validate();">Generate</button>
+            </form>
+            <div id="cell-rgso">
+                <img src="images/first.png" height="300" />
+            </div>
+            <div id="cell-rgsb">
+                Niet alle fields zijn ingevuld.
+            </div>
+            <div id="qr-code-container" style="display: none;">
+                <embed src="" height="300" />
+            </div>
+        </article>
+    </div>
+    <script>
+        // Function to validate and save the form data
+        function validate()
+        {
+            var ssid = document.getElementById("ssid").value;
+            var password = document.getElementById("password").value;
+
+            if (ssid == "" || password == "")
+            {
+                document.getElementById("cell-rgsb").innerHTML = 'Niet alle fields zijn ingevuld.';
+                document.getElementById("cell-rgso").innerHTML = '<img src="images/first.png" height="300" />';
+                document.getElementById("qr-code-container").style.display = "none";
+                
+                var queryString = "";
+                //Update url
+                var count = 0;
+                if(ssid != "") count++; queryString = `ssid=${encodeURIComponent(ssid)}`;
+                if(password != "") count++; queryString += count == 0 ? '' : '&' + `password=${encodeURIComponent(password)}`;
+
+                // Update the URL with the query string
+                if(queryString != "") window.history.replaceState({}, '', '?' + queryString);
+
+                // Store the form data in localStorage
+                if(ssid != "") localStorage.setItem("ssid", ssid);
+                if(password != "") localStorage.setItem("password", password);
+
+                return false; // Prevent form submission
+            }
+
+            //This should create this: WIFI:T:WPA;S:test;P:test;H:;;
+            var queryText = "WIFI:T:WPA;S:" + ssid + ';P:' + password + ';H:;;';
+            var queryUri = encodeURIComponent(queryText);
+            console.log('<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + queryUri + '/>');
+
+            document.getElementById("cell-rgsb").innerHTML = `<p class="consolas-text">${queryText}</p>`;
+            document.getElementById("cell-rgso").innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + queryUri + '" style="max-width: 100%;" height="auto"/>';
+            document.getElementById("qr-code-container").style.display = "block";
+            
+            // Update the URL with the query string
+            var queryString = `ssid=${encodeURIComponent(ssid)}&password=${encodeURIComponent(password)}`;
+            if(queryString) window.history.replaceState({}, '', '?' + queryString);
+
+            // Store the form data in localStorage
+            localStorage.setItem("ssid", ssid);
+            localStorage.setItem("password", password);
+
+            return true;
+        }
+
+        // Function to parse URL query parameters
+        function getUrlParameter(name)
+        {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // Load the saved form data from localStorage when the page loads
+        window.onload = function()
+        {
+            var savedssid = localStorage.getItem("ssid");
+            var savedpassword = localStorage.getItem("password");
+
+            var ssidParam = getUrlParameter('ssid');
+            var passwordParam = getUrlParameter('password');
+
+            if (savedssid != "" || ssidParam != "")
+                document.getElementById("ssid").value = ssidParam != "" ? ssidParam : savedssid;
+
+            if (savedpassword != "" || passwordParam != "")
+                document.getElementById("password").value = passwordParam != "" ? passwordParam : savedpassword;
+
+
+            // Trigger validation on page load to update the UI accordingly
+            validate();
+        }
+    </script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
