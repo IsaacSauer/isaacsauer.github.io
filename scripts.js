@@ -33,7 +33,7 @@ function updateItemList() {
 
     itemList.forEach(item => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${item.name}: ${'&nbsp;'.repeat(4 - item.name.length)}${item.value}`;
+        listItem.textContent = `${item.name}:\t${item.value}`;
         itemListElement.appendChild(listItem);
     });
 }
