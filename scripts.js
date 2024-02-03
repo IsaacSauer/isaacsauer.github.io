@@ -153,6 +153,9 @@ function updateFarthestElement() {
             const value = element.value;
             losers.push({ name, value });
         });
+
+        const farthestElementDiv = document.getElementById('farthestElement');
+        farthestElementDiv.textContent = '';
     } else {
         const farthestElementDiv = document.getElementById('farthestElement');
         farthestElementDiv.textContent = 'Add more elements to find the farthest one.';
