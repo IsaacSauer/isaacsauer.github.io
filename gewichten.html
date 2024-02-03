@@ -55,6 +55,11 @@
             color: #ffffff;
         }
 
+        .editButton {
+            height: 20px; /* Adjust the height for the edit button */
+            line-height: 3px; /* Align text vertically */
+        }
+
         ul {
             list-style: none;
             padding: 0;
@@ -74,6 +79,7 @@
         <h1>Farthest Element Finder</h1>
         <button onclick="saveList()">Save List</button>
         <button onclick="loadList()">Load List</button>
+        <button onclick="clearList()">Clear List</button>
 
         <label for="nameInput">Name:</label>
         <input type="text" id="nameInput">
