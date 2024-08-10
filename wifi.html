@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Pay</title>
+    <title>Wifi QR</title>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport" />
     <link href="assets/css/main.css" rel="stylesheet" />
@@ -83,10 +83,42 @@
             color: #155724;
         }
 
-        /* Define a CSS class for Consolas font */
         .consolas-text {
             font-family: Consolas, monospace;
-            font-size: 14px; /* You can adjust the font size as needed */
+            font-size: 14px;
+        }
+
+        @media print {
+            body {
+                background-color: #fff;
+            }
+
+            #main {
+                max-width: 100%;
+                box-shadow: none;
+                padding: 0;
+            }
+
+            .button {
+                display: none;
+            }
+
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            /* Adjust margins for A4 page */
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
+
+            /* Scale down the content */
+            body {
+                transform: scale(0.9);
+                transform-origin: top left;
+            }
         }
     </style>
 </head>
@@ -110,6 +142,7 @@
                     </tr>
                 </table>
                 <button class="button" onclick="validate();">Generate</button>
+                <button class="button" onclick="window.print()">Print this page</button>
             </form>
             <div id="cell-rgso">
                 <img src="images/first.png" height="300" />
@@ -134,19 +167,22 @@
                 document.getElementById("cell-rgsb").innerHTML = 'Niet alle fields zijn ingevuld.';
                 document.getElementById("cell-rgso").innerHTML = '<img src="images/first.png" height="300" />';
                 document.getElementById("qr-code-container").style.display = "none";
-                
+
                 var queryString = "";
+
                 //Update url
                 var count = 0;
-                if(ssid != "") count++; queryString = `ssid=${encodeURIComponent(ssid)}`;
-                if(password != "") count++; queryString += count == 0 ? '' : '&' + `password=${encodeURIComponent(password)}`;
+                if (ssid != "") count++;
+                queryString = `ssid=${encodeURIComponent(ssid)}`;
+                if (password != "") count++;
+                queryString += count == 0 ? '' : '&' + `password=${encodeURIComponent(password)}`;
 
                 // Update the URL with the query string
-                if(queryString != "") window.history.replaceState({}, '', '?' + queryString);
+                if (queryString != "") window.history.replaceState({}, '', '?' + queryString);
 
                 // Store the form data in localStorage
-                if(ssid != "") localStorage.setItem("ssid", ssid);
-                if(password != "") localStorage.setItem("password", password);
+                if (ssid != "") localStorage.setItem("ssid", ssid);
+                if (password != "") localStorage.setItem("password", password);
 
                 return false; // Prevent form submission
             }
@@ -159,10 +195,10 @@
             document.getElementById("cell-rgsb").innerHTML = `<p class="consolas-text">${queryText}</p>`;
             document.getElementById("cell-rgso").innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + queryUri + '" style="max-width: 100%;" height="auto"/>';
             document.getElementById("qr-code-container").style.display = "block";
-            
+
             // Update the URL with the query string
             var queryString = `ssid=${encodeURIComponent(ssid)}&password=${encodeURIComponent(password)}`;
-            if(queryString) window.history.replaceState({}, '', '?' + queryString);
+            if (queryString) window.history.replaceState({}, '', '?' + queryString);
 
             // Store the form data in localStorage
             localStorage.setItem("ssid", ssid);
@@ -194,7 +230,6 @@
 
             if (savedpassword != "" || passwordParam != "")
                 document.getElementById("password").value = passwordParam != "" ? passwordParam : savedpassword;
-
 
             // Trigger validation on page load to update the UI accordingly
             validate();
