@@ -10,6 +10,7 @@
     <noscript>
         <link href="assets/css/noscript.css" rel="stylesheet" />
     </noscript>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,6 +26,11 @@
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        div {
+            width:300px;
+            margin:auto;
         }
 
         label {
@@ -51,20 +57,24 @@
         #cell-rgsb,
         #cell-rgso {
             text-align: center;
+            margin: auto;
+            max-width: 100%;
+            height: auto;
         }
 
         .button {
             background-color: #5a2a2a;
             border: none;
             color: white;
-            padding: 10px 20px;
             text-align: center;
             text-decoration: none;
-            display: inline-block;
             font-size: 16px;
-            margin: 4px 2px;
             cursor: pointer;
             border-radius: 4px;
+            margin: auto;
+            display: block; /* Make buttons block elements to stack them */
+            width: 100%; /* Ensure the buttons take up the full width of their container */
+            margin-bottom: 10px; /* Add space between the buttons */
         }
 
         .button:hover {
@@ -141,8 +151,10 @@
                         </td>
                     </tr>
                 </table>
-                <button class="button" onclick="validate();">Generate</button>
-                <button class="button" onclick="window.print()">Print this page</button>
+                <div>
+                    <button class="button" onclick="validate();">Generate</button>
+                    <button class="button" onclick="window.print()">Print this page</button>
+                </div>
             </form>
             <div id="cell-rgso">
                 <img src="images/first.png" height="300" />
@@ -150,13 +162,21 @@
             <div id="cell-rgsb">
                 Niet alle fields zijn ingevuld.
             </div>
-            <div id="qr-code-container" style="display: none;">
-                <embed src="" height="300" />
-            </div>
         </article>
     </div>
     <script>
-        // Function to validate and save the form data
+        function generateQRCode(text, qrcodeContainer, width, height)
+        {
+            qrcodeContainer.innerHTML = ""; // Clear any existing QR code
+
+            // Generate QR code
+            new QRCode(qrcodeContainer, {
+                text: text,
+                width: width,
+                height: height
+            });
+        }
+        // Function to validate and save the form data and generating the qr code
         function validate()
         {
             var ssid = document.getElementById("ssid").value;
@@ -193,7 +213,7 @@
             console.log('<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + queryUri + '/>');
 
             document.getElementById("cell-rgsb").innerHTML = `<p class="consolas-text">${queryText}</p>`;
-            document.getElementById("cell-rgso").innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + queryUri + '" style="max-width: 100%;" height="auto"/>';
+            generateQRCode(queryText, document.getElementById("cell-rgso"), 300, 300);
             document.getElementById("qr-code-container").style.display = "block";
 
             // Update the URL with the query string

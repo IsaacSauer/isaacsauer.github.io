@@ -10,6 +10,8 @@
     <noscript>
         <link href="assets/css/noscript.css" rel="stylesheet" />
     </noscript>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,6 +27,11 @@
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        div {
+            width:300px;
+            margin:auto;
         }
 
         label {
@@ -57,14 +64,15 @@
             background-color: #5a2a2a;
             border: none;
             color: white;
-            padding: 10px 20px;
             text-align: center;
             text-decoration: none;
-            display: inline-block;
             font-size: 16px;
-            margin: 4px 2px;
             cursor: pointer;
             border-radius: 4px;
+            margin: auto;
+            display: block; /* Make buttons block elements to stack them */
+            width: 300px; /* Ensure the buttons take up the full width of their container */
+            margin-bottom: 10px; /* Add space between the buttons */
         }
 
         .button:hover {
@@ -105,13 +113,13 @@
                     <tr>
                         <td>
                             <label for="iban" title="Account number of the beneficiary according to the IBAN numbering system.">IBAN</label>
-                            <input type="text" id="iban" name="iban" value="BE" maxlength="36" oninput="this.value = 'BE' + this.value.replace(/[^0-9|' ']/g, '');" inputmode="numeric">
+                            <input type="text" id="iban" name="iban" value="BE" maxlength="34" oninput="this.value = 'BE' + this.value.replace(/[^0-9|' ']/g, '');" inputmode="numeric">
                         </td>
                     </tr>
                     <div id="euro-container">
                         <td>
                             <label for="euro" title="Euro">EUR</label>
-                            <input type="text" id="euro" name="euro" maxlength="12" oninput="this.value = this.value.replace(/[^0-9|','|'.']/g, '');" inputmode="decimal">
+                            <input type="text" id="euro" name="euro" maxlength="13" oninput="this.value = this.value.replace(/[^0-9|','|'.']/g, '');" inputmode="decimal">
                         </td>
                     </div>
                 </table>
@@ -129,6 +137,17 @@
         </article>
     </div>
     <script>
+        function generateQRCode(text, qrcodeContainer, width, height)
+        {
+            qrcodeContainer.innerHTML = ""; // Clear any existing QR code
+
+            // Generate QR code
+            new QRCode(qrcodeContainer, {
+                text: text,
+                width: width,
+                height: height
+            });
+        }
         // Function to validate and save the form data
         function validate()
         {
@@ -166,7 +185,7 @@
             console.log('<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + queryUri + '/>');
 
             document.getElementById("cell-rgsb").innerHTML = `<p class="consolas-text">${queryText}</p>`;
-            document.getElementById("cell-rgso").innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + queryUri + '" style="max-width: 100%;" height="auto"/>';
+            generateQRCode(queryText, document.getElementById("cell-rgso"), 300, 300);
             document.getElementById("qr-code-container").style.display = "block";
             
             // Update the URL with the query string
