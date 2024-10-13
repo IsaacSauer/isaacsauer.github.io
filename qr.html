@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>QR Code Generator</title>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport" />
+    <link href="assets/css/main.css" rel="stylesheet" />
+    <link href="assets/css/responsive.css" rel="stylesheet" />
+    <noscript>
+        <link href="assets/css/noscript.css" rel="stylesheet" />
+    </noscript>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        #main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        div {
+            width: 300px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .button {
+            background-color: #5a2a2a;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: auto;
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .consolas-text {
+            font-family: Consolas, monospace;
+            font-size: 14px;
+        }
+
+        #cell-rgsb,
+        #cell-rgso {
+            text-align: center;
+            margin: auto;
+        }
+
+        #qr-code-container {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="is-preload">
+    <div id="main">
+        <article class="panel" id="home">
+            <form onsubmit="return validate();">
+                <div>
+                    <label for="qr-type">Select QR Code Type:</label>
+                    <select id="qr-type" onchange="updateForm()">
+                        <option value="wifi">Wi-Fi</option>
+                        <option value="payment">Payment</option>
+                        <option value="text">Text</option>
+                    </select>
+                </div>
+
+                <div id="text-form">
+                    <label for="text">Content</label>
+                    <input type="text" id="text" name="text">
+                </div>
+
+                <div id="wifi-form">
+                    <label for="ssid">SSID</label>
+                    <input type="text" id="ssid" name="ssid" maxlength="70">
+                    <label for="password">Password</label>
+                    <input type="text" id="password" name="password">
+                </div>
+
+                <div id="payment-form" style="display: none;">
+                    <label for="bname">Kaarthouder</label>
+                    <input type="text" id="bname" name="bname" maxlength="70">
+                    <label for="iban">IBAN</label>
+                    <input type="text" id="iban" name="iban" value="BE" maxlength="34" oninput="this.value = 'BE' + this.value.replace(/[^0-9|' ']/g, '');" inputmode="numeric">
+                    <label for="euro">EUR</label>
+                    <input type="text" id="euro" name="euro" maxlength="13" oninput="this.value = this.value.replace(/[^0-9|','|'.']/g, '');" inputmode="decimal">
+                </div>
+
+                <div>
+                    <button class="button" type="button" onclick="validate();">Generate</button>
+                    <button class="button" type="button" onclick="window.print()">Print this page</button>
+                </div>
+            </form>
+
+            <div id="cell-rgso">
+                <img src="images/first.png" height="300" />
+            </div>
+            <div id="cell-rgsb">
+                Niet alle fields zijn ingevuld.
+            </div>
+            <div id="qr-code-container" style="display: none;">
+                <embed src="" height="300" />
+            </div>
+        </article>
+    </div>
+
+    <script>
+        function updateForm() {
+            const qrType = document.getElementById('qr-type').value;
+            document.getElementById('wifi-form').style.display = qrType === 'wifi' ? 'block' : 'none';
+            document.getElementById('payment-form').style.display = qrType === 'payment' ? 'block' : 'none';
+            document.getElementById('text-form').style.display = qrType === 'text' ? 'block' : 'none';
+        }
+
+        function generateQRCode(text, qrcodeContainer, width, height) {
+            qrcodeContainer.innerHTML = ""; // Clear any existing QR code
+            new QRCode(qrcodeContainer, {
+                text: text,
+                width: width,
+                height: height
+            });
+        }
+
+        function validate() {
+            const qrType = document.getElementById('qr-type').value;
+
+            if (qrType === 'wifi') {
+                const ssid = document.getElementById('ssid').value;
+                const password = document.getElementById('password').value;
+
+                if (!ssid || !password) {
+                    displayMessage('Niet alle fields zijn ingevuld.');
+                    return false;
+                }
+
+                const queryText = `WIFI:T:WPA;S:${ssid};P:${password};H:;;`;
+                updateQRCode(queryText);
+            } else if (qrType === 'payment') {
+                const bname = document.getElementById('bname').value;
+                const iban = document.getElementById('iban').value;
+                const euro = document.getElementById('euro').value;
+
+                if (!bname || !iban || !euro) {
+                    displayMessage('Niet alle fields zijn ingevuld.');
+                    return false;
+                }
+
+                const queryText = `BCD\n002\n1\nSCT\n\n${bname}\n${iban}\nEURO${euro}`;
+                updateQRCode(queryText);
+            } else if (qrType === 'text') {
+                const text = document.getElementById('text').value;
+
+                if (!bname) {
+                    displayMessage('Niet alle fields zijn ingevuld.');
+                    return false;
+                }
+
+                updateQRCode(text);
+            }
+
+            return true;
+        }
+
+        function updateQRCode(queryText) {
+            document.getElementById("cell-rgsb").innerHTML = `<p class="consolas-text">${queryText}</p>`;
+            generateQRCode(queryText, document.getElementById("cell-rgso"), 300, 300);
+            document.getElementById("qr-code-container").style.display = "block";
+        }
+
+        function displayMessage(message) {
+            document.getElementById("cell-rgsb").innerHTML = message;
+            document.getElementById("cell-rgso").innerHTML = '<img src="images/first.png" height="300" />';
+            document.getElementById("qr-code-container").style.display = "none";
+        }
+
+        window.onload = function() {
+            updateForm();
+        }
+    </script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
