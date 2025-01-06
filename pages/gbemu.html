@@ -55,23 +55,21 @@
 					<hr>
 
 					<p>
-						To expand the emulator beyond its initial capability of playing only
-						Tetris, significant enhancements were required. Using an opcode tester
-						proved invaluable for quickly and effectively validating the functionality
-						of opcodes. This streamlined the process of implementing missing opcodes
-						and fixing faulty ones. Additionally, test ROMs provided a realistic
-						environment to ensure the opcodes performed as expected. By the end of
-						this phase, all opcode functions were operational, except for the timer
-						implementation.
-						To support a broader range of games, a memory bank controller (MBC)
-						implementation was added. This enhancement allowed the emulator to run not
-						just ROM-only games but also those utilizing MBC chips, specifically MBC1
-						and MBC5. As a result, many more games became playable, including *The
-						Legend of Zelda: Link's Awakening* and *Kirby's Dream Land* (*Hoshi no
-						Kirby*).
-						A new sprite rendering system was introduced to improve compatibility with
-						additional games. While this update slightly reduced the emulator's
-						performance, it lays the groundwork for future optimization.
+						The initial project was limited to playing Tetris, so significant work was
+						needed to enable support for additional games. By utilizing an opcode
+						tester, opcodes could be evaluated quickly and efficiently to ensure they
+						functioned correctly. This streamlined the process of implementing missing
+						or malfunctioning opcodes. Test ROMs were also used to validate the
+						opcodes in a realistic setting, leading to functional opcode support,
+						except for the timer implementation.
+						To accommodate a wider range of games, a memory bank controller (MBC) was
+						added, enabling support for not only ROM-only games but also those
+						requiring an MBC chip. Implementations for MBC1 and MBC5 were included,
+						paving the way for emulating more complex games like The Legend of Zelda:
+						Link's Awakening and Hoshi no Kirby.
+						Additionally, a new sprite rendering system was introduced, allowing
+						broader game compatibility. However, this change slightly reduced
+						performance, though future optimizations could address this issue.
 					</p>
 
 					<div
