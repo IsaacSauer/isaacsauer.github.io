@@ -8,78 +8,120 @@
 	<head>
 		<title>Gameboy Emulator</title>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="../assets/css/main.css" />
-		<link rel="stylesheet" href="../assets/css/responsive.css"/>
-		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="../assets/css/responsive.css" />
+		<noscript><link rel="stylesheet"
+				href="../assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
 
 		<!-- Wrapper-->
-			<div id="wrapper">
+		<div id="wrapper">
 
-				<!-- Nav -->
-				<nav id="nav">
-					<a href="../index.html#" class="icon solid fa-home"><span>Home</span></a>
-					<a href="../index.html#projects" class="icon solid fa-code"><span>Projects</span></a>
-					<a href="../index.html#art" class="icon solid fa-paint-brush"><span>Art</span></a>
-					<a href="../index.html#music" class="icon solid fa-headphones"><span>Music</span></a>
-					<a href="https://www.linkedin.com/in/isaacsauer/" class="icon brands fa-linkedin-in"><span>LinkedIn</span></a>
-				</nav>
-				
-				<div id="main">
-					<article id="projects" class="panel">
-				
-						<header>
-							<h1>Gameboy Emulator</h1>
-							<p>Gradwork</p>
-							<hr>
-						</header>
+			<!-- Nav -->
+			<nav id="nav">
+				<a href="../index.html#" class="icon solid fa-home"><span>Home</span></a>
+				<a href="../index.html#projects"
+					class="icon solid fa-code"><span>Projects</span></a>
+				<a href="../index.html#art"
+					class="icon solid fa-paint-brush"><span>Art</span></a>
+				<a href="../index.html#music"
+					class="icon solid fa-headphones"><span>Music</span></a>
+				<a href="https://www.linkedin.com/in/isaacsauer/"
+					class="icon brands fa-linkedin-in"><span>LinkedIn</span></a>
+			</nav>
 
-						<iframe width="1060" height="596" src="https://www.youtube.com/embed/2bc5L7RZ1i8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen 
-						class="mobile"></iframe>
+			<div id="main">
+				<article id="projects" class="panel">
 
+					<header>
+						<h1>Gameboy Emulator</h1>
+						<p>Gradwork</p>
 						<hr>
+					</header>
 
-						<p>
-							Because the given project could only play Tetris, a lot had to be done before the emulator could supports more games. By using an opcode tester, it was possible to quickly and effectively test the opcodes to see if they worked. Because this was done quickly, the implementation of missing opcodes and failed opcodes could proceed more quickly. The use of test ROMS also made it easy to test the opcodes in a realistic environment. As a result, all opcode functions worked except for the timer implementation.
-							Since multiple games need to be supported, a memory bank controller implementation was added. This allowed not only ROMONLY games to run, but also games that had an MBC chip. The MBCs that were implemented were eventually MBC1 & MBC5. Eventually many more games could be emulated such as Legend of Zelda - Link's Awakening and Hoshi no Kirby.
-							Because there is a new implementation of the sprite rendering, which makes sure that more games are supported, the program does run a little slower than before. But this could be optimized in the future.
-						</p>
+					<div
+						style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+						<iframe
+							src="https://www.youtube.com/embed/2bc5L7RZ1i8"
+							frameborder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+							referrerpolicy="strict-origin-when-cross-origin"
+							allowfullscreen
+							style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+					</div>
+					<hr>
 
-						<iframe width="1060" height="596" src="https://www.youtube.com/embed/HsLH8Jg_2xU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen 
-						class="mobile"></iframe>
-						<iframe width="1060" height="596" src="https://www.youtube.com/embed/OWSOsolaPH0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen 
-						class="mobile"></iframe>
+					<p>
+						To expand the emulator beyond its initial capability of playing only
+						Tetris, significant enhancements were required. Using an opcode tester
+						proved invaluable for quickly and effectively validating the functionality
+						of opcodes. This streamlined the process of implementing missing opcodes
+						and fixing faulty ones. Additionally, test ROMs provided a realistic
+						environment to ensure the opcodes performed as expected. By the end of
+						this phase, all opcode functions were operational, except for the timer
+						implementation.
+						To support a broader range of games, a memory bank controller (MBC)
+						implementation was added. This enhancement allowed the emulator to run not
+						just ROM-only games but also those utilizing MBC chips, specifically MBC1
+						and MBC5. As a result, many more games became playable, including *The
+						Legend of Zelda: Link's Awakening* and *Kirby's Dream Land* (*Hoshi no
+						Kirby*).
+						A new sprite rendering system was introduced to improve compatibility with
+						additional games. While this update slightly reduced the emulator's
+						performance, it lays the groundwork for future optimization.
+					</p>
 
-						<a href="https://github.com/IsaacSauer/GameboyEmulator" target="_blank" rel="noopener noreferrer">Repository</a>
-						<br>
-						<a href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/GW_2122_Isaac_Sauer_NL_Executable.zip" target="_blank" rel="noopener noreferrer">Download Executable</a>						
-						<hr>
+					<div
+						style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+						<iframe
+							src="https://www.youtube.com/embed/HsLH8Jg_2xU"
+							frameborder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+							referrerpolicy="strict-origin-when-cross-origin"
+							allowfullscreen
+							style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+					</div>
+					<hr>
 
-					</article>
-				</div>
-				
-				<!-- Footer -->
-				<div id="footer">
-					<ul class="copyright">
-						<li>&copy; 2021 Isaac Sauer </li>
-					</ul>
-				</div>
+					<div
+						style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+						<iframe
+							src="https://www.youtube.com/embed/OWSOsolaPH0"
+							frameborder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+							referrerpolicy="strict-origin-when-cross-origin"
+							allowfullscreen
+							style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+					</div>
+					<a href="https://github.com/IsaacSauer/GameboyEmulator" target="_blank"
+						rel="noopener noreferrer">Repository</a>
+					<br>
+					<a
+						href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/GW_2122_Isaac_Sauer_NL_Executable.zip"
+						target="_blank" rel="noopener noreferrer">Download Executable</a>
+					<hr>
 
+				</article>
 			</div>
 
+			<!-- Footer -->
+			<div id="footer">
+				<ul class="copyright">
+					<li>&copy; 2025 Isaac Sauer </li>
+				</ul>
+			</div>
+
+		</div>
+
 		<!-- Scripts -->
-			<script src="../assets/js/jquery.min.js"></script>
-			<script src="../assets/js/browser.min.js"></script>
-			<script src="../assets/js/breakpoints.min.js"></script>
-			<script src="../assets/js/util.js"></script>
-			<script src="../assets/js/main.js"></script>
+		<script src="../assets/js/jquery.min.js"></script>
+		<script src="../assets/js/browser.min.js"></script>
+		<script src="../assets/js/breakpoints.min.js"></script>
+		<script src="../assets/js/util.js"></script>
+		<script src="../assets/js/main.js"></script>
 
 	</body>
-</html>					
-					
-					
-					
-					
-					
+</html>
