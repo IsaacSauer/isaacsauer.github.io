@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Email with EmailJS</title>
+</head>
+<body>
+
+    <h1>Send Email</h1>
+
+    <form id="emailForm">
+        <label for="email">Your email:</label>
+        <input type="text" id="email" name="Email" required><br><br>
+
+        <label for="name">Your name:</label>
+        <input type="text" id="name" name="Name" required><br><br>
+        
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required><br><br>
+
+        <label for="message">Email Content:</label><br>
+        <textarea id="message" name="message" rows="4" required></textarea><br><br>
+
+        <button type="submit">Send Email</button>
+    </form>
+
+    <div id="response"></div>
+
+    <!-- Include EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
+    <script>
+        // Initialize EmailJS
+        emailjs.init({
+            publicKey: 'ECfsK4wiFau9mLNYI',
+            // Do not allow headless browsers
+            blockHeadless: true,
+            blockList: {
+                // Block the suspended emails
+                list: ['foo@emailjs.com', 'bar@emailjs.com'],
+                // The variable contains the email address
+                watchVariable: 'userEmail',
+            },
+            limitRate: {
+                // Set the limit rate for the application
+                id: 'app',
+                // Allow 1 request per 10s
+                throttle: 10000,
+            },
+            });
+        document.getElementById('emailForm').addEventListener('submit', async function(e) 
+        {
+            e.preventDefault();
+
+            const subject = document.getElementById('subject').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            const responseDiv = document.getElementById('response');
+
+            const emailParams = {
+                subject: subject,
+                name: name,
+                email: email,
+                message: message
+            };
+
+            try {
+                // Send email using EmailJS
+                const response = await emailjs.send("service_8gj9t52", "template_axjzm4k", emailParams);
+                
+                if (response.status === 200) {
+                    responseDiv.innerHTML = 'Email sent successfully!';
+                } else {
+                    responseDiv.innerHTML = 'Error sending email: ' + response.text;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = 'Error: ' + error.message;
+            }
+        });
+    </script>
+
+</body>
+</html>

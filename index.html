@@ -15,14 +15,8 @@
         <noscript>
             <link href="assets/css/noscript.css" rel="stylesheet" />
         </noscript>
-        <script async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5537996291434594"
-            crossorigin="anonymous"></script>
     </head>
     <body class="is-preload">
-
-        <script defer src="https://apps.elfsight.com/p/platform.js"></script>
-        <div class="elfsight-app-33d02003-19fc-4e6a-97d6-3520cc5de5a0"></div>
 
         <!-- Wrapper-->
         <div id="wrapper">
@@ -36,6 +30,8 @@
                     href="#art"><span>Art</span></a>
                 <a class="icon solid fa-headphones"
                     href="#music"><span>Music</span></a>
+                <a href="#contact"
+                    class="icon solid fa-envelope"><span>Contact</span></a>
                 <a class="icon brands fa-linkedin-in"
                     href="https://www.linkedin.com/in/isaacsauer/"><span>LinkedIn</span></a>
             </nav>
@@ -144,13 +140,17 @@
                     <hr>
                     <section>
                         <div>
-                            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; width: 100%;">
-                                <iframe class="mobile" frameborder="0" height="100%" loading="lazy" mozallowfullscreen="true"
+                            <div
+                                style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; width: 100%;">
+                                <iframe class="mobile" frameborder="0"
+                                    height="100%" loading="lazy"
+                                    mozallowfullscreen="true"
                                     src="https://sketchfab.com/models/41959b57f8454cbfb4b22ad951edf9e9/embed?preload=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                                    webkitallowfullscreen="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                                    webkitallowfullscreen="true"
+                                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
                                 </iframe>
                             </div>
-                            
+
                             <p>Sentry Gun: Made for the Module High Poly in my
                                 second year at DAE Howest.</p>
 
@@ -175,13 +175,17 @@
                                     Subway Station
                                     Environment by Zac Svae</a></iframe>
 
-                            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; width: 100%;">
-                                <iframe class="mobile" frameborder="0" height="100%" loading="lazy" mozallowfullscreen="true"
+                            <div
+                                style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; width: 100%;">
+                                <iframe class="mobile" frameborder="0"
+                                    height="100%" loading="lazy"
+                                    mozallowfullscreen="true"
                                     src="https://sketchfab.com/models/0fd4b2be2ac14406bdb7b0d0d45050df/embed?preload=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                                    webkitallowfullscreen="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                                    webkitallowfullscreen="true"
+                                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
                                 </iframe>
                             </div>
-                            
+
                             <p>Kyoto - City Scene: Made for the module
                                 "3D Low Poly" in my first year at DAE
                                 Howest.</p>
@@ -543,6 +547,40 @@
                     </section>
                 </article>
 
+                <!-- Contact -->
+                <article id="contact" class="panel">
+                    <header>
+                        <h2>Contact Me</h2>
+                    </header>
+                    <form id="emailForm">
+                        <div>
+                            <div class="row">
+                                <div class="col-6 col-12-medium">
+                                    <input type="text" id="name" name="name"
+                                        placeholder="Name" required/>
+                                </div>
+                                <div class="col-6 col-12-medium">
+                                    <input type="text" id="email" name="email"
+                                        placeholder="Email" required/>
+                                </div>
+                                <div class="col-12">
+                                    <input type="text" id="subject"
+                                        name="subject" placeholder="Subject" required/>
+                                </div>
+                                <div class="col-12">
+                                    <textarea id="message" name="message"
+                                        placeholder="Message"
+                                        rows="6" required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <input type="submit" value="Send Message" />
+                                </div>
+                                <div id="response"></div>
+                            </div>
+                        </div>
+                    </form>
+                </article>
+
             </div>
 
             <!-- Footer -->
@@ -561,5 +599,82 @@
         <script src="assets/js/util.js"></script>
         <script src="assets/js/main.js"></script>
 
+        <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+        </script>
+        <script type="text/javascript">
+        (function(){
+            emailjs.init({
+                publicKey: "x8sJ8w_rEMgrHYxjP ",
+            });
+        })();
+        </script>
+        <script>
+            document.getElementById('emailForm').addEventListener('submit', function(e) 
+            {
+                e.preventDefault();
+                const responseDiv = document.getElementById('response');
+
+                const email = document.getElementById('email').value;
+                if(validateEmail(email) == false)
+                {
+                    console.log('Invalid email address');
+                    SetInnerHtmlWithFadeOutAfterTime(responseDiv, 'Invalid email address!', 5000);
+                    return;
+                }
+                const subject = document.getElementById('subject').value;
+                const name = document.getElementById('name').value;
+                const message = document.getElementById('message').value;
+
+                const emailParams = {
+                    subject: subject,
+                    name: name,
+                    email: email,
+                    message: message
+                };
+                console.log(emailParams);
+
+                emailjs.send('service_8gj9t52', 'template_axjzm4k', emailParams).then(
+                (response) => 
+                {
+                    SetInnerHtmlWithFadeOutAfterTime(responseDiv, 'Email sent successfully!', 5000);
+                    console.log('SUCCESS!', response.status, response.text);
+                },
+                (error) => 
+                {
+                    SetInnerHtmlWithFadeOutAfterTime(responseDiv, 'Error sending email: ' + response.text, 5000);
+                    console.log('FAILED...', error);
+                },
+                );
+            });
+
+            let fadeOutTimeout;
+            function SetInnerHtmlWithFadeOutAfterTime(htmlElement, content, time)
+            {
+                htmlElement.innerHTML = content;
+                htmlElement.style.opacity = '1'; // Reset opacity to 1 to make it visible again
+                htmlElement.style.transition = 'none'; // Remove transition for an instant reset
+
+                // Fade out after 5 seconds
+                clearTimeout(fadeOutTimeout); // Clear any existing timeouts
+                fadeOutTimeout = setTimeout(() => {
+                    htmlElement.style.transition = 'opacity 1s'; // Add a smooth transition effect
+                    htmlElement.style.opacity = '0'; // Set opacity to 0 to fade out
+                }, time);
+            }
+
+            // Check if the input is a valid email
+            function validateEmail(email) 
+            {
+                const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+                if (emailPattern.test(email)) {
+                    console.log('Valid email address');
+                    return true; // Valid email
+                } else {
+                    return false; // Invalid email
+                }
+            }
+        </script>
     </body>
 </html>
