@@ -5,206 +5,201 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-	<head>
-		<title>Mingin Game Engine</title>
-		<meta charset="utf-8" />
-		<meta name="viewport"
-			content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../assets/css/main.css" />
-		<link rel="stylesheet" href="../assets/css/responsive.css" />
-		<noscript><link rel="stylesheet"
-				href="../assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
 
-		<!-- Wrapper-->
-		<div id="wrapper">
+<head>
+	<title>Mingin Game Engine</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="../assets/css/main.css" />
+	<link rel="stylesheet" href="../assets/css/responsive.css" />
+	<noscript>
+		<link rel="stylesheet" href="../assets/css/noscript.css" />
+	</noscript>
+</head>
 
-			<!-- Nav -->
-			<nav id="nav">
-				<a href="../index.html#" class="icon solid fa-home"><span>Home</span></a>
-				<a href="../index.html#projects"
-					class="icon solid fa-code"><span>Projects</span></a>
-				<a href="../index.html#art"
-					class="icon solid fa-paint-brush"><span>Art</span></a>
-				<a href="../index.html#music"
-					class="icon solid fa-headphones"><span>Music</span></a>
-				<a href="https://www.linkedin.com/in/isaacsauer/"
-					class="icon brands fa-linkedin-in"><span>LinkedIn</span></a>
-			</nav>
+<body class="is-preload">
 
-			<div id="main">
-				<article id="projects" class="panel">
+	<!-- Wrapper-->
+	<div id="wrapper">
 
-					<header>
-						<h1>Mingin Game Engine</h1>
-						<p>Game Engine - Programming 4 @ DAE</p>
-						<hr>
-					</header>
+		<!-- Nav -->
+		<nav id="nav">
+			<a href="../index.html#" class="icon solid fa-home"><span>Home</span></a>
+			<a href="../index.html#projects" class="icon solid fa-code"><span>Projects</span></a>
+			<a href="../index.html#art" class="icon solid fa-paint-brush"><span>Art</span></a>
+			<a href="../index.html#music" class="icon solid fa-headphones"><span>Music</span></a>
+            <a href="../index.html#contact" class="icon solid fa-envelope"><span>Contact</span></a>
+		</nav>
 
-					<div
-						style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-						<iframe
-							src="https://www.youtube.com/embed/qDLBfyyX3-E"
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-							referrerpolicy="strict-origin-when-cross-origin"
-							allowfullscreen
-							style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-					</div>
+		<div id="main">
+			<article id="projects" class="panel">
+
+				<header>
+					<h1>Mingin Game Engine</h1>
+					<p>Game Engine - Programming 4 @ DAE</p>
 					<hr>
-					<p>
-						For my second year at <b>DAE Howest</b>, for the course
-						<b>Programming 4</b>, I had to build a <b>Game Engine</b> and use it
-						to create a game called <b>Qbert</b>.
-					</p>
+				</header>
 
-					<a href="https://github.com/IsaacSauer/2DAE08_Minigin_Engine_Isaac_Sauer"
-						target="_blank" rel="noopener noreferrer">Check out the Repo</a>
+				<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+					<iframe src="https://www.youtube.com/embed/qDLBfyyX3-E" frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
+						style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+				</div>
+				<hr>
+				<p>
+					For my second year at <b>DAE Howest</b>, for the course
+					<b>Programming 4</b>, I had to build a <b>Game Engine</b> and use it
+					to create a game called <b>Qbert</b>.
+				</p>
+
+				<a href="https://github.com/IsaacSauer/2DAE08_Minigin_Engine_Isaac_Sauer" target="_blank"
+					rel="noopener noreferrer">Check out the Repo</a>
+				<br>
+				<a href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/qbert_game.zip"
+					target="_blank" rel="noopener noreferrer">Download the Game</a>
+
+				<hr>
+
+				<h3>Game Engine Details & Design Choices</h3>
+
+				<hr>
+				<b>Command Pattern</b>
+				<p>
+					The Input System uses commands to trigger specific events. You can set
+					this up by either overriding the "Command" and "Execute" functions, or by
+					using "CommandFunc" and passing a function pointer (no parameters and void
+					return type). If you want to pass parameters, you can bind them when
+					creating the CommandFunc.
+				</p>
+
+				<hr>
+				<b>Flyweight Pattern</b>
+				<p>
+					The flyweight technique is used for managing resources like textures. When
+					you request a Texture2D, you pass in the file path, and if it exists, you
+					get the texture back. Internally, the system stores resources in a map
+					with file paths as the keys. This ensures each resource is loaded only
+					once, saving memory.
+				</p>
+
+				<hr>
+				<b>Observer Pattern</b>
+				<p>
+					If you need to listen to events from certain objects without direct calls,
+					you can add a subject to them. You create an Observer class, define your
+					event methods, and connect it with the Subject class. When you want to
+					notify listeners, you call "notify" on the subject and pass in the
+					observer's function. You can also bind additional parameters when needed.
+				</p>
+
+				<hr>
+				<b>Singleton</b>
+				<p>
+					I have two types of singletons: a normal one with a static stack
+					allocation and another using a static smart pointer for heap allocation.
+					This makes using singletons easier and prevents the need to manually free
+					the instance.
+				</p>
+
+				<hr>
+				<b>State Machine</b>
+				<p>
+					I implemented an object-oriented state machine. You create a class
+					inheriting from "State" and implement functions like "Enter", "Exit",
+					"HandleInput", "Update", and "FixedUpdate". After setting up your state
+					machine, you create instances of your custom state classes and start the
+					machine. In your component’s update methods, you call "HandleInput" and
+					"Update" and in "FixedUpdate", call "FixedUpdate" from the current state.
+				</p>
+
+				<hr>
+				<b>Game Loop</b>
+				<p>
+					For the game loop, I used the "Play catch up" pattern, which helps with
+					both physics (using Fixed Update) and regular frame updates (Update).
+				</p>
+
+				<hr>
+				<b>Component System</b>
+				<p>
+					Each GameObject can have components attached to it, each with its own
+					logic. This makes components modular, so you can use them across different
+					objects while keeping them functional. The parent GameObject manages the
+					component lifecycle (Initialize, LateInitialize, Start, Update,
+					FixedUpdate).
 					<br>
-					<a
-						href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/qbert_game.zip"
-						target="_blank" rel="noopener noreferrer">Download the Game</a>
+					"Initialize" and "LateInitialize" are only called once, while "Start" is
+					called each time the object becomes active (e.g., switching scenes).
+				</p>
 
-					<hr>
+				<hr>
+				<b>Update Method</b>
+				<p>
+					Each scene holds a collection of GameObjects, which may have child
+					GameObjects and components. Since the game loop calls "Update" and
+					"FixedUpdate" in the SceneManager, it lets each component have its own
+					dedicated "Update" and "FixedUpdate" methods.
+				</p>
 
-					<h3>Game Engine Details & Design Choices</h3>
+				<hr>
+				<b>Event Queue</b>
+				<p>
+					Right now, there's no standalone Event Queue. However, I use it in the
+					SoundSystem. Audio processing can be CPU-intensive, so I handle it on a
+					separate thread. When you request to play a sound, it creates a task and
+					adds it to the queue. The audio thread checks for tasks and processes them
+					when the queue has items.
+				</p>
 
-					<hr>
-					<b>Command Pattern</b>
-					<p>
-						The Input System uses commands to trigger specific events. You can set
-						this up by either overriding the "Command" and "Execute" functions, or by
-						using "CommandFunc" and passing a function pointer (no parameters and void
-						return type). If you want to pass parameters, you can bind them when
-						creating the CommandFunc.
-					</p>
+				<hr>
+				<b>Service Locator</b>
+				<p>
+					I used a Service Locator for sound system management. Currently, I use SDL
+					for sound, but I wanted flexibility in case I want to switch to a
+					different sound library. The Service Locator makes it easy to swap
+					services without having to rewrite code that uses the sound system.
+				</p>
 
-					<hr>
-					<b>Flyweight Pattern</b>
-					<p>
-						The flyweight technique is used for managing resources like textures. When
-						you request a Texture2D, you pass in the file path, and if it exists, you
-						get the texture back. Internally, the system stores resources in a map
-						with file paths as the keys. This ensures each resource is loaded only
-						once, saving memory.
-					</p>
+				<hr>
+				<b>Dirty Flag</b>
+				<p>
+					Lastly, I added the Dirty Flag pattern for optimization. Each GameObject
+					only stores its local transform, so to get the world transform, I used to
+					traverse up the hierarchy every time. With the Dirty Flag, I store a
+					cached world transform and only recalculate it when the flag is false,
+					saving a lot of unnecessary recalculations.
+				</p>
 
-					<hr>
-					<b>Observer Pattern</b>
-					<p>
-						If you need to listen to events from certain objects without direct calls,
-						you can add a subject to them. You create an Observer class, define your
-						event methods, and connect it with the Subject class. When you want to
-						notify listeners, you call "notify" on the subject and pass in the
-						observer's function. You can also bind additional parameters when needed.
-					</p>
+				<hr>
+				<a href="https://github.com/IsaacSauer/2DAE08_Minigin_Engine_Isaac_Sauer" target="_blank"
+					rel="noopener noreferrer">Repository</a>
+				<br>
+				<a href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/qbert_game.zip"
+					target="_blank" rel="noopener noreferrer">Download Executable</a>
 
-					<hr>
-					<b>Singleton</b>
-					<p>
-						I have two types of singletons: a normal one with a static stack
-						allocation and another using a static smart pointer for heap allocation.
-						This makes using singletons easier and prevents the need to manually free
-						the instance.
-					</p>
-
-					<hr>
-					<b>State Machine</b>
-					<p>
-						I implemented an object-oriented state machine. You create a class
-						inheriting from "State" and implement functions like "Enter", "Exit",
-						"HandleInput", "Update", and "FixedUpdate". After setting up your state
-						machine, you create instances of your custom state classes and start the
-						machine. In your component’s update methods, you call "HandleInput" and
-						"Update" and in "FixedUpdate", call "FixedUpdate" from the current state.
-					</p>
-
-					<hr>
-					<b>Game Loop</b>
-					<p>
-						For the game loop, I used the "Play catch up" pattern, which helps with
-						both physics (using Fixed Update) and regular frame updates (Update).
-					</p>
-
-					<hr>
-					<b>Component System</b>
-					<p>
-						Each GameObject can have components attached to it, each with its own
-						logic. This makes components modular, so you can use them across different
-						objects while keeping them functional. The parent GameObject manages the
-						component lifecycle (Initialize, LateInitialize, Start, Update,
-						FixedUpdate).
-						<br>
-						"Initialize" and "LateInitialize" are only called once, while "Start" is
-						called each time the object becomes active (e.g., switching scenes).
-					</p>
-
-					<hr>
-					<b>Update Method</b>
-					<p>
-						Each scene holds a collection of GameObjects, which may have child
-						GameObjects and components. Since the game loop calls "Update" and
-						"FixedUpdate" in the SceneManager, it lets each component have its own
-						dedicated "Update" and "FixedUpdate" methods.
-					</p>
-
-					<hr>
-					<b>Event Queue</b>
-					<p>
-						Right now, there's no standalone Event Queue. However, I use it in the
-						SoundSystem. Audio processing can be CPU-intensive, so I handle it on a
-						separate thread. When you request to play a sound, it creates a task and
-						adds it to the queue. The audio thread checks for tasks and processes them
-						when the queue has items.
-					</p>
-
-					<hr>
-					<b>Service Locator</b>
-					<p>
-						I used a Service Locator for sound system management. Currently, I use SDL
-						for sound, but I wanted flexibility in case I want to switch to a
-						different sound library. The Service Locator makes it easy to swap
-						services without having to rewrite code that uses the sound system.
-					</p>
-
-					<hr>
-					<b>Dirty Flag</b>
-					<p>
-						Lastly, I added the Dirty Flag pattern for optimization. Each GameObject
-						only stores its local transform, so to get the world transform, I used to
-						traverse up the hierarchy every time. With the Dirty Flag, I store a
-						cached world transform and only recalculate it when the flag is false,
-						saving a lot of unnecessary recalculations.
-					</p>
-
-					<hr>
-					<a href="https://github.com/IsaacSauer/2DAE08_Minigin_Engine_Isaac_Sauer"
-						target="_blank" rel="noopener noreferrer">Repository</a>
-					<br>
-					<a
-						href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/qbert_game.zip"
-						target="_blank" rel="noopener noreferrer">Download Executable</a>
-
-				</article>
-			</div>
-
-			<!-- Footer -->
-			<div id="footer">
-				<ul class="copyright">
-					<li>&copy; 2025 Isaac Sauer </li>
-				</ul>
-			</div>
-
+			</article>
 		</div>
 
-		<!-- Scripts -->
-		<script src="../assets/js/jquery.min.js"></script>
-		<script src="../assets/js/browser.min.js"></script>
-		<script src="../assets/js/breakpoints.min.js"></script>
-		<script src="../assets/js/util.js"></script>
-		<script src="../assets/js/main.js"></script>
-		<script src="widget.js"></script>
+		<div id="footer"></div>
+		<script>
+			fetch('/elements/footer.html')
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById('footer').innerHTML = data;
+				});
+		</script>
 
-	</body>
+	</div>
+
+	<!-- Scripts -->
+	<script src="../assets/js/jquery.min.js"></script>
+	<script src="../assets/js/browser.min.js"></script>
+	<script src="../assets/js/breakpoints.min.js"></script>
+	<script src="../assets/js/util.js"></script>
+	<script src="../assets/js/main.js"></script>
+	<script src="widget.js"></script>
+
+</body>
+
 </html>

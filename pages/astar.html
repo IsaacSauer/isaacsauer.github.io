@@ -1,245 +1,247 @@
 <!DOCTYPE HTML>
-<!--
+<!---
 	Astral by HTML5 UP
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-	<head>
-		<title>Faster A* For Games</title>
-		<meta charset="utf-8" />
-		<meta name="viewport"
-			content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../assets/css/main.css" />
-		<link rel="stylesheet" href="../assets/css/responsive.css" />
-		<noscript><link rel="stylesheet"
-				href="../assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
 
-		<!-Wrapper-->
-		<div id="wrapper">
+<head>
+	<title>Faster A* For Games</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="../assets/css/main.css" />
+	<link rel="stylesheet" href="../assets/css/responsive.css" />
+	<noscript>
+		<link rel="stylesheet" href="../assets/css/noscript.css" />
+	</noscript>
+</head>
 
-			<!-Nav -->
-			<nav id="nav">
-				<a href="../index.html#" class="icon solid fa-home"><span>Home</span></a>
-				<a href="../index.html#projects"
-					class="icon solid fa-code"><span>Projects</span></a>
-				<a href="../index.html#art"
-					class="icon solid fa-paint-brush"><span>Art</span></a>
-				<a href="../index.html#music"
-					class="icon solid fa-headphones"><span>Music</span></a>
-				<a href="https://www.linkedin.com/in/isaacsauer/"
-					class="icon brands fa-linkedin-in"><span>LinkedIn</span></a>
-			</nav>
+<body class="is-preload">
 
-			<div id="main">
-				<article id="projects" class="panel">
+	<!---Wrapper-->
+	<div id="wrapper">
 
-					<header>
-						<h1>Faster A* For Games</h1>
-						<p>Faster A* For Games Gameplay Programming @ DAE</p>
-						<hr>
-					</header>
+		<!--Nav -->
+		<nav id="nav">
+			<a href="../index.html#" class="icon solid fa-home"><span>Home</span></a>
+			<a href="../index.html#projects" class="icon solid fa-code"><span>Projects</span></a>
+			<a href="../index.html#art" class="icon solid fa-paint-brush"><span>Art</span></a>
+			<a href="../index.html#music" class="icon solid fa-headphones"><span>Music</span></a>
+			<a href="../index.html#contact" class="icon solid fa-envelope"><span>Contact</span></a>
+		</nav>
 
-					<h2>Introduction</h2><p>
-						The technique I used is mainly called Goal Bounding, it is an optimization
-						technique for pathfinding algorithms. In theory, it can be applied to any
-						search graph. After some digging, I stumbled upon a paper written by
-						<b>Steve Rabin</b> and <b>Nathan R. Sturtevant</b>
-						<a
-							href="http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter22_Faster_A_Star_with_Goal_Bounding.pdf"
-							target="_blank" rel="noopener noreferrer">[1]</a> where they explain the
-						core fundamentals of how this works. I'm going to take it a step further
-						and implement it into a basic pathfinding program.
-					</p>
-					<a href="https://github.com/IsaacSauer/faster-a-star-for-games"
-						target="_blank"><span>Github source</span></a>
-					<br>
+		<div id="main">
+			<article id="projects" class="panel">
+
+				<header>
+					<h1>Faster A* For Games</h1>
+					<p>Faster A* For Games Gameplay Programming @ DAE</p>
+					<hr>
+				</header>
+
+				<h2>Introduction</h2>
+				<p>
+					The technique I used is mainly called Goal Bounding, it is an optimization
+					technique for pathfinding algorithms. In theory, it can be applied to any
+					search graph. After some digging, I stumbled upon a paper written by
+					<b>Steve Rabin</b> and <b>Nathan R. Sturtevant</b>
+					<a href="http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter22_Faster_A_Star_with_Goal_Bounding.pdf"
+						target="_blank" rel="noopener noreferrer">[1]</a> where they explain the
+					core fundamentals of how this works. I'm going to take it a step further
+					and implement it into a basic pathfinding program.
+				</p>
+				<a href="https://github.com/IsaacSauer/faster-a-star-for-games" target="_blank"><span>Github
+						source</span></a>
+				<br>
+				<a href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/gameplay_prog_astar.zip"
+					target="_blank" rel="noopener noreferrer">Download Executable</a>
+				<hr>
+
+				<h2>Main Goal</h2>
+				<h3>Concept</h3>
+				<p>
+					The main goal of this project is to optimize a pathfinding algorithm at
+					runtime by pruning (excluding) large chunks of areas from a so-called
+					"search graph". This check can be done by checking bounding boxes for each
+					connection from a node with the optimal route to a goal node. These
+					bounding boxes are computed at different times but before the actual
+					runtime. Computation time will increase relative to how large your search
+					graph is. But never the less, the algorithm at runtime will run faster
+					because of those exclusions.
+				</p>
+				<img class="mobile"
+					src="https://pro2-bar-s3-cdn-cf2.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/dc5e96ca-632b-4e8e-835d-bcc4bc8ca13a_rw_600.png?h=3e95cb6e8740fd179b86467f648f6911"
+					srcset="https://pro2-bar-s3-cdn-cf2.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/dc5e96ca-632b-4e8e-835d-bcc4bc8ca13a_rw_600.png?h=3e95cb6e8740fd179b86467f648f6911 339w,"
+					sizes="(max-width: 339px) 100vw, 339px" width=auto>
+				<p>Here you can see three bounding boxes precomputed for each edge of the
+					black node. (Source: Faster A * with goal bounding) [<a
+						data-cke-saved-href="http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter22_Faster_A_Star_with_Goal_Bounding.pdf"
+						href="http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter22_Faster_A_Star_with_Goal_Bounding.pdf"
+						target="_blank">1</a>]<br></p>
+				<hr>
+
+				<h2>Optimization</h2>
+				<h3>Requirements</h3>
+				<p>
+					The search graph must be static, in other words, it can not change.
+					Since that would simply mean we would have to recompute all the bounding
+					boxes. And this can not be done at runtime.
+				</p>
+				<p>
+					It is important if u have a large NavMesh that these precomputations are
+					happening before release. You will have to save the data to a file, so you
+					can allocate the memory needed for this data on the RAM when initializing
+					the game/program. (I recommend saving the data as pure binary)
+				</p>
+				<hr>
+
+				<h2>Implementation</h2>
+				<h3>Computation Algorithm</h3>
+				<img class="mobile"
+					src="https://pro2-bar-s3-cdn-cf1.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/237872ab-e3dd-48d8-ab3e-592d2d313345_rw_1200.png?h=8eae2f68693bd4718651d86dc526c48d"
+					srcset="https://pro2-bar-s3-cdn-cf1.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/237872ab-e3dd-48d8-ab3e-592d2d313345_rw_600.png?h=bf4668322c5da0dd6b4bb5a2b53d5345 600w,https://pro2-bar-s3-cdn-cf1.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/237872ab-e3dd-48d8-ab3e-592d2d313345_rw_1200.png?h=8eae2f68693bd4718651d86dc526c48d 700w,"
+					sizes="(max-width: 700px) 100vw, 700px" width="700">
+				<p>
+					The approach I took is slightly different. Since my nodes are not in the
+					centre of a triangle/square but in the middle of each edge of a triangle
+					containing an adjacent triangle/square.
+				</p>
+				<img class="mobile"
+					src="https://pro2-bar-s3-cdn-cf1.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/9462cc49-9b03-499a-acfb-fb99f600589c_rw_1200.png?h=c3b4ce625ea03e3666f9b06055e2b9ef"
+					srcset="https://pro2-bar-s3-cdn-cf1.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/9462cc49-9b03-499a-acfb-fb99f600589c_rw_600.png?h=ca21a914928c5a5e072bec0731d3c6af 600w,https://pro2-bar-s3-cdn-cf1.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/9462cc49-9b03-499a-acfb-fb99f600589c_rw_1200.png?h=c3b4ce625ea03e3666f9b06055e2b9ef 703w,"
+					sizes="(max-width: 703px) 100vw, 703px" width="703">
+
+				<p> Because of this, the interpretation of terms in my code will be
+					different from the terms mentioned in the source paper. <br> connection =
+					edge = d = neighbor; <br> current record = node = n; </p>
+
+				<p>
+					This is how the enhanced Dijkstra method works: <br>
+					So what information we actually need is for each node the optimal starting
+					connection. This information is available to us in a normal Dijkstra
+					algorithm, it's just not stored since we don't need it in a normal
+					Dijkstra algorithm. To actually step through each node during a Dijkstra
+					algorithm, we don't give a Goal node (goal node is the same as start
+					node). This gives it the effect of flood fills the whole graph. Doing
+					this, we will have each node checked. To save this data you need to pass
+					that connection's ID to its children, each time you push a new record to
+					the open list. <br>
+					Having this information we can compute a bounding box for each connection
+					of a node.
+				</p>
+
+				<h3>Other Computation</h3>
+				<p>
+					I've stumbled upon another approach when implementing this. What if you
+					could store for each node a container containing a container representing
+					each node its optimal start connection.
+				</p>
+				<img class="mobile"
+					src="https://pro2-bar-s3-cdn-cf.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/b8ebc3d0-b5d3-45eb-96cd-dd47d1ebed41_rw_600.png?h=50ba4835053872fe819c6d3aeeafaa01"
+					srcset="https://pro2-bar-s3-cdn-cf.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/b8ebc3d0-b5d3-45eb-96cd-dd47d1ebed41_rw_600.png?h=50ba4835053872fe819c6d3aeeafaa01 344w,"
+					sizes="(max-width: 344px) 100vw, 344px" width="700">
+				<p>
+					Here you can see all the nodes containing the optimal start connection
+					from the black node. Do that for each node and you would simply have to
+					check if your goal node's optimal start node is the same as your
+					currentConnection in the foreach(connection of currentNode) of the while
+					loop. Using this in my implementation you would need to link the start and
+					goal node each to their closest node. Because the start and goal node are
+					not present when acquiring this information.
+				</p>
+				<hr>
+
+				<h2>Runtime Algorithm</h2>
+				<img class="mobile"
+					src="https://pro2-bar-s3-cdn-cf5.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/6f6b8e90-f3ea-4340-901d-b98cca0d5247_rw_600.png?h=0405f4c97bdae86efd05bf7df3bc3e56"
+					srcset="https://pro2-bar-s3-cdn-cf5.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/6f6b8e90-f3ea-4340-901d-b98cca0d5247_rw_600.png?h=0405f4c97bdae86efd05bf7df3bc3e56 509w,"
+					sizes="(max-width: 509px) 100vw, 509px" width="700">
+				<p>
+					When implementing this algorithm I stumbled upon some problems. The start
+					& end-node were not present when computing the bounding boxes. <br>
+					That left me with 2 options: <br>
+					1: I could find the closest valid Node and work my way up from there. <br>
+					2: I could check if I'm working with a start or end node and skip the
+					check. <br>
+					I choose to work with my second option. <br>
+					<b> Check if I can do the Bounding Box check </b> <br>
+					So it was said, you need to check if the Goal Position is in a
+					connection's assigned bounding box from the currentNode to actually
+					continue the search. That is really it, but it was tricky to actually
+					implement it. Since I had a dynamic Start and Goal node, which are added
+					at run time. Since these are only 2 nodes, I did a simple check to skip
+					them.
+				</p>
+
+				<p>
+					This is the check if the connection is related to the Start or a Goal node
+				</p>
+				<img class="mobile"
+					src="https://pro2-bar-s3-cdn-cf2.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/3ccde32d-7993-4676-85ab-a64293c87426_rw_1200.png?h=18f86a345316053edaa771348ef7f37b"
+					srcset="https://pro2-bar-s3-cdn-cf2.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/3ccde32d-7993-4676-85ab-a64293c87426_rw_600.png?h=7799c4cf666b39f429455eb039309690 600w,https://pro2-bar-s3-cdn-cf2.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/3ccde32d-7993-4676-85ab-a64293c87426_rw_1200.png?h=18f86a345316053edaa771348ef7f37b 864w,"
+					sizes="(max-width: 864px) 100vw, 864px" width="700">
+				<hr>
+
+				<h2>Bounding Box Check</h2>
+				<p>
+					This shows how I implemented the Bounding Box check. <br>
+					1: I find if the bounding Box at the node connection exists, If it doesn't
+					exist there was no optimal route. <br>
+					2: If it does exist, I check if the Goal(pos) is within that bounding box.
+					If it is, that means that connection is the optimal start connection for
+					that Goal node.
+				</p>
+				<img class="mobile" class="js-lazy e2e-site-project-module-image image-loaded"
+					src="https://pro2-bar-s3-cdn-cf6.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/712d187a-52cb-44f0-a1c5-d37642a2512e_rw_1200.png?h=9376fe730d42898abea60dc023c0c315"
+					srcset="https://pro2-bar-s3-cdn-cf6.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/712d187a-52cb-44f0-a1c5-d37642a2512e_rw_600.png?h=f411b436c7d9141e099079705c1a639d 600w,https://pro2-bar-s3-cdn-cf6.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/712d187a-52cb-44f0-a1c5-d37642a2512e_rw_1200.png?h=9376fe730d42898abea60dc023c0c315"
+					width="700">
+				<hr>
+
+				<h2>Conclusion</h2>
+				<p>
+					In my opinion, this can really speed up any Path Finding procedure. When
+					considering the constraints for this method, and implementing it right. I
+					really had fun implementing this optimization technique, it gave me a
+					bigger perspective of what you can do with pathfinding and how large the
+					spectrum actually is of the pathfinding branch. <br>
+					If there are any questions or you want to give feedback, feel free to
+					contact me.
+				</p>
+
+				<a href="https://github.com/IsaacSauer/faster-a-star-for-games" target="_blank"><span>Github
+						source</span></a>
+				<br>
+				<a href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/gameplay_prog_astar.zip"
+					target="_blank" rel="noopener noreferrer">Download Executable</a>
+				<hr>
+
+				<h2>References</h2>
+				<p>
+					Steve Rabin and Nathan R. Sturtevant, Faster A * with Goal Bounding
 					<a
-						href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/gameplay_prog_astar.zip"
-						target="_blank" rel="noopener noreferrer">Download Executable</a>
-					<hr>
+						href="http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter22_Faster_A_Star_with_Goal_Bounding.pdf">[1]</a>
+				</p>
 
-					<h2>Main Goal</h2><h3>Concept</h3><p>
-						The main goal of this project is to optimize a pathfinding algorithm at
-						runtime by pruning (excluding) large chunks of areas from a so-called
-						"search graph". This check can be done by checking bounding boxes for each
-						connection from a node with the optimal route to a goal node. These
-						bounding boxes are computed at different times but before the actual
-						runtime. Computation time will increase relative to how large your search
-						graph is. But never the less, the algorithm at runtime will run faster
-						because of those exclusions.
-					</p>
-					<img class="mobile"
-						src="https://pro2-bar-s3-cdn-cf2.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/dc5e96ca-632b-4e8e-835d-bcc4bc8ca13a_rw_600.png?h=3e95cb6e8740fd179b86467f648f6911"
-						srcset="https://pro2-bar-s3-cdn-cf2.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/dc5e96ca-632b-4e8e-835d-bcc4bc8ca13a_rw_600.png?h=3e95cb6e8740fd179b86467f648f6911 339w,"
-						sizes="(max-width: 339px) 100vw, 339px" width=auto>
-					<p>Here you can see three bounding boxes precomputed for each edge of the
-						black node. (Source: Faster A * with goal bounding) [<a
-							data-cke-saved-href="http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter22_Faster_A_Star_with_Goal_Bounding.pdf"
-							href="http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter22_Faster_A_Star_with_Goal_Bounding.pdf"
-							target="_blank">1</a>]<br></p>
-					<hr>
+			</article>
+		</div>
 
-					<h2>Optimization</h2><h3>Requirements</h3><p>
-						The search graph must be static, in other words, it can not change.
-						Since that would simply mean we would have to recompute all the bounding
-						boxes. And this can not be done at runtime.
-					</p><p>
-						It is important if u have a large NavMesh that these precomputations are
-						happening before release. You will have to save the data to a file, so you
-						can allocate the memory needed for this data on the RAM when initializing
-						the game/program. (I recommend saving the data as pure binary)
-					</p>
-					<hr>
+		<div id="footer"></div>
+		<script>
+			fetch('/elements/footer.html')
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById('footer').innerHTML = data;
+				});
+		</script>
 
-					<h2>Implementation</h2><h3>Computation Algorithm</h3>
-					<img class="mobile"
-						src="https://pro2-bar-s3-cdn-cf1.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/237872ab-e3dd-48d8-ab3e-592d2d313345_rw_1200.png?h=8eae2f68693bd4718651d86dc526c48d"
-						srcset="https://pro2-bar-s3-cdn-cf1.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/237872ab-e3dd-48d8-ab3e-592d2d313345_rw_600.png?h=bf4668322c5da0dd6b4bb5a2b53d5345 600w,https://pro2-bar-s3-cdn-cf1.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/237872ab-e3dd-48d8-ab3e-592d2d313345_rw_1200.png?h=8eae2f68693bd4718651d86dc526c48d 700w,"
-						sizes="(max-width: 700px) 100vw, 700px" width="700">
-					<p>
-						The approach I took is slightly different. Since my nodes are not in the
-						centre of a triangle/square but in the middle of each edge of a triangle
-						containing an adjacent triangle/square.
-					</p>
-					<img class="mobile"
-						src="https://pro2-bar-s3-cdn-cf1.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/9462cc49-9b03-499a-acfb-fb99f600589c_rw_1200.png?h=c3b4ce625ea03e3666f9b06055e2b9ef"
-						srcset="https://pro2-bar-s3-cdn-cf1.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/9462cc49-9b03-499a-acfb-fb99f600589c_rw_600.png?h=ca21a914928c5a5e072bec0731d3c6af 600w,https://pro2-bar-s3-cdn-cf1.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/9462cc49-9b03-499a-acfb-fb99f600589c_rw_1200.png?h=c3b4ce625ea03e3666f9b06055e2b9ef 703w,"
-						sizes="(max-width: 703px) 100vw, 703px" width="703">
+		<!---Scripts -->
+		<script src="../assets/js/jquery.min.js"></script>
+		<script src="../assets/js/browser.min.js"></script>
+		<script src="../assets/js/breakpoints.min.js"></script>
+		<script src="../assets/js/util.js"></script>
+		<script src="../assets/js/main.js"></script>
 
-					<p> Because of this, the interpretation of terms in my code will be
-						different from the terms mentioned in the source paper. <br> connection =
-						edge = d = neighbor; <br> current record = node = n; </p>
+</body>
 
-					<p>
-						This is how the enhanced Dijkstra method works: <br>
-						So what information we actually need is for each node the optimal starting
-						connection. This information is available to us in a normal Dijkstra
-						algorithm, it's just not stored since we don't need it in a normal
-						Dijkstra algorithm. To actually step through each node during a Dijkstra
-						algorithm, we don't give a Goal node (goal node is the same as start
-						node). This gives it the effect of flood fills the whole graph. Doing
-						this, we will have each node checked. To save this data you need to pass
-						that connection's ID to its children, each time you push a new record to
-						the open list. <br>
-						Having this information we can compute a bounding box for each connection
-						of a node.
-					</p>
-
-					<h3>Other Computation</h3>
-					<p>
-						I've stumbled upon another approach when implementing this. What if you
-						could store for each node a container containing a container representing
-						each node its optimal start connection.
-					</p>
-					<img class="mobile"
-						src="https://pro2-bar-s3-cdn-cf.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/b8ebc3d0-b5d3-45eb-96cd-dd47d1ebed41_rw_600.png?h=50ba4835053872fe819c6d3aeeafaa01"
-						srcset="https://pro2-bar-s3-cdn-cf.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/b8ebc3d0-b5d3-45eb-96cd-dd47d1ebed41_rw_600.png?h=50ba4835053872fe819c6d3aeeafaa01 344w,"
-						sizes="(max-width: 344px) 100vw, 344px" width="700">
-					<p>
-						Here you can see all the nodes containing the optimal start connection
-						from the black node. Do that for each node and you would simply have to
-						check if your goal node's optimal start node is the same as your
-						currentConnection in the foreach(connection of currentNode) of the while
-						loop. Using this in my implementation you would need to link the start and
-						goal node each to their closest node. Because the start and goal node are
-						not present when acquiring this information.
-					</p>
-					<hr>
-
-					<h2>Runtime Algorithm</h2>
-					<img class="mobile"
-						src="https://pro2-bar-s3-cdn-cf5.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/6f6b8e90-f3ea-4340-901d-b98cca0d5247_rw_600.png?h=0405f4c97bdae86efd05bf7df3bc3e56"
-						srcset="https://pro2-bar-s3-cdn-cf5.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/6f6b8e90-f3ea-4340-901d-b98cca0d5247_rw_600.png?h=0405f4c97bdae86efd05bf7df3bc3e56 509w,"
-						sizes="(max-width: 509px) 100vw, 509px" width="700">
-					<p>
-						When implementing this algorithm I stumbled upon some problems. The start
-						& end-node were not present when computing the bounding boxes. <br>
-						That left me with 2 options: <br>
-						1: I could find the closest valid Node and work my way up from there. <br>
-						2: I could check if I'm working with a start or end node and skip the
-						check. <br>
-						I choose to work with my second option. <br>
-						<b> Check if I can do the Bounding Box check </b> <br>
-						So it was said, you need to check if the Goal Position is in a
-						connection's assigned bounding box from the currentNode to actually
-						continue the search. That is really it, but it was tricky to actually
-						implement it. Since I had a dynamic Start and Goal node, which are added
-						at run time. Since these are only 2 nodes, I did a simple check to skip
-						them.
-					</p>
-
-					<p>
-						This is the check if the connection is related to the Start or a Goal node
-					</p>
-					<img class="mobile"
-						src="https://pro2-bar-s3-cdn-cf2.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/3ccde32d-7993-4676-85ab-a64293c87426_rw_1200.png?h=18f86a345316053edaa771348ef7f37b"
-						srcset="https://pro2-bar-s3-cdn-cf2.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/3ccde32d-7993-4676-85ab-a64293c87426_rw_600.png?h=7799c4cf666b39f429455eb039309690 600w,https://pro2-bar-s3-cdn-cf2.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/3ccde32d-7993-4676-85ab-a64293c87426_rw_1200.png?h=18f86a345316053edaa771348ef7f37b 864w,"
-						sizes="(max-width: 864px) 100vw, 864px" width="700">
-					<hr>
-
-					<h2>Bounding Box Check</h2>
-					<p>
-						This shows how I implemented the Bounding Box check. <br>
-						1: I find if the bounding Box at the node connection exists, If it doesn't
-						exist there was no optimal route. <br>
-						2: If it does exist, I check if the Goal(pos) is within that bounding box.
-						If it is, that means that connection is the optimal start connection for
-						that Goal node.
-					</p>
-					<img class="mobile"
-						class="js-lazy e2e-site-project-module-image image-loaded"
-						src="https://pro2-bar-s3-cdn-cf6.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/712d187a-52cb-44f0-a1c5-d37642a2512e_rw_1200.png?h=9376fe730d42898abea60dc023c0c315"
-						srcset="https://pro2-bar-s3-cdn-cf6.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/712d187a-52cb-44f0-a1c5-d37642a2512e_rw_600.png?h=f411b436c7d9141e099079705c1a639d 600w,https://pro2-bar-s3-cdn-cf6.myportfolio.com/c011fd5c-a640-4cdf-8eed-9131596c2bd6/712d187a-52cb-44f0-a1c5-d37642a2512e_rw_1200.png?h=9376fe730d42898abea60dc023c0c315"
-						width="700">
-					<hr>
-
-					<h2>Conclusion</h2>
-					<p>
-						In my opinion, this can really speed up any Path Finding procedure. When
-						considering the constraints for this method, and implementing it right. I
-						really had fun implementing this optimization technique, it gave me a
-						bigger perspective of what you can do with pathfinding and how large the
-						spectrum actually is of the pathfinding branch. <br>
-						If there are any questions or you want to give feedback, feel free to
-						contact me.
-					</p>
-
-					<a href="https://github.com/IsaacSauer/faster-a-star-for-games"
-						target="_blank"><span>Github source</span></a>
-					<br>
-					<a
-						href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/gameplay_prog_astar.zip"
-						target="_blank" rel="noopener noreferrer">Download Executable</a>
-					<hr>
-
-					<h2>References</h2>
-					<p>
-						Steve Rabin and Nathan R. Sturtevant, Faster A * with Goal Bounding
-						<a
-							href="http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter22_Faster_A_Star_with_Goal_Bounding.pdf">[1]</a>
-					</p>
-
-				</article>
-			</div>
-
-			<!-Footer -->
-			<div id="footer">
-				<ul class="copyright">
-					<li>&copy; 2025 Isaac Sauer </li
-					</ul>
-				</div>
-
-			</div>
-
-			<!-Scripts -->
-			<script src="../assets/js/jquery.min.js"></script>
-			<script src="../assets/js/browser.min.js"></script>
-			<script src="../assets/js/breakpoints.min.js"></script>
-			<script src="../assets/js/util.js"></script>
-			<script src="../assets/js/main.js"></script>
-
-		</body>
-	</html>
+</html>
