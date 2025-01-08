@@ -558,7 +558,7 @@
                                         placeholder="Name" required/>
                                 </div>
                                 <div class="col-6 col-12-medium">
-                                    <input type="text" id="email" name="email"
+                                    <input type="email" id="email" name="email"
                                         placeholder="Email" required/>
                                 </div>
                                 <div class="col-12">
@@ -610,18 +610,15 @@
         })();
         </script>
         <script>
-            document.getElementById('emailForm').addEventListener('submit', function(e) 
+            const emailForm = document.getElementById('emailForm');
+            const submitButton = emailForm.querySelector('input[type="submit"]');
+            isSending = false;
+            emailForm.addEventListener('submit', function(e)
             {
                 e.preventDefault();
                 const responseDiv = document.getElementById('response');
 
                 const email = document.getElementById('email').value;
-                if(validateEmail(email) == false)
-                {
-                    console.log('Invalid email address');
-                    SetInnerHtmlWithFadeOutAfterTime(responseDiv, 'Invalid email address!', 5000);
-                    return;
-                }
                 const subject = document.getElementById('subject').value;
                 const name = document.getElementById('name').value;
                 const message = document.getElementById('message').value;
@@ -634,15 +631,19 @@
                 };
                 console.log(emailParams);
 
+                SetButtonSending(true, submitButton);
                 emailjs.send('service_8gj9t52', 'template_axjzm4k', emailParams).then(
                 (response) => 
                 {
                     SetInnerHtmlWithFadeOutAfterTime(responseDiv, 'Email sent successfully!', 5000);
+                    SetButtonSending(false, submitButton);
                     console.log('SUCCESS!', response.status, response.text);
+                    emailForm.reset();
                 },
                 (error) => 
                 {
                     SetInnerHtmlWithFadeOutAfterTime(responseDiv, 'Error sending email: ' + response.text, 5000);
+                    SetButtonSending(false, submitButton);
                     console.log('FAILED...', error);
                 },
                 );
@@ -675,6 +676,23 @@
                     return false; // Invalid email
                 }
             }
+
+            function SetButtonSending(isSending, button)
+            {
+                if(isSending == false)
+                {
+                    // Restore button text after sending
+                    submitButton.value = "Send Message";
+                    submitButton.disabled = false; // Re-enable the button if needed
+                }
+                else
+                {
+                    // Change the button text to "Sending..."
+                    submitButton.value = "Sending...";
+                    submitButton.disabled = true; // Optional: Disable the button to prevent multiple submissions
+                }
+            }
+
         </script>
     </body>
 </html>
