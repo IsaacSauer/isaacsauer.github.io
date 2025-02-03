@@ -5,167 +5,156 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-	<head>
-		<title>Rick And Morty Tool</title>
-		<meta charset="utf-8" />
-		<meta name="viewport"
-			content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../assets/css/main.css" />
-		<link rel="stylesheet" href="../assets/css/responsive.css" />
-		<noscript><link rel="stylesheet"
-				href="../assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
 
-		<!-- Wrapper-->
-		<div id="wrapper">
+<head>
+	<title>Rick And Morty Tool</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="../assets/css/main.css" />
+	<link rel="stylesheet" href="../assets/css/responsive.css" />
+	<noscript>
+		<link rel="stylesheet" href="../assets/css/noscript.css" />
+	</noscript>
+</head>
 
-			<!-- Nav -->
-			<nav id="nav">
-				<a href="../index.html#" class="icon solid fa-home"><span>Home</span></a>
-				<a href="../index.html#projects"
-					class="icon solid fa-code"><span>Projects</span></a>
-				<a href="../index.html#art"
-					class="icon solid fa-paint-brush"><span>Art</span></a>
-				<a href="../index.html#music"
-					class="icon solid fa-headphones"><span>Music</span></a>
-				<a href="https://www.linkedin.com/in/isaacsauer/"
-					class="icon brands fa-linkedin-in"><span>LinkedIn</span></a>
-			</nav>
+<body class="is-preload">
 
-			<div id="main">
-				<article id="projects" class="panel">
+	<!-- Wrapper-->
+	<div id="wrapper">
 
-					<header>
-						<h1>Rick And Morty Tool</h1>
-						<p>Rick And Morty Characters - Tool Development @ DAE</</p>
+		<!-- Nav -->
+		<nav id="nav">
+			<a href="../index.html#" class="icon solid fa-home"><span>Home</span></a>
+			<a href="../index.html#projects" class="icon solid fa-code"><span>Projects</span></a>
+			<a href="../index.html#art" class="icon solid fa-paint-brush"><span>Art</span></a>
+			<a href="../index.html#music" class="icon solid fa-headphones"><span>Music</span></a>
+            <a href="../index.html#contact" class="icon solid fa-envelope"><span>Contact</span></a>
+		</nav>
+
+		<div id="main">
+			<article id="projects" class="panel">
+
+				<header>
+					<h1>Rick And Morty Tool</h1>
+					<p>Rick And Morty Characters - Tool Development @ DAE</< /p>
 						<hr>
-					</header>
+				</header>
 
-					<h3>Introduction:</h3>
-					<p>
-						For the course <b>Tool Development</b> in my <b>2nd year at DAE
-							Howest</b>,
-						For the C# part we had to make a tool which retrieves information from an
-						online API service. <br>
-						I choose the <a href="https://rickandmortyapi.com/documentation"
-							target="_blank" rel="noopener noreferrer">Rick And Morty API</a>.
-						<br>
-						<a
-							href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/tooldev_rick_and_morty_tool.zip"
-							target="_blank" rel="noopener noreferrer">Download Executable</a>
-					</p>
-
-					<hr>
-					<h3><strong>Why does this match the DAE/GD profile?</strong></h3>
-					<p><em>The Rick And Morty series is really popular within the Gaming &
-							Comics community.
-							This API includes all the Rick And Morty characters, including images,
-							and their associated episodes.
-							These episodes are then linked with another JSON request. Each episode
-							also includes all associated characters.</em></p>
-					<p>I will focus on visualizing the characters and viewing options, as well
-						as creating a different page showing the selected character's details.</p>
-
-					<h2>Navigation instructions</h2>
-
-					<h3>Overview Page</h3>
-					<img src="../images/rm/1.png" alt="Overview Page"
-						style="max-width: 100%;">
-
-					<p>The page has several options:</p>
-					<hr>
-
-					<h4><strong>Data Source</strong></h4>
-					<img src="../images/rm/2.png" alt="Data Source"
-						style="max-width: 100%;">
-					<p>This application has the option to switch between Online data or Offline
-						data. You can switch between both options using the "Data Source" dropdown
-						button. You won't see a difference, this is just useful when you're not
-						connected to the internet to still be able to preview the characters.</p>
-					<hr>
-
-					<h4><strong>Sorting</strong></h4>
-					<img src="../images/rm/3.png" alt="Sorting"
-						style="max-width: 100%;">
-					<p>You can quickly show/hide dead or alive characters, and you can also
-						sort the characters depending on which sorting type you selected.</p>
-					<hr>
-
-					<h4><strong>Page Navigation</strong></h4>
-					<img src="../images/rm/4.png" alt="Page Navigation"
-						style="max-width: 100%;">
-					<p>Using these buttons, you can switch to the next page or go back to the
-						previous page. The max amount of pages also gets updated according to your
-						viewing options.</p>
-					<hr>
-
-					<h4><strong>Search Bar</strong></h4>
-					<img src="../images/rm/5.png" alt="Search Bar"
-						style="max-width: 100%;">
-					<p>Here you search for specific characters by their name. Enter your search
-						query and click search. To reset the search results, search with an empty
-						name.</p>
-					<hr>
-
-					<h4><strong>Show Dead/Alive</strong></h4>
-					<img src="../images/rm/6.png" alt="Show Dead/Alive"
-						style="max-width: 100%;">
-					<p>These options can be used to quickly show/hide the "dead" or "alive"
-						characters. Keep in mind, some characters have an unknown status, so those
-						will be hidden in both options. Selecting an option when another option is
-						selected will cancel that one out. Selecting none of these will revert the
-						results back to the previous characters.</p>
-					<hr>
-
-					<h4><strong>Show Details</strong></h4>
-					<img src="../images/rm/7.png" alt="Show Details"
-						style="max-width: 100%;">
-					<p>When you select a character in the list and press this button, it will
-						take you to the detail page.</p>
-
-					<h3>Detail Page</h3>
-					<img src="../images/rm/8.png" alt="Detail Page"
-						style="max-width: 100%;">
-					<hr>
-
-					<h4><strong>Back to Overview</strong></h4>
-					<img src="../images/rm/9.png" alt="Back to Overview"
-						style="max-width: 100%;">
-					<p>Pressing this button will take you back to the overview page.</p>
-					<hr>
-
-					<h4><strong>Save as Image</strong></h4>
-					<img src="../images/rm/10.png" alt="Save as Image"
-						style="max-width: 100%;">
-					<p>This can be used to save the current page as an image. The image is
-						stored in the "saves" folder located in the executable folder. After
-						saving, the corresponding folder will also open.</p>
-
-					<hr>
-					<a
-						href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/tooldev_rick_and_morty_tool.zip"
+				<h3>Introduction:</h3>
+				<p>
+					For the course <b>Tool Development</b> in my <b>2nd year at DAE
+						Howest</b>,
+					For the C# part we had to make a tool which retrieves information from an
+					online API service. <br>
+					I choose the <a href="https://rickandmortyapi.com/documentation" target="_blank"
+						rel="noopener noreferrer">Rick And Morty API</a>.
+					<br>
+					<a href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/tooldev_rick_and_morty_tool.zip"
 						target="_blank" rel="noopener noreferrer">Download Executable</a>
+				</p>
 
-				</article>
-			</div>
+				<hr>
+				<h3><strong>Why does this match the DAE/GD profile?</strong></h3>
+				<p><em>The Rick And Morty series is really popular within the Gaming &
+						Comics community.
+						This API includes all the Rick And Morty characters, including images,
+						and their associated episodes.
+						These episodes are then linked with another JSON request. Each episode
+						also includes all associated characters.</em></p>
+				<p>I will focus on visualizing the characters and viewing options, as well
+					as creating a different page showing the selected character's details.</p>
 
-			<!-- Footer -->
-			<div id="footer">
-				<ul class="copyright">
-					<li>&copy; 2021 Isaac Sauer </li>
-				</ul>
-			</div>
+				<h2>Navigation instructions</h2>
 
+				<h3>Overview Page</h3>
+				<img src="../images/rm/1.png" alt="Overview Page" style="max-width: 100%;">
+
+				<p>The page has several options:</p>
+				<hr>
+
+				<h4><strong>Data Source</strong></h4>
+				<img src="../images/rm/2.png" alt="Data Source" style="max-width: 100%;">
+				<p>This application has the option to switch between Online data or Offline
+					data. You can switch between both options using the "Data Source" dropdown
+					button. You won't see a difference, this is just useful when you're not
+					connected to the internet to still be able to preview the characters.</p>
+				<hr>
+
+				<h4><strong>Sorting</strong></h4>
+				<img src="../images/rm/3.png" alt="Sorting" style="max-width: 100%;">
+				<p>You can quickly show/hide dead or alive characters, and you can also
+					sort the characters depending on which sorting type you selected.</p>
+				<hr>
+
+				<h4><strong>Page Navigation</strong></h4>
+				<img src="../images/rm/4.png" alt="Page Navigation" style="max-width: 100%;">
+				<p>Using these buttons, you can switch to the next page or go back to the
+					previous page. The max amount of pages also gets updated according to your
+					viewing options.</p>
+				<hr>
+
+				<h4><strong>Search Bar</strong></h4>
+				<img src="../images/rm/5.png" alt="Search Bar" style="max-width: 100%;">
+				<p>Here you search for specific characters by their name. Enter your search
+					query and click search. To reset the search results, search with an empty
+					name.</p>
+				<hr>
+
+				<h4><strong>Show Dead/Alive</strong></h4>
+				<img src="../images/rm/6.png" alt="Show Dead/Alive" style="max-width: 100%;">
+				<p>These options can be used to quickly show/hide the "dead" or "alive"
+					characters. Keep in mind, some characters have an unknown status, so those
+					will be hidden in both options. Selecting an option when another option is
+					selected will cancel that one out. Selecting none of these will revert the
+					results back to the previous characters.</p>
+				<hr>
+
+				<h4><strong>Show Details</strong></h4>
+				<img src="../images/rm/7.png" alt="Show Details" style="max-width: 100%;">
+				<p>When you select a character in the list and press this button, it will
+					take you to the detail page.</p>
+
+				<h3>Detail Page</h3>
+				<img src="../images/rm/8.png" alt="Detail Page" style="max-width: 100%;">
+				<hr>
+
+				<h4><strong>Back to Overview</strong></h4>
+				<img src="../images/rm/9.png" alt="Back to Overview" style="max-width: 100%;">
+				<p>Pressing this button will take you back to the overview page.</p>
+				<hr>
+
+				<h4><strong>Save as Image</strong></h4>
+				<img src="../images/rm/10.png" alt="Save as Image" style="max-width: 100%;">
+				<p>This can be used to save the current page as an image. The image is
+					stored in the "saves" folder located in the executable folder. After
+					saving, the corresponding folder will also open.</p>
+
+				<hr>
+				<a href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/tooldev_rick_and_morty_tool.zip"
+					target="_blank" rel="noopener noreferrer">Download Executable</a>
+
+			</article>
 		</div>
 
-		<!-- Scripts -->
-		<script src="../assets/js/jquery.min.js"></script>
-		<script src="../assets/js/browser.min.js"></script>
-		<script src="../assets/js/breakpoints.min.js"></script>
-		<script src="../assets/js/util.js"></script>
-		<script src="../assets/js/main.js"></script>
-		<script src="widget.js"></script>
+		<div id="footer"></div>
+		<script>
+			fetch('/elements/footer.html')
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById('footer').innerHTML = data;
+				});
+		</script>
 
-	</body>
+	</div>
+
+	<!-- Scripts -->
+	<script src="../assets/js/jquery.min.js"></script>
+	<script src="../assets/js/browser.min.js"></script>
+	<script src="../assets/js/breakpoints.min.js"></script>
+	<script src="../assets/js/util.js"></script>
+	<script src="../assets/js/main.js"></script>
+	<script src="widget.js"></script>
+
+</body>
+
 </html>
