@@ -5,21 +5,23 @@
     <title>Betalen</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="assets/js/qrcode.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             flex-direction: column;
+            box-sizing: border-box;
         }
 
         #main {
-            width: 100%;
+            width: 90%;
             max-width: 400px;
             background: #fff;
             padding: 20px;
@@ -35,20 +37,15 @@
             text-align: left;
         }
 
-        input[type="text"] {
-            width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            text-align: center;
-        }
-
+        input[type="text"],
         select {
             width: 100%;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
             padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
         }
 
         .button {
@@ -60,7 +57,8 @@
             cursor: pointer;
             width: 100%;
             font-size: 16px;
-            margin-top: 15px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
         }
 
         .button:hover {
@@ -70,7 +68,7 @@
         .numpad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            gap: 10px;
             margin-top: 15px;
         }
 
@@ -81,6 +79,7 @@
             cursor: pointer;
             border-radius: 5px;
             background-color: #e0e0e0;
+            transition: background-color 0.2s ease;
         }
 
         .numpad button:hover {
@@ -90,16 +89,20 @@
         #qr-container {
             text-align: center;
             margin-top: 20px;
-            justify-content: center;
-            align-items: center;
-            height: 100%; /* Adjust based on your layout */
-            width: 100%;  /* Adjust based on your layout */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #qr-code {
+            margin: 10px auto;
         }
 
         #qr-data {
             margin-top: 10px;
             font-size: 14px;
             word-break: break-word;
+            overflow-wrap: break-word;
         }
     </style>
 </head>
@@ -110,7 +113,6 @@
             <label for="settings">Selecteer instelling</label>
             <select id="settings" onchange="loadSettings()">
                 <option value="">Kies een instelling</option>
-                <!-- Predefined options will be added here -->
             </select>
 
             <label for="bname">Kaarthouder</label>
@@ -180,7 +182,7 @@
 
         function validate() {
             var bname = document.getElementById("bname").value.trim();
-            var iban = document.getElementById("iban").value.trim().replace(/\s+/g, '');;
+            var iban = document.getElementById("iban").value.trim().replace(/\s+/g, '');
             var euro = document.getElementById("euro").value.trim();
 
             if (!bname || !iban || !euro) {
@@ -207,9 +209,7 @@
             });
 
             document.getElementById("qr-data").textContent = qrText;
-
-            saveSetting(bname, iban, euro); // Save the setting for later use
-
+            saveSetting(bname, iban, euro);
             return false;
         }
 
@@ -235,20 +235,20 @@
         }
 
         function clearAllData() {
-            localStorage.removeItem("settings"); // Remove all settings from localStorage
-            document.getElementById("settings").innerHTML = `<option value="">Kies een instelling</option>`; // Clear dropdown
-            document.getElementById("bname").value = ''; // Clear fields
-            document.getElementById("iban").value = 'BE'; // Reset IBAN field
-            document.getElementById("euro").value = ''; // Clear euro field
-            document.getElementById("qr-code").innerHTML = ''; // Clear QR code
-            document.getElementById("qr-data").textContent = ''; // Clear QR data text
+            localStorage.removeItem("settings");
+            document.getElementById("settings").innerHTML = `<option value="">Kies een instelling</option>`;
+            document.getElementById("bname").value = '';
+            document.getElementById("iban").value = 'BE';
+            document.getElementById("euro").value = '';
+            document.getElementById("qr-code").innerHTML = '';
+            document.getElementById("qr-data").textContent = '';
         }
 
-        // Initialize dropdown on page load
         document.addEventListener("DOMContentLoaded", function() {
             let settings = JSON.parse(localStorage.getItem("settings")) || [];
             updateDropdown(settings);
         });
     </script>
 </body>
+
 </html>
