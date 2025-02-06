@@ -36,6 +36,10 @@
             margin: 10px 0 5px;
             text-align: left;
         }
+        label .optional {
+            font-weight: normal;
+            color: #666; /* optioneel: subtiel grijs */
+        }
 
         input[type="text"],
         select {
@@ -114,16 +118,21 @@
             <select id="settings" onchange="loadSettings()">
                 <option value="">Kies een instelling</option>
             </select>
-
+        
             <label for="bname">Kaarthouder</label>
             <input type="text" id="bname" maxlength="70" placeholder="Naam invoeren" required>
-
+        
             <label for="iban">IBAN</label>
             <input type="text" id="iban" value="BE" maxlength="34" placeholder="IBAN invoeren" required>
-
+        
+            <label for="reason">
+                Reden voor betaling <span class="optional">(Optioneel)</span>
+              </label>
+              <input type="text" id="reason" maxlength="100" placeholder="Reden invoeren">
+              
             <label for="euro">EUR</label>
             <input type="text" id="euro" maxlength="13" readonly placeholder="Bedrag invoeren" required>
-
+        
             <div class="numpad">
                 <button type="button" onclick="addNum('1')">1</button>
                 <button type="button" onclick="addNum('2')">2</button>
@@ -138,7 +147,7 @@
                 <button type="button" onclick="addNum('0')">0</button>
                 <button type="button" onclick="addNum('.')">.</button>
             </div>
-
+        
             <button type="submit" class="button">QR Code Genereren</button>
             <button type="button" class="button" onclick="clearAllData()">Clear All Data</button>
         </form>
@@ -168,6 +177,7 @@
                 if (setting) {
                     document.getElementById("bname").value = setting.bname;
                     document.getElementById("iban").value = setting.iban;
+                    document.getElementById("reason").value = setting.reason;
                 }
             }
         }
@@ -184,6 +194,7 @@
             var bname = document.getElementById("bname").value.trim();
             var iban = document.getElementById("iban").value.trim().replace(/\s+/g, '');
             var euro = document.getElementById("euro").value.trim();
+            var reason = document.getElementById("reason").value.trim();
 
             if (!bname || !iban || !euro) {
                 alert("Niet alle velden zijn ingevuld.");
@@ -200,7 +211,8 @@
                 return false;
             }
 
-            var qrText = `BCD\n002\n1\nSCT\n\n${bname}\n${iban}\nEUR${euro}`;
+            var qrText = `BCD\n001\n1\nSCT\n\n${bname}\n${iban}\nEUR${euro}\n\n\n${reason}`.trimEnd();
+            console.log(qrText);
             document.getElementById("qr-code").innerHTML = "";
             new QRCode(document.getElementById("qr-code"), {
                 text: qrText,
@@ -209,15 +221,15 @@
             });
 
             document.getElementById("qr-data").textContent = qrText;
-            saveSetting(bname, iban, euro);
+            saveSetting(bname, iban, euro, reason);
             return false;
         }
 
-        function saveSetting(bname, iban, euro) {
+        function saveSetting(bname, iban, euro, reason) {
             let settings = JSON.parse(localStorage.getItem("settings")) || [];
             let existingSetting = settings.find(s => s.iban === iban);
             if (!existingSetting) {
-                settings.push({ name: bname, bname, iban, euro });
+                settings.push({ name: bname, bname, iban, euro, reason });
                 localStorage.setItem("settings", JSON.stringify(settings));
                 updateDropdown(settings);
             }
