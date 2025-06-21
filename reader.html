@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CBR Viewer (Unarchiver.js)</title>
+  <script src="https://xenova.github.io/unarchiver.js/dist/unarchiver.min.js"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin: 2rem; }
+    img { max-width: 100%; max-height: 90vh; }
+    button { margin: 0.5rem; padding: 0.4rem 1rem; }
+  </style>
+</head>
+<body>
+  <h1>CBR Comic Viewer</h1>
+  <input type="file" id="fileInput" accept=".cbr,.rar" /><br/>
+  <button id="prev" disabled>Previous</button>
+  <button id="next" disabled>Next</button>
+  <div><img id="viewer" src="" alt="Page" /></div>
+
+  <script>
+    let pages = [], idx = 0;
+
+    document.getElementById('fileInput').addEventListener('change', async e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const archive = await Unarchiver.open(file);
+      const entries = archive.entries
+        .filter(e => /\.(jpe?g|png|gif)$/i.test(e.name))
+        .sort((a,b) => a.name.localeCompare(b.name, undefined, {numeric:true}));
+
+      pages = await Promise.all(entries.map(async entry => {
+        const blob = await entry.read();
+        return URL.createObjectURL(blob);
+      }));
+
+      idx = 0;
+      if (pages.length) {
+        document.getElementById('viewer').src = pages[0];
+        document.getElementById('prev').disabled = false;
+        document.getElementById('next').disabled = false;
+      }
+    });
+
+    document.getElementById('prev').addEventListener('click', () => {
+      if (idx > 0) document.getElementById('viewer').src = pages[--idx];
+    });
+    document.getElementById('next').addEventListener('click', () => {
+      if (idx < pages.length - 1) document.getElementById('viewer').src = pages[++idx];
+    });
+  </script>
+</body>
+</html>
