@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GitHub Repo Browser (Private/Public)</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    label, input, button { display: block; margin: 10px 0; }
+    input[type="text"], input[type="password"] { width: 300px; padding: 5px; }
+    a { text-decoration: none; color: #0366d6; display: block; margin: 5px 0; }
+    pre { background: #f6f8fa; padding: 10px; overflow-x: auto; border: 1px solid #ddd; }
+    .breadcrumb { margin: 15px 0; }
+  </style>
+</head>
+<body>
+  <h1>GitHub Repo Browser</h1>
+
+  <label>GitHub Repository (e.g. <code>your-username/private-repo</code>):</label>
+  <input type="text" id="repo" placeholder="owner/repo" />
+
+  <label>GitHub Personal Access Token (for private repos):</label>
+  <input type="password" id="token" placeholder="ghp_..." />
+
+  <button onclick="loadRepo()">Browse</button>
+
+  <div id="file-list"></div>
+  <div id="file-content"></div>
+
+  <script>
+    let currentPath = "";
+    let currentRepo = "";
+    let authToken = "";
+
+    async function loadRepo(path = "") {
+      currentRepo = document.getElementById('repo').value.trim();
+      authToken = document.getElementById('token').value.trim();
+      currentPath = path;
+
+      const fileList = document.getElementById('file-list');
+      const fileContent = document.getElementById('file-content');
+      fileList.innerHTML = '';
+      fileContent.innerHTML = '';
+
+      if (!currentRepo) {
+        alert("Please enter a valid GitHub repository.");
+        return;
+      }
+
+      const url = `https://api.github.com/repos/${currentRepo}/contents/${path}`;
+      const headers = authToken ? { Authorization: `token ${authToken}` } : {};
+
+      try {
+        const response = await fetch(url, { headers });
+        if (!response.ok) throw new Error("Access denied or repo not found");
+
+        const items = await response.json();
+
+        const parts = path.split('/').filter(Boolean);
+        let breadcrumb = `<div class="breadcrumb"><strong>Path:</strong> `;
+        breadcrumb += `<a href="#" onclick="loadRepo('')">root</a>`;
+        let fullPath = "";
+        parts.forEach(part => {
+          fullPath += "/" + part;
+          breadcrumb += ` / <a href="#" onclick="loadRepo('${fullPath.slice(1)}')">${part}</a>`;
+        });
+        breadcrumb += `</div>`;
+        fileList.innerHTML = breadcrumb;
+
+        items.forEach(item => {
+          const link = document.createElement("a");
+          link.href = "#";
+          link.textContent = item.name + (item.type === 'dir' ? '/' : '');
+          link.onclick = (e) => {
+            e.preventDefault();
+            if (item.type === 'dir') {
+              loadRepo(item.path);
+            } else {
+              downloadFile(item.path, item.name);
+            }
+          };
+          fileList.appendChild(link);
+        });
+      } catch (err) {
+        fileList.innerHTML = `<p style="color:red;">${err.message}</p>`;
+      }
+    }
+
+    async function downloadFile(filePath, fileName) {
+      const url = `https://api.github.com/repos/${currentRepo}/contents/${filePath}`;
+      const headers = authToken ? { Authorization: `token ${authToken}` } : {};
+      try {
+        const res = await fetch(url, { headers });
+        if (!res.ok) throw new Error("Could not load file");
+        const data = await res.json();
+        const content = atob(data.content.replace(/\n/g, ''));
+
+        // Create blob and download
+        const blob = new Blob([content], { type: "application/octet-stream" });
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(blobUrl);
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+  </script>
+</body>
+</html>
