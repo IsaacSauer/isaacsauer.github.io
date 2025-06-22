@@ -6,109 +6,149 @@
   <title>GitHub Repo Browser (Private/Public)</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
-    label, input, button { display: block; margin: 10px 0; }
-    input[type="text"], input[type="password"] { width: 300px; padding: 5px; }
-    a { text-decoration: none; color: #0366d6; display: block; margin: 5px 0; }
-    pre { background: #f6f8fa; padding: 10px; overflow-x: auto; border: 1px solid #ddd; }
-    .breadcrumb { margin: 15px 0; }
+    input, button { margin: 10px 0; display: block; padding: 5px; width: 300px; }
+    ul { list-style: none; padding-left: 20px; }
+    li { margin: 4px 0; cursor: pointer; }
+    .folder::before { content: '📁 '; }
+    .file::before { content: '📄 '; }
+    .modal {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+    }
+    .modal-content {
+      background: white; padding: 20px; border-radius: 8px; text-align: center;
+    }
+    .modal-content button { margin: 10px; }
   </style>
 </head>
 <body>
   <h1>GitHub Repo Browser</h1>
+  <input id="repo" placeholder="owner/repo" />
+  <input id="branch" placeholder="branch (default: main)" />
+  <input id="token" type="password" placeholder="GitHub Token (optional)" />
+  <button onclick="browse()">Browse</button>
 
-  <label>GitHub Repository (e.g. <code>your-username/private-repo</code>):</label>
-  <input type="text" id="repo" placeholder="owner/repo" />
+  <div id="tree"></div>
 
-  <label>GitHub Personal Access Token (for private repos):</label>
-  <input type="password" id="token" placeholder="ghp_..." />
-
-  <button onclick="loadRepo()">Browse</button>
-
-  <div id="file-list"></div>
-  <div id="file-content"></div>
+  <div id="popup" class="modal" style="display:none">
+    <div class="modal-content">
+      <h3 id="popup-filename"></h3>
+      <button onclick="downloadFile()">📥 Download</button>
+      <button onclick="openRaw()">🔗 Open in New Tab</button>
+      <button onclick="closePopup()">Cancel</button>
+    </div>
+  </div>
 
   <script>
-    let currentPath = "";
-    let currentRepo = "";
-    let authToken = "";
+    let currentRepo = '', currentBranch = 'main', authToken = '', selectedFile = {};
 
-    async function loadRepo(path = "") {
-      currentRepo = document.getElementById('repo').value.trim();
-      authToken = document.getElementById('token').value.trim();
-      currentPath = path;
-
-      const fileList = document.getElementById('file-list');
-      const fileContent = document.getElementById('file-content');
-      fileList.innerHTML = '';
-      fileContent.innerHTML = '';
-
-      if (!currentRepo) {
-        alert("Please enter a valid GitHub repository.");
-        return;
-      }
-
-      const url = `https://api.github.com/repos/${currentRepo}/contents/${path}`;
-      const headers = authToken ? { Authorization: `token ${authToken}` } : {};
-
-      try {
-        const response = await fetch(url, { headers });
-        if (!response.ok) throw new Error("Access denied or repo not found");
-
-        const items = await response.json();
-
-        const parts = path.split('/').filter(Boolean);
-        let breadcrumb = `<div class="breadcrumb"><strong>Path:</strong> `;
-        breadcrumb += `<a href="#" onclick="loadRepo('')">root</a>`;
-        let fullPath = "";
-        parts.forEach(part => {
-          fullPath += "/" + part;
-          breadcrumb += ` / <a href="#" onclick="loadRepo('${fullPath.slice(1)}')">${part}</a>`;
-        });
-        breadcrumb += `</div>`;
-        fileList.innerHTML = breadcrumb;
-
-        items.forEach(item => {
-          const link = document.createElement("a");
-          link.href = "#";
-          link.textContent = item.name + (item.type === 'dir' ? '/' : '');
-          link.onclick = (e) => {
-            e.preventDefault();
-            if (item.type === 'dir') {
-              loadRepo(item.path);
-            } else {
-              downloadFile(item.path, item.name);
-            }
-          };
-          fileList.appendChild(link);
-        });
-      } catch (err) {
-        fileList.innerHTML = `<p style="color:red;">${err.message}</p>`;
-      }
+    function getParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        repo: params.get('repo') || '',
+        branch: params.get('branch') || 'main',
+        token: params.get('token') || ''
+      };
     }
 
-    async function downloadFile(filePath, fileName) {
-      const url = `https://api.github.com/repos/${currentRepo}/contents/${filePath}`;
+    function updateURL(repo, branch, token) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('repo', repo);
+      url.searchParams.set('branch', branch);
+      if (token) {
+        url.searchParams.set('token', token);
+      } else {
+        url.searchParams.delete('token');
+      }
+      history.replaceState(null, '', url.toString());
+    }
+
+    function browse() {
+      currentRepo = document.getElementById('repo').value;
+      currentBranch = document.getElementById('branch').value || 'main';
+      authToken = document.getElementById('token').value;
+      updateURL(currentRepo, currentBranch, authToken);
+      document.getElementById('tree').innerHTML = '';
+      loadTree('');
+    }
+
+    async function loadTree(path, container = document.getElementById('tree')) {
+      const url = `https://api.github.com/repos/${currentRepo}/contents/${path}?ref=${currentBranch}`;
       const headers = authToken ? { Authorization: `token ${authToken}` } : {};
+
       try {
         const res = await fetch(url, { headers });
-        if (!res.ok) throw new Error("Could not load file");
         const data = await res.json();
-        const content = atob(data.content.replace(/\n/g, ''));
 
-        // Create blob and download
-        const blob = new Blob([content], { type: "application/octet-stream" });
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(blobUrl);
+        const ul = document.createElement('ul');
+        for (const item of data) {
+          const li = document.createElement('li');
+          li.textContent = item.name;
+          li.className = item.type;
+
+          if (item.type === 'dir') {
+            li.onclick = (e) => {
+              e.stopPropagation();
+              if (!li.loaded) {
+                loadTree(item.path, li);
+                li.loaded = true;
+              } else {
+                const childUl = li.querySelector('ul');
+                if (childUl) childUl.style.display = childUl.style.display === 'none' ? 'block' : 'none';
+              }
+            };
+          } else {
+            li.onclick = (e) => {
+              e.stopPropagation();
+              selectedFile = item;
+              document.getElementById('popup-filename').textContent = item.name;
+              document.getElementById('popup').style.display = 'flex';
+            };
+          }
+
+          ul.appendChild(li);
+        }
+        container.appendChild(ul);
       } catch (err) {
-        alert(err.message);
+        alert('Error loading repository: ' + err.message);
       }
     }
+
+    function closePopup() {
+      document.getElementById('popup').style.display = 'none';
+    }
+
+    async function downloadFile() {
+      closePopup();
+      const headers = authToken ? { Authorization: `token ${authToken}` } : {};
+      const res = await fetch(selectedFile.url + `?ref=${currentBranch}`, { headers });
+      const data = await res.json();
+      const content = atob(data.content.replace(/\n/g, ''));
+      const blob = new Blob([content], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = selectedFile.name;
+      link.click();
+    }
+
+    function openRaw() {
+      closePopup();
+      const rawUrl = `https://raw.githubusercontent.com/${currentRepo}/${currentBranch}/${selectedFile.path}`;
+      window.open(rawUrl, '_blank');
+    }
+
+    window.onload = () => {
+      const params = getParams();
+      document.getElementById('repo').value = params.repo;
+      document.getElementById('branch').value = params.branch;
+      document.getElementById('token').value = params.token;
+      if (params.repo) {
+        currentRepo = params.repo;
+        currentBranch = params.branch;
+        authToken = params.token;
+        loadTree('');
+      }
+    };
   </script>
 </body>
 </html>
