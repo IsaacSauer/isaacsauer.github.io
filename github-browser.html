@@ -1,154 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GitHub Repo Browser (Private/Public)</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    input, button { margin: 10px 0; display: block; padding: 5px; width: 300px; }
-    ul { list-style: none; padding-left: 20px; }
-    li { margin: 4px 0; cursor: pointer; }
-    .folder::before { content: '📁 '; }
-    .file::before { content: '📄 '; }
-    .modal {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
-    }
-    .modal-content {
-      background: white; padding: 20px; border-radius: 8px; text-align: center;
-    }
-    .modal-content button { margin: 10px; }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>GitHub Repo Browser</title>
+    <style>
+        :root {
+            --bg: #f5f7fa;
+            --card-bg: #fff;
+            --primary: #4f46e5;
+            --accent: #6366f1;
+            --text: #1f2937;
+            --border: #e5e7eb;
+            --radius: 10px;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+        }
+
+        input, button {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+        }
+
+        input:focus, button:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: var(--accent);
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 1rem;
+        }
+
+        li {
+            margin: 6px 0;
+            padding: 4px 8px;
+            border-radius: var(--radius);
+            transition: background 0.2s;
+        }
+
+        li:hover {
+            background-color: #eef2ff;
+        }
+
+        .folder::before {
+            content: '📁 ';
+        }
+
+        .file::before {
+            content: '📄 ';
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 1rem;
+        }
+
+        .modal-content button {
+            width: auto;
+            margin: 0.5rem;
+            background: var(--primary);
+            border: none;
+        }
+
+        .modal-content button:hover {
+            background: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>GitHub Repo Browser</h1>
-  <input id="repo" placeholder="owner/repo" />
-  <input id="branch" placeholder="branch (default: main)" />
-  <input id="token" type="password" placeholder="GitHub Token (optional)" />
-  <button onclick="browse()">Browse</button>
+<h1>GitHub Repo Browser</h1>
+<div class="container">
+    <input id="repo" placeholder="owner/repo"/>
+    <input id="branch" placeholder="branch (default: main)"/>
+    <input id="token" type="password" placeholder="GitHub Token (optional)"/>
+    <button onclick="browse()">🔍 Browse</button>
+    <div id="tree"></div>
+</div>
 
-  <div id="tree"></div>
-
-  <div id="popup" class="modal" style="display:none">
+<div id="popup" class="modal">
     <div class="modal-content">
-      <h3 id="popup-filename"></h3>
-      <button onclick="downloadFile()">📥 Download</button>
-      <button onclick="openRaw()">🔗 Open in New Tab</button>
-      <button onclick="closePopup()">Cancel</button>
+        <h3 id="popup-filename"></h3>
+        <button onclick="downloadFile()">📥 Download</button>
+        <button onclick="openRaw()">🔗 Open in New Tab</button>
+        <button onclick="closePopup()">❌ Cancel</button>
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
     let currentRepo = '', currentBranch = 'main', authToken = '', selectedFile = {};
 
     function getParams() {
-      const params = new URLSearchParams(window.location.search);
-      return {
-        repo: params.get('repo') || '',
-        branch: params.get('branch') || 'main',
-        token: params.get('token') || ''
-      };
+        const params = new URLSearchParams(window.location.search);
+        return {
+            repo: params.get('repo') || '',
+            branch: params.get('branch') || 'main',
+            token: params.get('token') || ''
+        };
     }
 
     function updateURL(repo, branch, token) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('repo', repo);
-      url.searchParams.set('branch', branch);
-      if (token) {
-        url.searchParams.set('token', token);
-      } else {
-        url.searchParams.delete('token');
-      }
-      history.replaceState(null, '', url.toString());
+        const url = new URL(window.location.href);
+        url.searchParams.set('repo', repo);
+        url.searchParams.set('branch', branch);
+        token ? url.searchParams.set('token', token) : url.searchParams.delete('token');
+        history.replaceState(null, '', url.toString());
     }
 
     function browse() {
-      currentRepo = document.getElementById('repo').value;
-      currentBranch = document.getElementById('branch').value || 'main';
-      authToken = document.getElementById('token').value;
-      updateURL(currentRepo, currentBranch, authToken);
-      document.getElementById('tree').innerHTML = '';
-      loadTree('');
+        currentRepo = document.getElementById('repo').value;
+        currentBranch = document.getElementById('branch').value || 'main';
+        authToken = document.getElementById('token').value;
+        updateURL(currentRepo, currentBranch, authToken);
+        document.getElementById('tree').innerHTML = '';
+        loadTree('');
     }
 
     async function loadTree(path, container = document.getElementById('tree')) {
-      const url = `https://api.github.com/repos/${currentRepo}/contents/${path}?ref=${currentBranch}`;
-      const headers = authToken ? { Authorization: `token ${authToken}` } : {};
+        const url = `https://api.github.com/repos/${currentRepo}/contents/${path}?ref=${currentBranch}`;
+        const headers = authToken ? {Authorization: `token ${authToken}`} : {};
 
-      try {
-        const res = await fetch(url, { headers });
-        const data = await res.json();
+        try {
+            const res = await fetch(url, {headers});
+            if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            const data = await res.json();
 
-        const ul = document.createElement('ul');
-        for (const item of data) {
-          const li = document.createElement('li');
-          li.textContent = item.name;
-          li.className = item.type;
+            const ul = document.createElement('ul');
+            for (const item of data) {
+                const li = document.createElement('li');
+                li.textContent = item.name;
+                li.className = item.type;
 
-          if (item.type === 'dir') {
-            li.onclick = (e) => {
-              e.stopPropagation();
-              if (!li.loaded) {
-                loadTree(item.path, li);
-                li.loaded = true;
-              } else {
-                const childUl = li.querySelector('ul');
-                if (childUl) childUl.style.display = childUl.style.display === 'none' ? 'block' : 'none';
-              }
-            };
-          } else {
-            li.onclick = (e) => {
-              e.stopPropagation();
-              selectedFile = item;
-              document.getElementById('popup-filename').textContent = item.name;
-              document.getElementById('popup').style.display = 'flex';
-            };
-          }
+                if (item.type === 'dir') {
+                    li.onclick = (e) => {
+                        e.stopPropagation();
+                        if (!li.loaded) {
+                            loadTree(item.path, li);
+                            li.loaded = true;
+                        } else {
+                            const childUl = li.querySelector('ul');
+                            if (childUl) childUl.style.display = childUl.style.display === 'none' ? 'block' : 'none';
+                        }
+                    };
+                } else {
+                    li.onclick = (e) => {
+                        e.stopPropagation();
+                        selectedFile = item;
+                        document.getElementById('popup-filename').textContent = item.name;
+                        document.getElementById('popup').style.display = 'flex';
+                    };
+                }
 
-          ul.appendChild(li);
+                ul.appendChild(li);
+            }
+            container.appendChild(ul);
+        } catch (err) {
+            alert('Error loading repository: ' + err.message);
         }
-        container.appendChild(ul);
-      } catch (err) {
-        alert('Error loading repository: ' + err.message);
-      }
     }
 
     function closePopup() {
-      document.getElementById('popup').style.display = 'none';
+        document.getElementById('popup').style.display = 'none';
     }
 
-    async function downloadFile() {
-      closePopup();
-      const headers = authToken ? { Authorization: `token ${authToken}` } : {};
-      const res = await fetch(selectedFile.url + `?ref=${currentBranch}`, { headers });
-      const data = await res.json();
-      const content = atob(data.content.replace(/\n/g, ''));
-      const blob = new Blob([content], { type: 'text/plain' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = selectedFile.name;
-      link.click();
+    function downloadFile() {
+        const link = document.createElement('a');
+        let rawUrl = `https://github.com/${currentRepo}/raw/refs/heads/${currentBranch}/${selectedFile.path}`;
+        if (authToken) rawUrl += `?access_token=${authToken}`;
+        link.href = rawUrl;
+        link.download = selectedFile.name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     function openRaw() {
-      closePopup();
-      const rawUrl = `https://raw.githubusercontent.com/${currentRepo}/${currentBranch}/${selectedFile.path}`;
-      window.open(rawUrl, '_blank');
+        closePopup();
+        const rawUrl = `https://github.com/${currentRepo}/raw/refs/heads/${currentBranch}/${selectedFile.path}`;
+        window.open(rawUrl, '_blank');
     }
 
     window.onload = () => {
-      const params = getParams();
-      document.getElementById('repo').value = params.repo;
-      document.getElementById('branch').value = params.branch;
-      document.getElementById('token').value = params.token;
-      if (params.repo) {
-        currentRepo = params.repo;
-        currentBranch = params.branch;
-        authToken = params.token;
-        loadTree('');
-      }
+        const params = getParams();
+        document.getElementById('repo').value = params.repo;
+        document.getElementById('branch').value = params.branch;
+        document.getElementById('token').value = params.token;
+        if (params.repo) {
+            currentRepo = params.repo;
+            currentBranch = params.branch;
+            authToken = params.token;
+            loadTree('');
+        }
     };
-  </script>
+</script>
 </body>
 </html>
