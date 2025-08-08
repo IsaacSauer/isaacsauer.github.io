@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>PlayFab Leaderboard with Logging</title>
+    <script src="https://download.playfab.com/PlayFabClientApi.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #eee;
+            cursor: pointer;
+        }
+
+        #log {
+            white-space: pre-wrap;
+            background: #222;
+            color: #0f0;
+            padding: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-family: monospace;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Leaderboard with Details</h1>
+<button onclick="loadLeaderboard()">Load Leaderboard</button>
+<!--<button onclick="submitTestScore()">Submit Test Score</button>-->
+<button onclick="downloadCSV()">Download CSV</button>
+
+<div id="leaderboardContainer"></div>
+
+<h2>Logs</h2>
+<div id="log"></div>
+
+<script>
+    var titleId = "10C1DF";
+    PlayFab.settings.titleId = titleId;
+    let currentLeaderboard = [];
+    let scoreSortAsc = true;
+
+    function log(message) {
+        const logDiv = document.getElementById('log');
+        const timestamp = new Date().toLocaleTimeString();
+        logDiv.textContent += `[${timestamp}] ${message}\n`;
+        logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    function login() {
+        log("Logging in with fixed ID...");
+        return new Promise((resolve, reject) => {
+            PlayFab.ClientApi.LoginWithCustomID({
+                CustomId: "LeaderboardTester",
+                CreateAccount: true
+            }, function (result, error) {
+                if (error) {
+                    log("Login failed: " + JSON.stringify(error));
+                    reject(error);
+                } else {
+                    log("Login successful. PlayFabId: " + result.data.PlayFabId);
+                    resolve(result);
+                }
+            });
+        });
+    }
+
+    function submitTestScore() {
+        login().then(() => {
+            PlayFab.ClientApi.UpdatePlayerStatistics({
+                Statistics: [{
+                    StatisticName: "Score",
+                    Value: Math.floor(Math.random() * 1000)
+                }]
+            }, function (result, error) {
+                if (error) {
+                    log("Failed to submit score: " + JSON.stringify(error));
+                } else {
+                    log("Test score submitted.");
+                }
+            });
+        });
+    }
+
+    function loadLeaderboard() {
+        log("Loading leaderboard...");
+        document.getElementById("leaderboardContainer").innerHTML = "";
+
+        login().then(() => {
+            PlayFab.ClientApi.ExecuteCloudScript({
+                FunctionName: "getLeaderboardWithDetails",
+                GeneratePlayStreamEvent: true
+            }, function (result, error) {
+                if (error) {
+                    log("CloudScript call failed: " + JSON.stringify(error));
+                    document.getElementById("leaderboardContainer").innerHTML = "<p>Error loading leaderboard.</p>";
+                } else {
+                    log("CloudScript call successful.");
+                    currentLeaderboard = result.data.FunctionResult.leaderboard || [];
+                    log(`Loaded ${currentLeaderboard.length} leaderboard entries.`);
+                    renderLeaderboard(currentLeaderboard);
+                }
+            });
+        }).catch((e) => {
+            log("Login error: " + JSON.stringify(e));
+            document.getElementById("leaderboardContainer").innerHTML = "<p>Login failed.</p>";
+        });
+    }
+
+    function renderLeaderboard(entries) {
+        if (!entries || entries.length === 0) {
+            document.getElementById("leaderboardContainer").innerHTML = "<p>No leaderboard data available.</p>";
+            return;
+        }
+
+        let table = "<table><thead><tr>" +
+            "<th>Rank</th>" +
+            "<th>Display Name</th>" +
+            `<th onclick="sortByScore()">Score &#x25B2;&#x25BC;</th>` +
+            "<th>Start Time</th>" +
+            "<th>Penalty Time</th>" +
+            "</tr></thead><tbody>";
+
+        entries.forEach((player, index) => {
+            table += `<tr>
+                <td>${index + 1}</td>
+                <td>${player.DisplayName || "N/A"}</td>
+                <td>${player.Score || 0}</td>
+                <td>${player.StartTime || "N/A"}</td>
+                <td>${player.PenaltyTime || "N/A"}</td>
+            </tr>`;
+        });
+
+        table += "</tbody></table>";
+        document.getElementById("leaderboardContainer").innerHTML = table;
+    }
+
+    function sortByScore() {
+        currentLeaderboard.sort((a, b) => scoreSortAsc
+            ? (a.Score || 0) - (b.Score || 0)
+            : (b.Score || 0) - (a.Score || 0)
+        );
+        scoreSortAsc = !scoreSortAsc;
+        renderLeaderboard(currentLeaderboard);
+    }
+
+    function downloadCSV() {
+        if (!currentLeaderboard.length) {
+            alert("No leaderboard data to download!");
+            return;
+        }
+        const headers = ["Rank", "Display Name", "Score", "Start Time", "Penalty Time"];
+        const rows = currentLeaderboard.map((player, index) => [
+            index + 1,
+            `"${player.DisplayName || "N/A"}"`,
+            player.Score || 0,
+            `"${player.StartTime || "N/A"}"`,
+            `"${player.PenaltyTime || "N/A"}"`
+        ]);
+
+        let csvContent = headers.join(",") + "\n" + rows.map(r => r.join(",")).join("\n");
+
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", "leaderboard.csv");
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+</body>
+</html>
