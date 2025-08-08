@@ -38,12 +38,12 @@
         }
 
         input, button {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border);
+            width: 100%; /* or a fixed width like 300px */
+            margin: 0 auto 1rem auto; /* auto on left/right centers it */
+            display: block; /* required for margin auto to work */
             border-radius: var(--radius);
             font-size: 1rem;
+            border: 1px solid var(--border);
         }
 
         input:focus, button:focus {
@@ -68,15 +68,15 @@
             padding-left: 1rem;
         }
 
+        ul ul {
+            padding-left: 1.5rem;
+        }
+
         li {
             margin: 6px 0;
             padding: 4px 8px;
             border-radius: var(--radius);
             transition: background 0.2s;
-        }
-
-        li:hover {
-            background-color: #eef2ff;
         }
 
         .folder::before {
@@ -105,6 +105,10 @@
             max-width: 400px;
             text-align: center;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .modal-content h3 {
@@ -112,8 +116,9 @@
         }
 
         .modal-content button {
-            width: auto;
-            margin: 0.5rem;
+            width: fit-content;
+            padding: 0.5rem 1rem;
+            margin: 0;
             background: var(--primary);
             border: none;
         }
@@ -193,6 +198,9 @@
                 li.className = item.type;
 
                 if (item.type === 'dir') {
+                    li.classList.add('folder');
+                    li.style.cursor = 'pointer';
+
                     li.onclick = (e) => {
                         e.stopPropagation();
                         if (!li.loaded) {
@@ -200,7 +208,9 @@
                             li.loaded = true;
                         } else {
                             const childUl = li.querySelector('ul');
-                            if (childUl) childUl.style.display = childUl.style.display === 'none' ? 'block' : 'none';
+                            if (childUl) {
+                                childUl.style.display = (childUl.style.display === 'none') ? 'block' : 'none';
+                            }
                         }
                     };
                 } else {

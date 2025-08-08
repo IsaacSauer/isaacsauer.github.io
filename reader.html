@@ -2,28 +2,369 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CBR/CBZ Comic Viewer</title>
     <script src="https://xenova.github.io/unarchiver.js/dist/unarchiver.min.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <style>
+        :root {
+            --bg: #f5f7fa;
+            --card-bg: #fff;
+            --text: #1f2937;
+            --primary: #4f46e5;
+            --accent: #6366f1;
+            --border: #e5e7eb;
+            --radius: 10px;
+            --dark-bg: #1e1e1e;
+            --dark-card: #2a2a2a;
+            --dark-text: #e5e5e5;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: background 0.3s;
+        }
+
+        body.dark .container {
+            background: var(--dark-card);
+        }
+
+        input[type="file"] {
+            margin-bottom: 1rem;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            margin: 0.5rem;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        button:hover:not(:disabled) {
+            background: var(--accent);
+        }
+
+        #viewer {
+            margin-top: 1rem;
+            max-width: 100%;
+            max-height: 75vh;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #pageCounter {
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+
+        #loading {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        #darkToggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            button {
+                width: 100%;
+                margin: 0.3rem 0;
+            }
+            #darkToggle {
+                position: static;
+                margin-bottom: 1rem;
+            }
+        }
+
+        .main-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        aside#thumbnails {
+            width: 140px;
+            height: 90vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            margin-right: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            box-sizing: border-box;
+            border-right: 1px solid var(--border);
+        }
+
+        aside#thumbnails img {
+            width: 100%;
+            border: 2px solid transparent;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: transform 0.2s, border 0.2s;
+            box-sizing: border-box;
+        }
+
+        aside#thumbnails img:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        aside#thumbnails img.active {
+            transform: scale(1.08);
+            border-color: var(--accent);
+            z-index: 1;
+        }
+
+        body.dark aside#thumbnails img.active {
+            border-color: #93c5fd;
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+                align-items: center;
+            }
+            .container {
+                padding: 1rem;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            button {
+                width: 100%;
+                margin: 0.3rem 0;
+            }
+            #darkToggle {
+                position: static;
+                margin-bottom: 1rem;
+                align-self: flex-end;
+            }
+            .controls {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            aside#thumbnails {
+                flex-direction: row;
+                height: auto;
+                width: 100%;
+                overflow-x: auto;
+                overflow-y: hidden;
+                margin: 1rem 0;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 0.5rem 0;
+            }
+            aside#thumbnails img {
+                width: 90px;
+                flex: 0 0 auto;
+            }
+            #viewer {
+                max-height: 60vh;
+            }
+        }
+
+        aside#thumbnails::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        aside#thumbnails::-webkit-scrollbar-thumb {
+            background-color: #aaa;
+            border-radius: 6px;
+        }
+
+        body.dark aside#thumbnails::-webkit-scrollbar-thumb {
+            background-color: #555;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        img {
+            touch-action: manipulation;
+        }
+    </style>
 </head>
 <body>
-<button id="darkToggle">🌙 Toggle Dark Mode</button>
-<h1>CBR/CBZ Comic Viewer</h1>
-<div class="main-layout">
-    <aside id="thumbnails"></aside>
-
-    <div class="container">
-        <input type="file" id="fileInput"/>
-        <div>
-            <button id="prev" disabled>⬅️ Previous</button>
-            <button id="next" disabled>Next ➡️</button>
+    <button id="darkToggle">🌙 Toggle Dark Mode</button>
+    <h1>CBR/CBZ Comic Viewer</h1>
+    <div class="main-layout">
+        <div class="container">
+            <input type="file" id="fileInput" />
+            <div class="controls">
+                <button id="prev" disabled>⬅️ Previous</button>
+                <button id="next" disabled>Next ➡️</button>
+            </div>
+            <div id="pageCounter">Page 0 of 0</div>
+            <div id="loading">⏳ Loading pages...</div>
+            <img id="viewer" src="" alt="Comic Page" />
         </div>
-        <div id="pageCounter">Page 0 of 0</div>
-        <div id="loading">⏳ Loading pages...</div>
-        <img id="viewer" src="" alt="Comic Page" />
+        <aside id="thumbnails"></aside>
     </div>
-</div>
+    <script>
+        let pages = [], idx = 0;
 
-<script src="script.js"></script>
+        const fileInput = document.getElementById('fileInput');
+        const viewer = document.getElementById('viewer');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        const pageCounter = document.getElementById('pageCounter');
+        const loading = document.getElementById('loading');
+        const darkToggle = document.getElementById('darkToggle');
+        const thumbnailContainer = document.getElementById('thumbnails');
+
+        fileInput.addEventListener('change', async e => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            pages = [];
+            idx = 0;
+            viewer.src = '';
+            pageCounter.textContent = '';
+            thumbnailContainer.innerHTML = '';
+            loading.style.display = 'block';
+
+            try {
+                const archive = await Unarchiver.open(file);
+                const entries = archive.entries
+                    .filter(e => /\.(jpe?g|png|gif|webp)$/i.test(e.name))
+                    .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+
+                pages = await Promise.all(entries.map(async entry => {
+                    const blob = await entry.read();
+                    return URL.createObjectURL(blob);
+                }));
+
+                if (pages.length) {
+                    idx = 0;
+                    renderThumbnails();
+                    updateViewer();
+                    prevBtn.disabled = false;
+                    nextBtn.disabled = false;
+                }
+            } catch (err) {
+                alert("Failed to read archive: " + err.message);
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+
+        function renderThumbnails() {
+            thumbnailContainer.innerHTML = '';
+            pages.forEach((src, i) => {
+                const thumb = document.createElement('img');
+                thumb.src = src;
+                if (i === idx) thumb.classList.add('active');
+                thumb.addEventListener('click', () => {
+                    idx = i;
+                    updateViewer();
+                });
+                thumbnailContainer.appendChild(thumb);
+            });
+        }
+
+        function updateViewer() {
+            viewer.src = pages[idx];
+            pageCounter.textContent = `Page ${idx + 1} of ${pages.length}`;
+            [...thumbnailContainer.children].forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === idx);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (idx > 0) {
+                idx--;
+                updateViewer();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (idx < pages.length - 1) {
+                idx++;
+                updateViewer();
+            }
+        });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') prevBtn.click();
+            if (e.key === 'ArrowRight') nextBtn.click();
+        });
+
+        darkToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+        });
+
+        // Swipe gesture support for mobile/touch devices
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        viewer.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, false);
+
+        viewer.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, false);
+
+        function handleSwipe() {
+            const swipeThreshold = 50; // Minimum distance in px to count as swipe
+            const diff = touchEndX - touchStartX;
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swipe right → previous page
+                    prevBtn.click();
+                } else {
+                    // Swipe left → next page
+                    nextBtn.click();
+                }
+            }
+        }
+
+    </script>
 </body>
 </html>
