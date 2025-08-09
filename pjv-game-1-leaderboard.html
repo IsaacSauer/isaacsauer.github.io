@@ -100,7 +100,6 @@
 <h1>🏆 Escape Room Leaderboard</h1>
 <div class="container">
     <button onclick="loadLeaderboard()">Load Leaderboard</button>
-<!--    <button onclick="submitTestScore()">Submit Test Score</button>-->
     <button onclick="downloadCSV()">Download CSV</button>
 
     <div id="leaderboardContainer"></div>
@@ -140,23 +139,6 @@
         });
     }
 
-    function submitTestScore() {
-        login().then(() => {
-            PlayFab.ClientApi.UpdatePlayerStatistics({
-                Statistics: [{
-                    StatisticName: "Score",
-                    Value: Math.floor(Math.random() * 1000)
-                }]
-            }, function (result, error) {
-                if (error) {
-                    log("Failed to submit score: " + JSON.stringify(error));
-                } else {
-                    log("Test score submitted.");
-                }
-            });
-        });
-    }
-
     function loadLeaderboard() {
         log("Loading leaderboard...");
         document.getElementById("leaderboardContainer").innerHTML = "";
@@ -188,22 +170,32 @@
             return;
         }
 
+        function formatTime(seconds) {
+            if (seconds == null || isNaN(seconds)) return "N/A";
+            let hrs = Math.floor(seconds / 3600);
+            let mins = Math.floor((seconds % 3600) / 60);
+            let secs = seconds % 60;
+            return [hrs, mins, secs]
+                .map(v => String(v).padStart(2, "0"))
+                .join(":");
+        }
+
         let table = "<table><thead><tr>" +
             "<th>Rank</th>" +
             "<th>Display Name</th>" +
-            `<th onclick="sortByScore()">Score ⬍</th>` +
+            `<th onclick="sortByScore()">Tijd ⬍</th>` +
+            "<th>Waarvan penalty</th>" +
             "<th>Start Time</th>" +
-            "<th>Penalty Time</th>" +
             "</tr></thead><tbody>";
 
         entries.forEach((player, index) => {
             table += `<tr>
-                <td>${index + 1}</td>
-                <td>${player.DisplayName || "N/A"}</td>
-                <td>${player.Score || 0}</td>
-                <td>${player.StartTime || "N/A"}</td>
-                <td>${player.PenaltyTime || "N/A"}</td>
-            </tr>`;
+            <td>${index + 1}</td>
+            <td>${player.DisplayName || "N/A"}</td>
+            <td>${formatTime(player.Score)}</td>
+            <td>${formatTime(player.PenaltyTime)}</td>
+            <td>${player.StartTime || "N/A"}</td>
+        </tr>`;
         });
 
         table += "</tbody></table>";
