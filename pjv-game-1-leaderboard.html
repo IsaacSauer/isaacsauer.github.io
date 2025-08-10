@@ -52,6 +52,11 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.25);
         }
 
+        button.active {
+            box-shadow: 0 0 12px 3px #00aaff;
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+        }
+
         table {
             border-collapse: collapse;
             width: 100%;
@@ -102,6 +107,12 @@
     <button onclick="loadLeaderboard()">Load Leaderboard</button>
     <button onclick="downloadCSV()">Download CSV</button>
 
+    <!-- Filter buttons added here -->
+    <div>
+        <button id="filterZero" onclick="filterByStartChar('0')">Kinderen</button>
+        <button id="filterOne" onclick="filterByStartChar('1')">Tieners</button>
+    </div>
+
     <div id="leaderboardContainer"></div>
 
     <h2>Logs</h2>
@@ -112,6 +123,8 @@
     var titleId = "10C1DF";
     PlayFab.settings.titleId = titleId;
     let currentLeaderboard = [];
+    let filteredLeaderboard = [];
+    let currentFilter = null; // either '0', '1' or null for no filter
     let scoreSortAsc = true;
 
     function log(message) {
@@ -155,6 +168,8 @@
                     log("CloudScript call successful.");
                     currentLeaderboard = result.data.FunctionResult.leaderboard || [];
                     log(`Loaded ${currentLeaderboard.length} leaderboard entries.`);
+                    currentFilter = null;
+                    updateFilterButtons();
                     renderLeaderboard(currentLeaderboard);
                 }
             });
@@ -189,9 +204,12 @@
             "</tr></thead><tbody>";
 
         entries.forEach((player, index) => {
+            // Remove leading "0-" or "1-" from DisplayName
+            const cleanName = (player.DisplayName || "N/A").replace(/^[01]-/, "");
+            
             table += `<tr>
             <td>${index + 1}</td>
-            <td>${player.DisplayName || "N/A"}</td>
+            <td>${cleanName || "N/A"}</td>
             <td>${formatTime(player.Score)}</td>
             <td>${formatTime(player.PenaltyTime)}</td>
             <td>${player.StartTime || "N/A"}</td>
@@ -203,21 +221,23 @@
     }
 
     function sortByScore() {
-        currentLeaderboard.sort((a, b) => scoreSortAsc
+        const listToSort = currentFilter ? filteredLeaderboard : currentLeaderboard;
+        listToSort.sort((a, b) => scoreSortAsc
             ? (a.Score || 0) - (b.Score || 0)
             : (b.Score || 0) - (a.Score || 0)
         );
         scoreSortAsc = !scoreSortAsc;
-        renderLeaderboard(currentLeaderboard);
+        renderLeaderboard(listToSort);
     }
 
     function downloadCSV() {
-        if (!currentLeaderboard.length) {
+        const listToDownload = currentFilter ? filteredLeaderboard : currentLeaderboard;
+        if (!listToDownload.length) {
             alert("No leaderboard data to download!");
             return;
         }
         const headers = ["Rank", "Display Name", "Score", "Start Time", "Penalty Time"];
-        const rows = currentLeaderboard.map((player, index) => [
+        const rows = listToDownload.map((player, index) => [
             index + 1,
             `"${player.DisplayName || "N/A"}"`,
             player.Score || 0,
@@ -236,6 +256,36 @@
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    // New function to filter leaderboard by first character of DisplayName
+    function filterByStartChar(char) {
+        if (!currentLeaderboard.length) {
+            alert("Load the leaderboard first!");
+            return;
+        }
+        currentFilter = char;
+        filteredLeaderboard = currentLeaderboard.filter(player =>
+            player.DisplayName && player.DisplayName.startsWith(char)
+        );
+        updateFilterButtons();
+        renderLeaderboard(filteredLeaderboard);
+        log(`Filtered leaderboard to names starting with '${char}'. ${filteredLeaderboard.length} entries.`);
+    }
+
+    // Update button active state
+    function updateFilterButtons() {
+        const btnZero = document.getElementById("filterZero");
+        const btnOne = document.getElementById("filterOne");
+
+        btnZero.classList.toggle("active", currentFilter === "0");
+        btnOne.classList.toggle("active", currentFilter === "1");
+
+        // If no filter active, remove active from both buttons
+        if (!currentFilter) {
+            btnZero.classList.remove("active");
+            btnOne.classList.remove("active");
+        }
     }
 </script>
 </body>
