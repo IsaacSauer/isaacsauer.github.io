@@ -4,8 +4,8 @@
 a = Analysis(
     ['Run.py'],
     pathex=[],
-    binaries=[],
-    datas=[],
+    binaries=[('realesrgan-ncnn-vulkan.exe', '.'), ('vcomp140d.dll', '.')],
+    datas=[('models', 'models')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

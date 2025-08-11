@@ -1,16 +1,32 @@
-import tkinter as tk
-from tkinter import filedialog, messagebox
-from tkinter import ttk
-import subprocess
 import os
+import sys
+import tkinter as tk
+from tkinter import filedialog, messagebox, ttk
+import subprocess
 import threading
 
-def run_batch(bat_path, file_path, progress_bar, btn):
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and PyInstaller"""
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.abspath(relative_path)
+
+def run_upscaler(file_path, progress_bar, btn):
     try:
-        subprocess.run([bat_path, file_path], check=True)
-        messagebox.showinfo("Done", "Image processed successfully.")
+        input_folder = os.path.dirname(file_path)
+        input_name, input_ext = os.path.splitext(os.path.basename(file_path))
+        output_image = os.path.join(input_folder, f"{input_name}_upscaled{input_ext}")
+
+        exe_path = resource_path("realesrgan-ncnn-vulkan.exe")
+
+        if not os.path.isfile(exe_path):
+            messagebox.showerror("Error", f"Upscaler executable not found:\n{exe_path}")
+            return
+
+        subprocess.run([exe_path, "-i", file_path, "-o", output_image], check=True)
+        messagebox.showinfo("Done", f"Image processed successfully.\nSaved as:\n{output_image}")
     except subprocess.CalledProcessError as e:
-        messagebox.showerror("Error", f"Failed to run batch file.\n{e}")
+        messagebox.showerror("Error", f"Upscaling failed.\n{e}")
     finally:
         progress_bar.stop()
         progress_bar.grid_remove()
@@ -24,19 +40,11 @@ def select_and_run():
     if not file_path:
         return
 
-    bat_path = os.path.abspath("DropHere.bat")
-
-    if not os.path.isfile(bat_path):
-        messagebox.showerror("Error", f"Batch file not found:\n{bat_path}")
-        return
-
-    # Disable button and show progress bar
     btn.config(state=tk.DISABLED)
     progress_bar.grid(row=1, column=0, padx=20, pady=10)
     progress_bar.start(10)
 
-    # Run batch in background thread
-    threading.Thread(target=run_batch, args=(bat_path, file_path, progress_bar, btn), daemon=True).start()
+    threading.Thread(target=run_upscaler, args=(file_path, progress_bar, btn), daemon=True).start()
 
 if __name__ == "__main__":
     root = tk.Tk()
@@ -47,7 +55,6 @@ if __name__ == "__main__":
     btn.grid(row=0, column=0, padx=20, pady=20)
 
     progress_bar = ttk.Progressbar(root, mode="indeterminate")
-    # Initially hidden
     progress_bar.grid(row=1, column=0, padx=20, pady=10)
     progress_bar.grid_remove()
 
