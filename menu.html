@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Project Index</title>
+  <style>
+    :root {
+      --bg-color: #f9fafb;
+      --text-color: #333;
+      --card-bg: #fff;
+      --link-color: #007bff;
+      --link-hover-bg: #007bff;
+      --link-hover-color: #fff;
+    }
+    body.dark {
+      --bg-color: #1e1e1e;
+      --text-color: #e0e0e0;
+      --card-bg: #2c2c2c;
+      --link-color: #4ea3ff;
+      --link-hover-bg: #4ea3ff;
+      --link-hover-color: #000;
+    }
+    body {
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background 0.3s, color 0.3s;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+      text-align: center;
+      transition: color 0.3s;
+    }
+    .theme-toggle {
+      margin-bottom: 20px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      background: var(--link-color);
+      color: var(--link-hover-color);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover {
+      background: var(--link-hover-bg);
+      color: var(--link-hover-color);
+    }
+    .tree-container {
+      background: var(--card-bg);
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      min-width: 300px;
+      max-width: 600px;
+      transition: background 0.3s;
+    }
+    ul {
+      list-style: none;
+      padding-left: 20px;
+      margin: 0;
+    }
+    li {
+      margin: 5px 0;
+      line-height: 1.6;
+      position: relative;
+    }
+    a {
+      color: var(--link-color);
+      text-decoration: none;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    a:hover {
+      background: var(--link-hover-bg);
+      color: var(--link-hover-color);
+    }
+    .folder {
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      user-select: none;
+      transition: color 0.3s;
+    }
+    .folder::before {
+      content: "📂";
+      margin-right: 6px;
+    }
+    .file::before {
+      content: "📄";
+      margin-right: 6px;
+    }
+    .nested {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    .open > .nested {
+      max-height: 500px;
+      transition: max-height 0.5s ease-in;
+    }
+    .caret::after {
+      content: "▶";
+      font-size: 0.8rem;
+      margin-left: 6px;
+      transition: transform 0.2s;
+    }
+    .open > .folder .caret::after {
+      transform: rotate(90deg);
+    }
+  </style>
+</head>
+<body>
+  <h1>📂 Project Index</h1>
+  <button class="theme-toggle" onclick="toggleTheme()">🌙 Toggle Dark Mode</button>
+  <div class="tree-container">
+<ul>
+  <li class=""><div class="folder"><span class="caret"></span>RealESGRAN/</div>
+<ul class='nested'>
+  <li class=""><div class="folder"><span class="caret"></span>build/</div>
+<ul class='nested'>
+  <li class=""><div class="folder"><span class="caret"></span>Run/</div>
+<ul class='nested'>
+  <li><a class="file" href="RealESGRAN/build/Run/xref-Run.html">xref-Run.html</a></li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li><a class="file" href="blog.html">blog.html</a></li>
+  <li class=""><div class="folder"><span class="caret"></span>elements/</div>
+<ul class='nested'>
+  <li><a class="file" href="elements/footer.html">footer.html</a></li>
+  <li><a class="file" href="elements/nav.html">nav.html</a></li>
+</ul>
+  </li>
+  <li><a class="file" href="github-browser.html">github-browser.html</a></li>
+  <li><a class="file" href="menu.html">menu.html</a></li>
+  <li class=""><div class="folder"><span class="caret"></span>pages/</div>
+<ul class='nested'>
+  <li><a class="file" href="pages/astar.html">astar.html</a></li>
+  <li><a class="file" href="pages/breachersvr.html">breachersvr.html</a></li>
+  <li><a class="file" href="pages/capcig.html">capcig.html</a></li>
+  <li><a class="file" href="pages/crash.html">crash.html</a></li>
+  <li><a class="file" href="pages/gbemu.html">gbemu.html</a></li>
+  <li><a class="file" href="pages/gdm.html">gdm.html</a></li>
+  <li><a class="file" href="pages/minigin.html">minigin.html</a></li>
+  <li><a class="file" href="pages/rickandmortyapp.html">rickandmortyapp.html</a></li>
+</ul>
+  </li>
+  <li><a class="file" href="payfast.html">payfast.html</a></li>
+  <li><a class="file" href="pjv-game-1-leaderboard.html">pjv-game-1-leaderboard.html</a></li>
+  <li><a class="file" href="qr.html">qr.html</a></li>
+  <li class=""><div class="folder"><span class="caret"></span>qrcode/</div>
+<ul class='nested'>
+  <li><a class="file" href="qrcode/epc-qr.html">epc-qr.html</a></li>
+</ul>
+  </li>
+  <li><a class="file" href="reader.html">reader.html</a></li>
+  <li><a class="file" href="redirect.html">redirect.html</a></li>
+  <li><a class="file" href="test.html">test.html</a></li>
+</ul>
+
+  </div>
+  <script>
+    // Collapsible folders
+    document.querySelectorAll(".folder").forEach(folder => {
+      folder.addEventListener("click", function(e) {
+        e.stopPropagation();
+        const parent = this.parentElement;
+        parent.classList.toggle("open");
+      });
+    });
+
+    // Dark mode toggle
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("theme", 
+        document.body.classList.contains("dark") ? "dark" : "light");
+    }
+
+    // Load saved theme
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark");
+    }
+  </script>
+</body>
+</html>
