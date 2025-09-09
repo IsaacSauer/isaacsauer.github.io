@@ -197,10 +197,10 @@
 
         let table = "<table><thead><tr>" +
             "<th>Rank</th>" +
-            "<th>Display Name</th>" +
+            "<th>Naam</th>" +
             `<th onclick="sortByScore()">Tijd ⬍</th>` +
             "<th>Waarvan straftijd</th>" +
-            "<th>Start Time</th>" +
+            "<th>Start Tijd</th>" +
             "</tr></thead><tbody>";
 
         entries.forEach((player, index) => {
@@ -236,7 +236,7 @@
             alert("No leaderboard data to download!");
             return;
         }
-        const headers = ["Rank", "Display Name", "Score", "Start Time", "Penalty Time"];
+        const headers = ["Rank", "Naam", "Seconden", "Start Tijd", "Straf Tijd"];
         const rows = listToDownload.map((player, index) => [
             index + 1,
             `"${player.DisplayName || "N/A"}"`,
