@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="nl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>EPC QR Code Generator</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>EPC QR Code Generator</title>
 
-  <!-- QR library (creates a canvas) -->
-  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+    <!-- QR library (creates a canvas) -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 
-  <style>
+    <style>
     :root {
       --accent: #007bff;
     }
@@ -65,66 +66,129 @@
     .actions { display:flex; gap:8px; margin-top:10px; }
     .small { font-size:.9rem; padding:8px 10px; }
     .note { color:#555; font-size:.9rem; margin-top:8px; }
+
+    /* Overlay styles */
+    .overlay {
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .overlay-content {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.2);
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    #qr-overlay-canvas {
+      width: 90vw;
+      height: auto;
+      max-width: 500px;
+      max-height: 500px;
+    }
+
   </style>
-</head>
-<body>
-  <div id="main">
-    <h1>EPC / SEPA QR-code generator</h1>
-    <form id="epcForm" onsubmit="return generateQR();">
-      <label for="bname">Naam begunstigde</label>
-      <input id="bname" type="text" maxlength="70" placeholder="Bijv. Stichting Voorbeeld" required>
+  </head>
+  <body>
+    <div id="main">
+      <h1>EPC / SEPA QR-code generator</h1>
+      <form id="epcForm" onsubmit="return generateQR();">
+        <label for="bname">Naam begunstigde</label>
+        <input id="bname" type="text" maxlength="70"
+          placeholder="Bijv. Stichting Voorbeeld" required>
 
-      <label for="iban">IBAN</label>
-      <input id="iban" type="text" maxlength="34" placeholder="Bijv. BE72000000001616" value="BE" required>
+        <label for="iban">IBAN</label>
+        <input id="iban" type="text" maxlength="34"
+          placeholder="Bijv. BE72000000001616" value="BE" required>
 
-      <div class="row">
-        <div>
-          <label for="bic">BIC <span class="optional">(optioneel)</span></label>
-          <input id="bic" type="text" maxlength="11" placeholder="Bijv. BPOTBEB1 (optioneel)">
+        <div class="row">
+          <div>
+            <label for="bic">BIC <span
+                class="optional">(optioneel)</span></label>
+            <input id="bic" type="text" maxlength="11"
+              placeholder="Bijv. BPOTBEB1 (optioneel)">
+          </div>
+          <div>
+            <label for="amount">Bedrag (EUR) <span
+                class="optional">(optioneel)</span></label>
+            <input id="amount" type="text" maxlength="15"
+              placeholder="Bijv. 12.34">
+          </div>
         </div>
-        <div>
-          <label for="amount">Bedrag (EUR) <span class="optional">(optioneel)</span></label>
-          <input id="amount" type="text" maxlength="15" placeholder="Bijv. 12.34">
+
+        <label for="reference">Betaalreferentie / Structured reference <span
+            class="optional">(optioneel)</span></label>
+        <input id="reference" type="text" maxlength="35"
+          placeholder="Bijv. RF... of leeg">
+
+        <label for="remittance">Vrije mededeling / Remittance
+          (optioneel)</label>
+        <textarea id="remittance" rows="2" maxlength="140"
+          placeholder="Bijv. Factuur 2025-001"></textarea>
+
+        <div class="actions">
+          <button class="button" type="submit">QR Code genereren</button>
+          <button type="button" class="button secondary small"
+            onclick="clearAll()">Clear</button>
         </div>
-      </div>
 
-      <label for="reference">Betaalreferentie / Structured reference <span class="optional">(optioneel)</span></label>
-      <input id="reference" type="text" maxlength="35" placeholder="Bijv. RF... of leeg">
+      </form>
 
-      <label for="remittance">Vrije mededeling / Remittance (optioneel)</label>
-      <textarea id="remittance" rows="2" maxlength="140" placeholder="Bijv. Factuur 2025-001"></textarea>
-
-      <div class="actions">
-        <button class="button" type="submit">QR Code genereren</button>
-        <button type="button" class="button secondary small" onclick="clearAll()">Clear</button>
-      </div>
-
-      <p class="note">
-        Dit genereert een EPC (SCT) payload per EPC-richtlijnen (payload begint met <code>BCD</code>).
-        Banks/apps that support EPC will read this and populate a SEPA credit transfer. :contentReference[oaicite:1]{index=1}
-      </p>
-    </form>
-
-    <div id="qr-area" aria-live="polite">
-      <div style="flex:0 0 220px; text-align:center;">
-        <canvas id="qr-canvas" width="220" height="220" style="display:block; margin:0 auto"></canvas>
-        <div style="margin-top:8px;">
-          <button id="downloadBtn" class="button small" onclick="downloadPNG()" style="width:48%; display:inline-block">Download PNG</button>
-          <button id="copyPayloadBtn" class="button small secondary" onclick="copyPayload()" style="width:48%; display:inline-block">Copy payload</button>
+      <div id="qr-area" aria-live="polite">
+        <div style="flex:0 0 220px; text-align:center;">
+          <canvas id="qr-canvas" width="220" height="220"
+            style="display:block; margin:0 auto"></canvas>
+          <div style="margin-top:8px;">
+            <button id="downloadBtn" class="button small"
+              onclick="downloadPNG()"
+              style="width:48%; display:inline-block">Download PNG</button>
+            <button id="copyPayloadBtn" class="button small secondary"
+              onclick="copyPayload()"
+              style="width:48%; display:inline-block">Copy payload</button>
+          </div>
         </div>
-      </div>
 
-      <div style="flex:1; min-width:220px;">
-        <label>Gegenereerde EPC payload</label>
-        <div id="qr-data">Geen QR gegenereerd</div>
+        <div style="flex:1; min-width:220px;">
+          <label>Gegenereerde EPC payload</label>
+          <div id="qr-data">Geen QR gegenereerd</div>
+        </div>
       </div>
     </div>
-  </div>
+    <!-- Overlay for QR -->
+    <div id="qr-overlay" class="overlay">
+        <button class="close-btn" onclick="closeOverlay()">✕</button>
+      <div class="overlay-content">
+        <canvas id="qr-overlay-canvas"></canvas>
+        <div style="margin-top:10px; font-size:1rem; color:#333;">Scan de
+          QR-code</div>
+      </div>
+    </div>
 
-  <script>
-    // --- Helpers & validation ---
+    <script>
     function validateIBAN(iban) {
-      // Basic IBAN structure check (country code + digits/letters). Not full checksum here.
       iban = iban.replace(/\s+/g,'').toUpperCase();
       return /^[A-Z]{2}[0-9A-Z]{13,32}$/.test(iban);
     }
@@ -134,52 +198,39 @@
     }
 
     function validateAmount(amount) {
-      if (!amount) return true; // optional
-      // Accept "12" "12.3" "12.34" but not comma
+      if (!amount) return true;
       return /^\d+(\.\d{1,2})?$/.test(amount);
     }
 
     function trimToLength(s, max) { return (s || '').trim().substring(0, max); }
 
-    // Build the EPC payload according to the common EPC layout:
-    // ServiceTag (BCD)
-    // Version (001)
-    // Character set (1 = UTF-8)
-    // Identification (SCT)
-    // BIC (optional)
-    // Name (max 70)
-    // IBAN
-    // Amount (EUR + decimal with dot, e.g. EUR12.34) (optional)
-    // Purpose or structured reference (we put reference here) (optional)
-    // Remittance (unstructured) (optional)
-    // Information (optional)  -- we will leave empty if not used
-    //
-    // See EPC guidelines (EPC069-12) for details. (Name and IBAN are required by the scheme).
-    // Source: EPC guidelines & Wikipedia. :contentReference[oaicite:2]{index=2}
     function buildEpcPayload({ bic, name, iban, amount, reference, remittance }) {
       const lines = [];
-      lines.push('BCD');         // Service tag
-      lines.push('001');         // Version (001 is commonly used)
-      lines.push('1');           // Character set: 1 = UTF-8
-      lines.push('SCT');         // Identification: SCT (SEPA Credit Transfer)
-      lines.push(bic || '');     // BIC (optional, empty line allowed)
-      lines.push(trimToLength(name, 70) || ''); // Name (required)
-      lines.push(iban.replace(/\s+/g,'').toUpperCase() || ''); // IBAN (required)
+      lines.push('BCD');
+      lines.push('001');
+      lines.push('1');
+      lines.push('SCT');
+      lines.push(bic || '');
+      lines.push(trimToLength(name, 70) || '');
+      lines.push(iban.replace(/\s+/g,'').toUpperCase() || '');
       if (amount) {
-        // EPC expects decimal point and 2 decimals commonly; prefix with EUR
-        const formatted = parseFloat(amount).toFixed(2).replace(/\.00$/, '.00'); // keep 2 decimals
+        const formatted = parseFloat(amount).toFixed(2).replace(/\.00$/, '.00');
         lines.push('EUR' + formatted);
       } else {
         lines.push('');
       }
-      lines.push(trimToLength(reference, 35) || '');    // Payment reference or structured ref (optional)
-      lines.push(trimToLength(remittance, 140) || '');   // Unstructured remittance (optional)
-      lines.push(''); // Additional information (left empty)
-      return lines.join('\n').replace(/\u0000/g,''); // ensure no nulls
+      lines.push(trimToLength(reference, 35) || '');
+      lines.push(trimToLength(remittance, 140) || '');
+      lines.push('');
+      return lines.join('\n').replace(/\u0000/g,'');
     }
 
-    // --- QR generation using QRious (canvas) ---
     let qr = new QRious({ element: document.getElementById('qr-canvas'), value: '', size: 220, padding: 10 });
+    let qrOverlay = new QRious({
+      element: document.getElementById('qr-overlay-canvas'),
+      value: '',
+      size: 800, // high resolution for crisp scaling
+    });
 
     function generateQR() {
       const name = document.getElementById('bname').value.trim();
@@ -189,30 +240,44 @@
       const reference = document.getElementById('reference').value.trim();
       const remittance = document.getElementById('remittance').value.trim();
 
-      // Basic required checks
       if (!name) { alert('Voer de naam van de begunstigde in.'); return false; }
       if (!iban) { alert('Voer een IBAN in.'); return false; }
-      if (!validateIBAN(iban)) { alert('Ongeldige IBAN (controleer op juistheid).'); return false; }
+      if (!validateIBAN(iban)) { alert('Ongeldige IBAN.'); return false; }
       if (!validateBIC(bic)) { alert('Ongeldige BIC.'); return false; }
-      if (!validateAmount(amount)) { alert('Ongeldig bedrag. Gebruik bijv. 12.34 (punt als decimaalscheider).'); return false; }
+      if (!validateAmount(amount)) { alert('Ongeldig bedrag.'); return false; }
 
-      // Build payload
       const payload = buildEpcPayload({ bic, name, iban, amount: amount || null, reference, remittance });
 
-      // Write to QR canvas
+      // Update both small QR and big QR
       qr.value = payload;
+      qrOverlay.value = payload;
 
-      // Show payload text
       document.getElementById('qr-data').textContent = payload;
 
-      // enable download button
+      // Update URL params
+      const params = [];
+      params.push("name=" + encodeURIComponent(name));
+      params.push("iban=" + encodeURIComponent(iban));
+      if (bic) params.push("bic=" + encodeURIComponent(bic));
+      if (remittance) params.push("remittance=" + encodeURIComponent(remittance));
+      const newUrl = window.location.pathname + "?" + params.join("&");
+      window.history.replaceState(null, "", newUrl);
+
       document.getElementById('downloadBtn').disabled = false;
-      return false; // prevent form submit reload
+
+      // Show overlay
+      document.getElementById('qr-overlay').style.display = "flex";
+
+      return false;
     }
+
+    function closeOverlay() {
+      document.getElementById('qr-overlay').style.display = "none";
+    }
+
 
     function downloadPNG() {
       const canvas = document.getElementById('qr-canvas');
-      // Attempt to force white background if transparent
       const tmp = document.createElement('canvas');
       tmp.width = canvas.width;
       tmp.height = canvas.height;
@@ -238,7 +303,7 @@
       navigator.clipboard?.writeText(payload).then(() => {
         alert('Payload gekopieerd naar klembord.');
       }, () => {
-        alert('Kan niet kopiëren via clipboard API; selecteer en kopieer handmatig.');
+        alert('Kan niet kopiëren; selecteer en kopieer handmatig.');
       });
     }
 
@@ -253,11 +318,16 @@
       document.getElementById('qr-data').textContent = 'Geen QR gegenereerd';
     }
 
-    // Initialise
     document.addEventListener('DOMContentLoaded', function(){
       document.getElementById('downloadBtn').disabled = true;
-    });
 
+      // --- Prefill from URL ---
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("name")) document.getElementById("bname").value = decodeURIComponent(params.get("name"));
+      if (params.has("iban")) document.getElementById("iban").value = decodeURIComponent(params.get("iban"));
+      if (params.has("bic")) document.getElementById("bic").value = decodeURIComponent(params.get("bic"));
+      if (params.has("remittance")) document.getElementById("remittance").value = decodeURIComponent(params.get("remittance"));
+    });
   </script>
-</body>
+  </body>
 </html>
