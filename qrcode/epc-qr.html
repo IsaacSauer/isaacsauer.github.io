@@ -4,11 +4,51 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>EPC QR Code Generator</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff" />
+    <meta name="description" content="Genereer een EPC / SEPA QR-code voor betalingen." />
+    <meta name="keywords" content="EPC, SEPA, QR code, QR-code, generator, betaling, payment, IBAN, BIC, structured reference, betaalreferentie" />
+    <meta name="author" content="Isaac Sauer" />
+    <link rel="apple-touch-icon" href="../icons/icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="EPC QR Code Generator">
+    <link rel="icon" type="image/png" href="../icons/icon-192.png" />
+    <link rel="shortcut icon" href="../icons/icon-192.png" />
 
     <!-- QR library (creates a canvas) -->
     <script
       src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <script>
+    // Register service worker
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("../service-worker.js")
+          .then(reg => console.log("Service Worker registered:", reg))
+          .catch(err => console.error("Service Worker failed:", err));
+      });
+    }
 
+    // --- Remember install-time params ---
+    (function() {
+      const STORAGE_KEY = "pwaInstallUrl";
+
+      // Save only ONCE: when installing (first time app is opened from web, not from manifest)
+      if (!localStorage.getItem(STORAGE_KEY) && window.location.search) {
+        localStorage.setItem(STORAGE_KEY, window.location.href);
+      }
+
+      // If app is opened *from installed shortcut* without params, restore install-time params
+      window.addEventListener("load", () => {
+        const installUrl = localStorage.getItem(STORAGE_KEY);
+
+        if (installUrl && window.location.search === "") {
+          // Redirect to the saved install-time URL
+          window.location.replace(installUrl);
+        }
+      });
+    })();
+  </script>
     <style>
     :root {
       --accent: #007bff;
