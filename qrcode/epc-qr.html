@@ -19,36 +19,64 @@
     <!-- QR library (creates a canvas) -->
     <script
       src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-  <script>
-    // Register service worker
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("../service-worker.js")
-          .then(reg => console.log("Service Worker registered:", reg))
-          .catch(err => console.error("Service Worker failed:", err));
-      });
-    }
-
-    // --- Remember install-time params ---
-    (function() {
-      const STORAGE_KEY = "pwaInstallUrl";
-
-      // Save only ONCE: when installing (first time app is opened from web, not from manifest)
-      if (!localStorage.getItem(STORAGE_KEY) && window.location.search) {
-        localStorage.setItem(STORAGE_KEY, window.location.href);
+    <script>
+      // Register service worker
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("../service-worker.js")
+            .then(reg => console.log("Service Worker registered:", reg))
+            .catch(err => console.error("Service Worker failed:", err));
+        });
       }
 
-      // If app is opened *from installed shortcut* without params, restore install-time params
-      window.addEventListener("load", () => {
-        const installUrl = localStorage.getItem(STORAGE_KEY);
-
-        if (installUrl && window.location.search === "") {
-          // Redirect to the saved install-time URL
-          window.location.replace(installUrl);
+      // --- Remember install-time params using IndexedDB (iOS-safe) ---
+      (function() {
+        function openDB(cb) {
+          const req = indexedDB.open("PWAData", 1);
+          req.onupgradeneeded = e => {
+            e.target.result.createObjectStore("store");
+          };
+          req.onsuccess = e => cb(e.target.result);
         }
-      });
-    })();
-  </script>
+
+        function saveInstallUrl(url) {
+          openDB(db => {
+            const tx = db.transaction("store", "readwrite");
+            tx.objectStore("store").put(url, "installUrl");
+          });
+        }
+
+        function getInstallUrl(cb) {
+          openDB(db => {
+            const tx = db.transaction("store", "readonly");
+            const req = tx.objectStore("store").get("installUrl");
+            req.onsuccess = () => cb(req.result);
+          });
+        }
+
+        const hasParams = window.location.search.length > 0;
+
+        if (hasParams) {
+          getInstallUrl(stored => {
+            if (!stored) {
+              saveInstallUrl(window.location.href);
+              console.log("Saved install-time URL:", window.location.href);
+            }
+          });
+        }
+
+        window.addEventListener("load", () => {
+          if (!hasParams) {
+            getInstallUrl(stored => {
+              if (stored) {
+                console.log("Restoring install-time URL:", stored);
+                window.location.replace(stored);
+              }
+            });
+          }
+        });
+      })();
+    </script>
     <style>
     :root {
       --accent: #007bff;
