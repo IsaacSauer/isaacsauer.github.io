@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GPX Viewer with ArcGIS Street Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  
+  <!-- Leaflet GPX plugin -->
+  <script src="https://unpkg.com/leaflet-gpx"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+    #map {
+      height: 100%;
+      width: 100%;
+    }
+    #controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+      background: white;
+      padding: 8px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <input type="file" id="gpxfile" accept=".gpx"/>
+  </div>
+  <div id="map"></div>
+
+  <script>
+    // Initialize map
+    const map = L.map('map').setView([50.889126, 3.4175765], 15);
+
+    // ArcGIS Streets basemap
+    L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', 
+      {
+        attribution: 'Tiles © Esri — Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom'
+      }
+    ).addTo(map);
+
+    let currentGpxLayer = null; // Keep track of the current GPX layer
+
+    // Handle GPX upload
+    document.getElementById('gpxfile').addEventListener('change', function(evt) {
+      const file = evt.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const gpx = e.target.result;
+
+        // Remove previous GPX layer if it exists
+        if (currentGpxLayer) {
+          map.removeLayer(currentGpxLayer);
+        }
+
+        // Add new GPX layer
+        currentGpxLayer = new L.GPX(gpx, {
+          async: true,
+          marker_options: {
+            startIconUrl: 'https://unpkg.com/leaflet-gpx/pin-icon-start.png',
+            endIconUrl: 'https://unpkg.com/leaflet-gpx/pin-icon-end.png',
+            shadowUrl: 'https://unpkg.com/leaflet-gpx/pin-shadow.png'
+          }
+        }).on('loaded', function(e) {
+          map.fitBounds(e.target.getBounds());
+        });
+
+        currentGpxLayer.addTo(map);
+      };
+      reader.readAsText(file);
+    });
+  </script>
+</body>
+</html>
