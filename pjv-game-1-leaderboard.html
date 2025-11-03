@@ -1,131 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>Escape Room Leaderboard</title>
     <script src="https://download.playfab.com/PlayFabClientApi.js"></script>
+
     <style>
+        :root {
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #f1f1f1;
+            --accent: #00bcd4;
+            --accent-hover: #0097a7;
+            --border: #2c2c2c;
+            --success: #4caf50;
+            --error: #f44336;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            background: linear-gradient(120deg, #2b5876, #4e4376);
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            padding: 20px;
         }
 
         h1 {
-            color: white;
-            margin-top: 30px;
-            font-size: 2.2em;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 20px;
         }
 
         .container {
-            background: white;
+            max-width: 900px;
+            margin: auto;
+            background: var(--card-bg);
+            border-radius: 16px;
             padding: 20px;
-            margin: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .tab-menu {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tab-menu button {
+            background: var(--border);
+            color: var(--text);
+            border: none;
+            padding: 10px 16px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            width: 90%;
-            max-width: 1000px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+
+        .tab-menu button.active {
+            background: var(--accent);
+            color: #000;
+            font-weight: bold;
+        }
+
+        .tab-menu button:hover {
+            background: var(--accent-hover);
         }
 
         button {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            color: white;
+            background: var(--accent);
+            color: #000;
             border: none;
-            padding: 10px 18px;
-            font-size: 15px;
-            border-radius: 6px;
-            cursor: pointer;
+            padding: 10px 16px;
             margin: 5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s, transform 0.2s;
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            background: var(--accent-hover);
+            transform: scale(1.03);
         }
 
         button.active {
-            box-shadow: 0 0 12px 3px #00aaff;
-            background: linear-gradient(135deg, #0072ff, #00c6ff);
+            background: var(--success);
+            color: #fff;
         }
 
         table {
-            border-collapse: collapse;
             width: 100%;
+            border-collapse: collapse;
             margin-top: 15px;
-            overflow: hidden;
-            border-radius: 8px;
         }
 
         th, td {
-            padding: 12px 15px;
             text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
         }
 
         th {
-            background: #0072ff;
-            color: white;
-            font-weight: 600;
+            background: var(--border);
             cursor: pointer;
             user-select: none;
         }
 
-        tr:nth-child(even) {
-            background: #f8f9fa;
+        th:hover {
+            background: var(--accent-hover);
+            color: #000;
         }
 
         tr:hover {
-            background: #e0f0ff;
-            transition: background 0.2s;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         #log {
-            white-space: pre-wrap;
-            background: #111;
-            color: #0f0;
-            padding: 10px;
-            border-radius: 8px;
-            max-height: 200px;
-            overflow-y: auto;
+            background: #0d0d0d;
+            color: #ccc;
             font-family: monospace;
-            margin-top: 20px;
-            font-size: 13px;
+            padding: 10px;
+            height: 150px;
+            overflow-y: auto;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            white-space: pre-line;
+        }
+
+        .polling-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            th, td { font-size: 14px; }
+            button { padding: 8px 12px; }
         }
     </style>
 </head>
+
 <body>
 <h1>🏆 Escape Room Leaderboard</h1>
-<div class="container">
-    <button onclick="loadLeaderboard()">Load Leaderboard</button>
-    <button onclick="downloadCSV()">Download CSV</button>
 
-    <!-- Filter buttons added here -->
-    <div>
+<div class="container">
+    <!-- Tabs -->
+    <div class="tab-menu">
+        <button id="tabScore" class="active" onclick="switchSource('Score')">Score</button>
+        <button id="tabScore2" onclick="switchSource('Score2')">Score 2</button>
+    </div>
+
+    <!-- Actions -->
+    <div style="text-align:center;">
+        <button onclick="loadLeaderboard()">Load Leaderboard</button>
+        <button onclick="downloadCSV()">Download CSV</button>
+    </div>
+
+    <!-- Filters -->
+    <div style="text-align:center; margin-top:10px;">
         <button id="filterZero" onclick="filterByStartChar('0')">Kinderen</button>
         <button id="filterOne" onclick="filterByStartChar('1')">Tieners</button>
     </div>
 
+    <!-- Polling controls -->
+    <div class="polling-controls">
+        <button id="autoPollBtn" onclick="toggleAutoPolling()">Enable Auto Refresh</button>
+        <label for="pollRate">Every</label>
+        <input type="number" id="pollRate" value="30" min="5" max="300" />
+        <span>sec</span>
+    </div>
+
+    <!-- Leaderboard Table -->
     <div id="leaderboardContainer"></div>
 
+    <!-- Logs -->
     <h2>Logs</h2>
     <div id="log"></div>
 </div>
 
 <script>
+    // PlayFab setup
     var titleId = "10C1DF";
     PlayFab.settings.titleId = titleId;
+
+    let currentSource = "Score";
     let currentLeaderboard = [];
     let filteredLeaderboard = [];
-    let currentFilter = null; // either '0', '1' or null for no filter
+    let currentFilter = null;
     let scoreSortAsc = true;
+    let loggedIn = false;
+    let loginPromise = null;
+
+    // Polling
+    let pollingActive = false;
+    let pollingInterval = null;
 
     function log(message) {
         const logDiv = document.getElementById('log');
@@ -135,8 +224,9 @@
     }
 
     function login() {
-        log("Logging in with fixed ID...");
-        return new Promise((resolve, reject) => {
+        if (loggedIn && loginPromise) return loginPromise;
+        log("Logging in...");
+        loginPromise = new Promise((resolve, reject) => {
             PlayFab.ClientApi.LoginWithCustomID({
                 CustomId: "LeaderboardTester",
                 CreateAccount: true
@@ -145,42 +235,60 @@
                     log("Login failed: " + JSON.stringify(error));
                     reject(error);
                 } else {
-                    log("Login successful. PlayFabId: " + result.data.PlayFabId);
+                    log("Login successful.");
+                    loggedIn = true;
                     resolve(result);
                 }
             });
         });
+        return loginPromise;
+    }
+
+    function switchSource(source) {
+        currentSource = source;
+        document.getElementById('tabScore').classList.toggle('active', source === 'Score');
+        document.getElementById('tabScore2').classList.toggle('active', source === 'Score2');
+        log(`Switched to source: ${source}`);
+        loadLeaderboard();
     }
 
     function loadLeaderboard() {
-        log("Loading leaderboard...");
-        document.getElementById("leaderboardContainer").innerHTML = "";
+        log(`Loading leaderboard for ${currentSource}...`);
+        document.getElementById("leaderboardContainer").innerHTML = "<p>Loading...</p>";
 
         login().then(() => {
             PlayFab.ClientApi.ExecuteCloudScript({
                 FunctionName: "getLeaderboardWithDetails",
+                FunctionParameter: { statisticName: currentSource },
                 GeneratePlayStreamEvent: true
             }, function (result, error) {
                 if (error) {
-                    log("CloudScript call failed: " + JSON.stringify(error));
+                    log("CloudScript failed: " + JSON.stringify(error));
                     document.getElementById("leaderboardContainer").innerHTML = "<p>Error loading leaderboard.</p>";
-                } else {
-                    log("CloudScript call successful.");
-                    currentLeaderboard = result.data.FunctionResult.leaderboard || [];
-                    log(`Loaded ${currentLeaderboard.length} leaderboard entries.`);
+                    return;
+                }
+                try {
+                    const funcResult = result.data && result.data.FunctionResult;
+                    if (!funcResult || !funcResult.leaderboard) {
+                        log("⚠️ No leaderboard returned.");
+                        document.getElementById("leaderboardContainer").innerHTML = "<p>No leaderboard data found.</p>";
+                        return;
+                    }
+                    currentLeaderboard = funcResult.leaderboard;
                     currentFilter = null;
                     updateFilterButtons();
                     renderLeaderboard(currentLeaderboard);
+                    log(`✅ Leaderboard updated (${currentLeaderboard.length} entries).`);
+                } catch (ex) {
+                    log("⚠️ Error parsing leaderboard: " + ex.message);
+                    document.getElementById("leaderboardContainer").innerHTML = "<p>Error parsing leaderboard.</p>";
                 }
             });
-        }).catch((e) => {
-            log("Login error: " + JSON.stringify(e));
-            document.getElementById("leaderboardContainer").innerHTML = "<p>Login failed.</p>";
         });
     }
 
     function renderLeaderboard(entries) {
-        if (!entries || entries.length === 0) {
+        if (!entries.length) {
             document.getElementById("leaderboardContainer").innerHTML = "<p>No leaderboard data available.</p>";
             return;
         }
@@ -190,101 +298,111 @@
             let hrs = Math.floor(seconds / 3600);
             let mins = Math.floor((seconds % 3600) / 60);
             let secs = seconds % 60;
-            return [hrs, mins, secs]
-                .map(v => String(v).padStart(2, "0"))
-                .join(":");
+            return [hrs, mins, secs].map(v => String(v).padStart(2, "0")).join(":");
         }
 
         let table = "<table><thead><tr>" +
             "<th>Rank</th>" +
             "<th>Naam</th>" +
-            `<th onclick="sortByScore()">Tijd ⬍</th>` +
-            "<th>Waarvan straftijd</th>" +
-            "<th>Start Tijd</th>" +
-            "</tr></thead><tbody>";
+            `<th onclick='sortByScore()'>Tijd ⬍</th>` +
+            (currentSource === "Score" ? "<th>Waarvan straftijd</th>" : "") +
+            "<th>Start Tijd</th></tr></thead><tbody>";
 
-        entries.forEach((player, index) => {
-            // Remove leading "0-" or "1-" from DisplayName
-            const cleanName = (player.DisplayName || "N/A").replace(/^[01]-/, "");
-            
+        entries.forEach((p, i) => {
+            const cleanName = (p.DisplayName || "N/A").replace(/^[01]-/, "");
             table += `<tr>
-            <td>${index + 1}</td>
-            <td>${cleanName || "N/A"}</td>
-            <td>${formatTime(player.Score)}</td>
-            <td>${formatTime(player.PenaltyTime)}</td>
-            <td>${player.StartTime || "N/A"}</td>
-        </tr>`;
+            <td>${i + 1}</td>
+            <td>${cleanName}</td>
+            <td>${formatTime(p.Score)}</td>`;
+            if (currentSource === "Score") {
+                table += `<td>${formatTime(p.PenaltyTime)}</td>`;
+            }
+            table += `<td>${p.StartTime || "N/A"}</td></tr>`;
         });
-
         table += "</tbody></table>";
         document.getElementById("leaderboardContainer").innerHTML = table;
     }
 
     function sortByScore() {
-        const listToSort = currentFilter ? filteredLeaderboard : currentLeaderboard;
-        listToSort.sort((a, b) => scoreSortAsc
-            ? (a.Score || 0) - (b.Score || 0)
-            : (b.Score || 0) - (a.Score || 0)
-        );
+        const list = currentFilter ? filteredLeaderboard : currentLeaderboard;
+        list.sort((a, b) => scoreSortAsc ? (a.Score || 0) - (b.Score || 0) : (b.Score || 0) - (a.Score || 0));
         scoreSortAsc = !scoreSortAsc;
-        renderLeaderboard(listToSort);
+        renderLeaderboard(list);
     }
 
-    function downloadCSV() {
-        const listToDownload = currentFilter ? filteredLeaderboard : currentLeaderboard;
-        if (!listToDownload.length) {
-            alert("No leaderboard data to download!");
-            return;
-        }
-        const headers = ["Rank", "Naam", "Seconden", "Start Tijd", "Straf Tijd"];
-        const rows = listToDownload.map((player, index) => [
-            index + 1,
-            `"${player.DisplayName || "N/A"}"`,
-            player.Score || 0,
-            `"${player.StartTime || "N/A"}"`,
-            `"${player.PenaltyTime || "N/A"}"`
-        ]);
-
-        let csvContent = headers.join(",") + "\n" + rows.map(r => r.join(",")).join("\n");
-
-        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.setAttribute("href", url);
-        link.setAttribute("download", "leaderboard.csv");
-        link.style.display = "none";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    // New function to filter leaderboard by first character of DisplayName
     function filterByStartChar(char) {
         if (!currentLeaderboard.length) {
             alert("Load the leaderboard first!");
             return;
         }
         currentFilter = char;
-        filteredLeaderboard = currentLeaderboard.filter(player =>
-            player.DisplayName && player.DisplayName.startsWith(char)
-        );
+        filteredLeaderboard = currentLeaderboard.filter(p => p.DisplayName && p.DisplayName.startsWith(char));
         updateFilterButtons();
         renderLeaderboard(filteredLeaderboard);
-        log(`Filtered leaderboard to names starting with '${char}'. ${filteredLeaderboard.length} entries.`);
+        log(`Filtered to names starting with '${char}'.`);
     }
 
-    // Update button active state
     function updateFilterButtons() {
         const btnZero = document.getElementById("filterZero");
         const btnOne = document.getElementById("filterOne");
-
         btnZero.classList.toggle("active", currentFilter === "0");
         btnOne.classList.toggle("active", currentFilter === "1");
-
-        // If no filter active, remove active from both buttons
         if (!currentFilter) {
             btnZero.classList.remove("active");
             btnOne.classList.remove("active");
+        }
+    }
+
+    function downloadCSV() {
+        const list = currentFilter ? filteredLeaderboard : currentLeaderboard;
+        if (!list.length) {
+            alert("No leaderboard data to download!");
+            return;
+        }
+
+        const headers = currentSource === "Score"
+            ? ["Rank", "Naam", "Seconden", "Start Tijd", "Straf Tijd"]
+            : ["Rank", "Naam", "Seconden", "Start Tijd"];
+
+        const rows = list.map((p, i) => currentSource === "Score"
+            ? [i + 1, `"${p.DisplayName || "N/A"}"`, p.Score || 0, `"${p.StartTime || "N/A"}"`, `"${p.PenaltyTime || "N/A"}"`]
+            : [i + 1, `"${p.DisplayName || "N/A"}"`, p.Score || 0, `"${p.StartTime || "N/A"}"`]
+        );
+
+        let csv = headers.join(",") + "\n" + rows.map(r => r.join(",")).join("\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${currentSource}_leaderboard.csv`;
+        link.click();
+    }
+
+    // 🔄 Auto Polling
+    function toggleAutoPolling() {
+        const button = document.getElementById('autoPollBtn');
+        const pollRate = parseInt(document.getElementById('pollRate').value, 10) * 1000;
+
+        if (!pollingActive) {
+            if (isNaN(pollRate) || pollRate < 5000) {
+                alert("Please enter a polling rate of at least 5 seconds.");
+                return;
+            }
+            pollingActive = true;
+            button.classList.add('active');
+            button.textContent = "Disable Auto Refresh";
+            log(`Auto polling enabled (every ${pollRate / 1000}s).`);
+            loadLeaderboard();
+            pollingInterval = setInterval(() => {
+                loadLeaderboard();
+                log("Auto-refresh triggered.");
+            }, pollRate);
+        } else {
+            pollingActive = false;
+            clearInterval(pollingInterval);
+            button.classList.remove('active');
+            button.textContent = "Enable Auto Refresh";
+            log("Auto polling disabled.");
         }
     }
 </script>
