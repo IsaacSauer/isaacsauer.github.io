@@ -211,7 +211,8 @@
     let scoreSortAsc = true;
     let loggedIn = false;
     let loginPromise = null;
-
+	let lastSortApplied = false;
+	
     // Polling
     let pollingActive = false;
     let pollingInterval = null;
@@ -252,40 +253,51 @@
         loadLeaderboard();
     }
 
-    function loadLeaderboard() {
-        log(`Loading leaderboard for ${currentSource}...`);
-        document.getElementById("leaderboardContainer").innerHTML = "<p>Loading...</p>";
+	function loadLeaderboard() {
+		log(`Loading leaderboard for ${currentSource}...`);
+		document.getElementById("leaderboardContainer").innerHTML = "<p>Loading...</p>";
 
-        login().then(() => {
-            PlayFab.ClientApi.ExecuteCloudScript({
-                FunctionName: "getLeaderboardWithDetails",
-                FunctionParameter: { statisticName: currentSource },
-                GeneratePlayStreamEvent: true
-            }, function (result, error) {
-                if (error) {
-                    log("CloudScript failed: " + JSON.stringify(error));
-                    document.getElementById("leaderboardContainer").innerHTML = "<p>Error loading leaderboard.</p>";
-                    return;
-                }
-                try {
-                    const funcResult = result.data && result.data.FunctionResult;
-                    if (!funcResult || !funcResult.leaderboard) {
-                        log("⚠️ No leaderboard returned.");
-                        document.getElementById("leaderboardContainer").innerHTML = "<p>No leaderboard data found.</p>";
-                        return;
-                    }
-                    currentLeaderboard = funcResult.leaderboard;
-                    currentFilter = null;
-                    updateFilterButtons();
-                    renderLeaderboard(currentLeaderboard);
-                    log(`✅ Leaderboard updated (${currentLeaderboard.length} entries).`);
-                } catch (ex) {
-                    log("⚠️ Error parsing leaderboard: " + ex.message);
-                    document.getElementById("leaderboardContainer").innerHTML = "<p>Error parsing leaderboard.</p>";
-                }
-            });
-        });
-    }
+		login().then(() => {
+			PlayFab.ClientApi.ExecuteCloudScript({
+				FunctionName: "getLeaderboardWithDetails",
+				FunctionParameter: { statisticName: currentSource },
+				GeneratePlayStreamEvent: true
+			}, function (result, error) {
+				if (error) {
+					log("CloudScript failed: " + JSON.stringify(error));
+					document.getElementById("leaderboardContainer").innerHTML = "<p>Error loading leaderboard.</p>";
+					return;
+				}
+
+				try {
+					const funcResult = result.data && result.data.FunctionResult;
+					if (!funcResult || !funcResult.leaderboard) {
+						log("⚠️ No leaderboard returned.");
+						document.getElementById("leaderboardContainer").innerHTML = "<p>No leaderboard data found.</p>";
+						return;
+					}
+
+					// Store new data
+					currentLeaderboard = funcResult.leaderboard;
+					currentFilter = null;
+					updateFilterButtons();
+
+					// ✅ Reapply sorting if user sorted before
+					if (lastSortApplied) {
+						sortByScore(false); // reapply same direction
+					} else {
+						renderLeaderboard(currentLeaderboard);
+					}
+
+					log(`✅ Leaderboard updated (${currentLeaderboard.length} entries).`);
+				} catch (ex) {
+					log("⚠️ Error parsing leaderboard: " + ex.message);
+					document.getElementById("leaderboardContainer").innerHTML = "<p>Error parsing leaderboard.</p>";
+				}
+			});
+		});
+	}
+
 
     function renderLeaderboard(entries) {
         if (!entries.length) {
@@ -322,13 +334,22 @@
         table += "</tbody></table>";
         document.getElementById("leaderboardContainer").innerHTML = table;
     }
+	
+	function sortByScore(toggle = true) {
+		const list = currentFilter ? filteredLeaderboard : currentLeaderboard;
 
-    function sortByScore() {
-        const list = currentFilter ? filteredLeaderboard : currentLeaderboard;
-        list.sort((a, b) => scoreSortAsc ? (a.Score || 0) - (b.Score || 0) : (b.Score || 0) - (a.Score || 0));
-        scoreSortAsc = !scoreSortAsc;
-        renderLeaderboard(list);
-    }
+		// Only flip direction when user actually clicks
+		if (toggle) scoreSortAsc = !scoreSortAsc;
+
+		list.sort((a, b) => scoreSortAsc
+			? (a.Score || 0) - (b.Score || 0)
+			: (b.Score || 0) - (a.Score || 0)
+		);
+
+		lastSortApplied = true;
+		renderLeaderboard(list);
+	}
+
 
     function filterByStartChar(char) {
         if (!currentLeaderboard.length) {
