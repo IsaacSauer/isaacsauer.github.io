@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score 2</title>
+<script src="https://download.playfab.com/PlayFabClientApi.js"></script>
+<style>
+*{margin:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+body{background:#000;color:#fff;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);padding:8px;transition:all .3s}
+h1{font-size:1.5em;text-align:center;color:#0af;margin:10px 0;font-weight:700}
+.c{max-width:100%;margin:auto;background:#111;padding:12px;border-radius:16px;box-shadow:0 4px 20px rgba(0,170,255,.2);transition:.3s}
+
+/* BUTTONS */
+.btn{padding:10px 16px;margin:4px;border-radius:12px;background:#0af;color:#000;font-weight:600;cursor:pointer;display:inline-block;min-width:80px;text-align:center;box-shadow:0 2px 8px rgba(0,170,255,.4)}
+.btn:hover{filter:brightness(1.15);transform:scale(1.03)}
+.btn.on{background:#0f0;color:#fff;box-shadow:0 0 12px #0f0}
+
+/* FILTERS */
+.filters{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0}
+.filters .btn{font-size:1em;padding:10px 14px}
+
+/* LEGEND */
+.legend{text-align:center;margin:8px 0;font-size:.9em;opacity:.9}
+.legend span{display:inline-block;padding:4px 10px;border-radius:8px;margin:0 6px;font-weight:500}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:clamp(14px, 3.5vw, 18px)}
+th,td{padding:10px 6px;border-bottom:1px solid #333;text-align:left}
+th{background:#222;cursor:pointer;font-weight:600}
+th:hover{background:#0af;color:#000}
+tr:hover{filter:brightness(1.2)}
+
+/* COLORS */
+.k{background:rgba(100,200,255,.25)}
+.t{background:rgba(200,120,255,.25)}
+.fs .k{background:rgba(100,200,255,.4)}
+.fs .t{background:rgba(200,120,255,.4)}
+
+/* AUTO REFRESH */
+.poll{display:flex;gap:8px;align-items:center;justify-content:center;margin:12px 0;flex-wrap:wrap;font-size:.95em}
+.poll input{width:60px;padding:6px;border-radius:8px;border:1px solid #0af;background:#000;color:#0af;text-align:center;font-weight:600}
+
+/* LOG */
+#log{background:#000;color:#8f8;font:11px monospace;height:80px;overflow:auto;padding:8px;border-radius:10px;margin-top:10px;border:1px solid #333;display:block}
+
+/* FULLSCREEN */
+.fs body{padding:0;background:#000}
+.fs .c{padding:0;border-radius:0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.fs h1,.fs .top,.fs .filters,.fs .legend,.fs .poll,.fs #log{display:none}
+.fs #T{flex:1;overflow:auto;padding:20px 10px}
+.fs table{font-size:clamp(18px, 5vw, 28px)}
+.fs th, .fs td{padding:14px 8px}
+
+/* MOBILE TOUCH */
+@media (max-width:480px){
+  .btn{padding:12px 18px;font-size:1em}
+  .filters{gap:10px}
+  .poll input{width:70px}
+}
+</style>
+</head>
+<body onload="load()">
+<h1>Score 2 Leaderboard</h1>
+<div class="c">
+  <!-- TOP BUTTONS -->
+  <div class="top" style="text-align:center">
+    <div class="btn" onclick="load()">Load</div>
+    <div class="btn" onclick="csv()">CSV</div>
+    <div class="btn" onclick="toggleLog()">Verberg logs</div>
+    <div id="fsBtn" class="btn" onclick="toggleFS()">Fullscreen</div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <div id="A" class="btn on" onclick="filter(null)">Alles</div>
+    <div id="0" class="btn" onclick="filter('0')">Kinderen</div>
+    <div id="1" class="btn" onclick="filter('1')">Tieners</div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <span class="k">Kinderen</span>
+    <span class="t">Tieners</span>
+  </div>
+
+  <!-- AUTO REFRESH -->
+  <div class="poll">
+    <div id="R" class="btn" onclick="poll()">Auto</div>
+    elke <input id="s" value="30" min="5"> sec
+  </div>
+
+  <!-- TABLE -->
+  <div id="T"><p style="text-align:center;padding:30px;font-size:1.1em">Tik op Load →</p></div>
+
+  <!-- LOG -->
+  <div id="log"></div>
+</div>
+
+<script>
+PlayFab.settings.titleId="10C1DF";
+let data=[],f=null,asc=true,int=null,logOn=true;
+
+function log(m){
+  if(!logOn) return;
+  const d=document.getElementById('log'),t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  d.textContent+=`[${t}] ${m}\n`; d.scrollTop=d.scrollHeight;
+}
+
+function toggleLog(){
+  logOn=!logOn;
+  document.getElementById('log').style.display=logOn?'block':'none';
+  event.target.textContent=logOn?'Verberg logs':'Toon logs';
+}
+
+function toggleFS(){
+  document.body.classList.toggle('fs');
+  const btn=document.getElementById('fsBtn');
+  btn.textContent=document.body.classList.contains('fs')?'Exit fullscreen':'Fullscreen';
+}
+
+// ESC = exit fullscreen
+document.addEventListener('keydown',e=>e.key==='Escape'&&document.body.classList.contains('fs')&&toggleFS());
+
+function login(cb){
+  PlayFab.ClientApi.LoginWithCustomID({CustomId:"LB",CreateAccount:true},cb);
+}
+
+function load(){
+  log('Laden...');
+  document.getElementById('T').innerHTML='<p style="text-align:center;padding:40px">Laden...</p>';
+  login(()=>PlayFab.ClientApi.ExecuteCloudScript({
+    FunctionName:"getLeaderboardWithDetails",
+    FunctionParameter:{statisticName:"Score2"}
+  },(r,e)=>{
+    if(e){log('Fout');return}
+    data=r.data.FunctionResult.leaderboard||[];
+    render();
+    log(`Geladen: ${data.length} scores`);
+  }));
+}
+
+function time(s){
+  if(!s)return"N/A";
+  const h=Math.floor(s/3600).toString().padStart(2,'0');
+  const m=Math.floor(s%3600/60).toString().padStart(2,'0');
+  const c=(s%60).toString().padStart(2,'0');
+  return `${h}:${m}:${c}`;
+}
+
+function render(){
+  let list = f===null ? data : data.filter(x=>x.DisplayName?.startsWith(f));
+  list.sort((a,b)=>asc?(a.Score||9e9)-(b.Score||9e9):(b.Score||9e9)-(a.Score||9e9));
+  let h=`<table><thead><tr>
+    <th>#</th>
+    <th>Naam</th>
+    <th onclick="asc=!asc;render()" style="cursor:pointer">Tijd ${asc?'↑':'↓'}</th>
+    <th>Start</th>
+  </tr></thead><tbody>`;
+  list.forEach((p,i)=>{
+    const n=(p.DisplayName||"").replace(/^[01]-/,'');
+    const c=p.DisplayName?.[0]==='0'?'k':p.DisplayName?.[0]==='1'?'t':'';
+    h+=`<tr class="${c}">
+      <td>${i+1}</td>
+      <td><b>${n}</b></td>
+      <td>${time(p.Score)}</td>
+      <td>${p.StartTime||"N/A"}</td>
+    </tr>`;
+  });
+  document.getElementById('T').innerHTML=h+'</tbody></table>';
+}
+
+function filter(x){
+  f=x;
+  ['A','0','1'].forEach(id=>document.getElementById(id).classList.toggle('on',id===String(x??'A')));
+  render();
+  log(x===null?'Alles':x==='0'?'Kinderen':'Tieners');
+}
+
+function csv(){
+  const list = f===null ? data : data.filter(x=>x.DisplayName?.startsWith(f));
+  if(!list.length) return alert('Geen data');
+  const rows = list.map((p,i)=>[
+    i+1,
+    `"${(p.DisplayName||"").replace(/^[01]-/,'')}"`,
+    p.Score||0,
+    `"${p.StartTime||""}"`
+  ]);
+  const csv = [["#","Naam","Tijd","Start"],...rows].map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download=`Score2_${f===null?'alles':f==='0'?'kinderen':'tieners'}.csv`;
+  a.click();
+}
+
+function poll(){
+  const b=document.getElementById('R'),sec=document.getElementById('s').value*1000;
+  if(int){clearInterval(int);int=null;b.textContent='Auto';b.classList.remove('on');log('Auto uit');return}
+  if(sec<5000) return alert('Min 5 sec');
+  int=setInterval(load,sec);
+  b.textContent='Stop';b.classList.add('on');
+  log(`Auto elke ${sec/1000}s`);
+  load();
+}
+
+// Start
+window.onload=()=>{load();setTimeout(()=>{document.getElementById('T').scrollTop=0},500)};
+</script>
+</body>
+</html>
