@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Red Pill with Blue Tint</title>
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #8b0000;
+        gap: 40px;
+    }
+
+    .controls {
+        display: flex;
+        gap: 10px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: opacity 0.2s;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+
+    .red-pill {
+        width: 200px;
+        height: 100px;
+        border-radius: 50% / 50%;
+        position: relative;
+        background: linear-gradient(
+            to top,
+            #ff4d4d 0%,
+            #b30000 60%,
+            #4d4dff 100%
+        );
+        box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background 0.3s;
+    }
+
+    .red-pill::before {
+        content: '';
+        position: absolute;
+        top: 20%;
+        left: 15%;
+        width: 60%;
+        height: 30%;
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.7), rgba(255,255,255,0));
+        border-radius: 50%;
+    }
+
+    .red-pill span {
+        color: white;
+        font-weight: bold;
+        font-size: 2.5rem;
+        font-family: Arial, sans-serif;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+        z-index: 1;
+    }
+</style>
+</head>
+<body>
+    <div class="controls">
+        <button onclick="setPillColor('red')">Red</button>
+        <button onclick="setPillColor('blue')">Blue</button>
+        <button onclick="setPillColor('green')">Green</button>
+        <button onclick="setPillColor('purple')">Purple</button>
+    </div>
+
+    <div class="red-pill" id="pill">
+        <span>559</span>
+    </div>
+
+    <script>
+        const colors = {
+            red: 'linear-gradient(to top, #ff4d4d 0%, #b30000 60%, #4d4dff 100%)',
+            blue: 'linear-gradient(to top, #4d4dff 0%, #0000b3 60%, #ff4d4d 100%)',
+            green: 'linear-gradient(to top, #4dff4d 0%, #00b300 60%, #ffff4d 100%)',
+            purple: 'linear-gradient(to top, #ff4dff 0%, #b300b3 60%, #4d4dff 100%)'
+        };
+
+        function setPillColor(color) {
+            document.getElementById('pill').style.background = colors[color];
+        }
+    </script>
+</body>
+</html>

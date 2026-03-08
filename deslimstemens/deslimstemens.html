@@ -9,7 +9,7 @@
         font-family: sans-serif;
         margin: 0;
         padding: 20px;
-        background: #f4f4f9;
+        background: #f9f6f4;
       }
 
       .header {
@@ -34,17 +34,25 @@
       }
 
       .controls {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 6px;
+        display: flex;
+        gap: 0px; 
         margin-top: 10px;
+        align-items: center;
+      }
+
+      .controls .toggle {
+        flex: 2; 
+      }
+      .controls button:not(.toggle) {
+        flex: 1; 
       }
 
       button {
-        padding: 8px;
+        padding: 6px;
         border-radius: 4px;
         border: 1px solid #ccc;
         cursor: pointer;
+        margin: 5px;
       }
 
       button:hover {
@@ -56,14 +64,10 @@
         font-weight: bold;
       }
 
-      /* DISPLAY MODE */
+      /* DISPLAY MODE & PILL STYLES */
 
       .display-mode {
-        background: #111;
-        color: #00ff00;
-        font-family:
-          Courier New,
-          monospace;
+        background: #b12c2c; /* Dark background for the display view */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -72,46 +76,78 @@
 
       #display {
         display: flex;
-        gap: 20px;
+        gap: 40px;
         justify-content: center;
         align-items: center;
         flex-wrap: wrap;
         width: 100%;
       }
 
-      .timer-display {
-        width: 260px;
-        height: 200px;
-
+      .timer-wrapper {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        font-size: 6rem;
-        font-variant-numeric: tabular-nums;
-
-        border: 3px solid #444;
-        border-radius: 15px;
+        align-items: center; 
+        gap: 15px; 
+        padding: 20px;
       }
 
       .display-label {
-        font-size: 1.5rem;
-        color: #aaa;
-        margin-bottom: 15px;
+        color: white;
+        font-family: sans-serif;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
       }
 
-      .paused {
-        color: #ff4444;
-        border-color: #660000;
+      /* The Pill implementation */
+      .red-pill {
+        width: 200px;
+        height: 100px;
+        border-radius: 50% / 50%;
+        position: relative;
+        /* Default Red Gradient (Paused) */
+        background: linear-gradient(
+            to top,
+            #ff4d4d 0%,
+            #b30000 80%,
+            #4d4dff 100%
+        );
+        box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background 0.3s, transform 0.2s;
       }
 
-      .fullscreen-btn {
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        padding: 10px 15px;
-        font-size: 14px;
+      /* Blue Gradient (Active/Running) */
+      .red-pill.active {
+        background: linear-gradient(
+            to top, 
+            #4d4dff 0%, 
+            #0000b3 60%, 
+            #ff4d4d 100%
+        );
+      }
+
+      .red-pill::before {
+        content: '';
+        position: absolute;
+        top: 20%;
+        left: 15%;
+        width: 60%;
+        height: 30%;
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.7), rgba(255,255,255,0));
+        border-radius: 50%;
+      }
+
+      .red-pill span {
+        color: white;
+        font-weight: bold;
+        font-size: 3rem;
+        font-family: Arial, sans-serif;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+        z-index: 1;
+        font-variant-numeric: tabular-nums;
       }
     </style>
   </head>
@@ -125,56 +161,31 @@
         </div>
       </div>
       <div>
-        <button
-          onclick="
-            introSound.currentTime = 0;
-            introSound.play();
-          "
-        >
-          Intro muziek
-        </button>
-        <button
-          onclick="
-            bumperSound.currentTime = 0;
-            bumperSound.play();
-          "
-        >
-          Bumper muziek
-        </button>
-        <button
-          onclick="
-            finaleSound.currentTime = 0;
-            finaleSound.play();
-          "
-        >
-          Finale sfx
-        </button>
+        <button onclick="introSound.currentTime = 0; introSound.play();">Intro muziek</button>
+        <button onclick="bumperSound.currentTime = 0; bumperSound.play();">Bumper muziek</button>
+        <button onclick="finaleSound.currentTime = 0; finaleSound.play();">Finale sfx</button>
         <button onclick="stopAllAudio()">Stop all audio</button>
         <input type="checkbox" id="isFinaleCheck" />
         <label for="isFinaleCheck">Is Finale</label>
       </div>
       <div id="controller"></div>
     </div>
+
     <div id="displayUI" style="display: none">
       <div id="display"></div>
     </div>
+
     <script>
       class AppState {
         static isFinale = false;
       }
-      /* SETTINGS */
 
+      /* SETTINGS */
       const params = new URLSearchParams(location.search);
       const DISPLAY_MODE = params.get("display") === "1";
-
-      const STEPS_SMALL = 10;
-      const STEPS_MED = 30;
-      const STEPS_BIG = 50;
-
       const channel = new BroadcastChannel("timers");
 
       /* SOUND SETTINGS */
-
       const introSound = new Audio("/deslimstemens/audio/intro.mp3");
       const bumperSound = new Audio("/deslimstemens/audio/bumper.mp3");
       const goedSound = new Audio("/deslimstemens/audio/goed.mp3");
@@ -182,27 +193,15 @@
       const resumeSound = new Audio("/deslimstemens/audio/resume.mp3");
       const pauseSound = new Audio("/deslimstemens/audio/pauze.mp3");
       const finaleSound = new Audio("/deslimstemens/audio/finale.mp3");
-      const finaleMuziekSound = new Audio(
-        "/deslimstemens/audio/finale_muziek.mp3",
-      );
+      const finaleMuziekSound = new Audio("/deslimstemens/audio/finale_muziek.mp3");
 
       function getMixedResumeSound() {
         return AppState.isFinale ? finaleMuziekSound : resumeSound;
       }
 
-      [
-        introSound,
-        bumperSound,
-        goedSound,
-        foutSound,
-        resumeSound,
-        pauseSound,
-        finaleSound,
-        finaleMuziekSound,
-      ].forEach((a) => (a.preload = "auto"));
+      [introSound, bumperSound, goedSound, foutSound, resumeSound, pauseSound, finaleSound, finaleMuziekSound].forEach((a) => (a.preload = "auto"));
 
       /* STORE */
-
       const store = {
         timers: [
           { id: 1, name: "Timer 1", seconds: 0, paused: true },
@@ -225,16 +224,9 @@
 
         toggle(id) {
           const t = this.get(id);
-
           if (t.paused) {
-            // pause all timers
-            this.timers.forEach((timer) => {
-              timer.paused = true;
-            });
-
-            // resume selected timer
+            this.timers.forEach((timer) => { timer.paused = true; });
             t.paused = false;
-
             getMixedResumeSound().currentTime = 0;
             getMixedResumeSound().play();
           } else {
@@ -243,7 +235,6 @@
             pauseSound.currentTime = 0;
             pauseSound.play();
           }
-
           this.notify();
         },
 
@@ -255,8 +246,6 @@
 
         rename(id, value) {
           this.get(id).name = value;
-
-          // update display only
           channel.postMessage(this.timers);
         },
 
@@ -271,29 +260,23 @@
       };
 
       /* TIMER LOOP */
-
       setInterval(() => {
         store.timers.forEach((t) => {
           if (!t.paused && t.seconds > 0) {
             t.seconds--;
           }
         });
+        channel.postMessage(store.timers); 
 
-        channel.postMessage(store.timers); // update display only
-
-        // update seconds text without rebuilding cards
         store.timers.forEach((t) => {
           const el = document.querySelector(`#sec-${t.id}`);
-          if (el)
-            el.textContent = `${t.paused ? "Paused" : "Running"} (${t.seconds}s)`;
+          if (el) el.textContent = `${t.paused ? "Paused" : "Running"} (${t.seconds}s)`;
         });
       }, 1000);
 
       /* DISPLAY MODE */
-
       if (DISPLAY_MODE) {
         document.body.classList.add("display-mode");
-
         document.getElementById("controllerUI").style.display = "none";
         document.getElementById("displayUI").style.display = "block";
 
@@ -303,23 +286,18 @@
           display.innerHTML = timers
             .map(
               (t) => `
-
-<div class="timer-display ${t.paused ? "paused" : ""}">
-
-<div class="display-label">${t.name}</div>
-
-${t.seconds}
-
-</div>
-
-`,
+                <div class="timer-wrapper">
+                  <div class="display-label">${t.name}</div>
+                  <div class="red-pill ${t.paused ? '' : 'active'}">
+                    <span>${t.seconds}</span>
+                  </div>
+                </div>
+              `,
             )
             .join("");
         }
 
         channel.onmessage = (e) => render(e.data);
-
-        /* FULLSCREEN KEY */
 
         document.addEventListener("keydown", (e) => {
           if (e.key === "f") toggleFullscreen();
@@ -327,12 +305,10 @@ ${t.seconds}
       } else {
         /* CONTROLLER MODE */
         const container = document.getElementById("controller");
-
         store.subscribe(render);
 
         function render(timers) {
           container.innerHTML = "";
-
           timers.forEach((t, index) => {
             const card = document.createElement("div");
             card.className = "timer-card";
@@ -340,134 +316,78 @@ ${t.seconds}
             card.dataset.index = index;
 
             card.innerHTML = `
-
-<div class="timer-name">
-
-<input value="${t.name}"
-oninput="store.rename(${t.id},this.value)">
-
-</div>
-
-<div id="sec-${t.id}">
-${t.paused ? "Paused" : "Running"} (${t.seconds}s)
-</div>
-
-<button onclick="removeTimer(${t.id})">Remove</button>
-<button onclick="foutSound.currentTime = 0; foutSound.play();">Fout sfx</button>
-
-<div class="controls">
-
-<button onclick="store.add(${t.id},-${STEPS_BIG})">-50</button>
-<button onclick="store.add(${t.id},-${STEPS_MED})">-30</button>
-<button onclick="store.add(${t.id},-${STEPS_SMALL})">-10</button>
-
-<button class="toggle"
-onclick="store.toggle(${t.id})">
-${t.paused ? "Resume" : "Pause"}
-</button>
-
-<button onclick="store.add(${t.id},${STEPS_SMALL}); goedSound.currentTime=0; goedSound.play();">+10</button>
-<button onclick="store.add(${t.id},${STEPS_MED}); goedSound.currentTime=0; goedSound.play();">+30</button>
-<button onclick="store.add(${t.id},${STEPS_BIG}); goedSound.currentTime=0; goedSound.play();">+50</button>
-
-</div>
-
-`;
-
+              <div class="timer-name">
+                <input value="${t.name}" oninput="store.rename(${t.id},this.value)">
+              </div>
+              <div id="sec-${t.id}">
+                ${t.paused ? "Paused" : "Running"} (${t.seconds}s)
+              </div>
+              <button onclick="removeTimer(${t.id})">Remove</button>
+              <button onclick="foutSound.currentTime = 0; foutSound.play();">Fout sfx</button>
+              <div class="controls">
+                <button style="width:40px;" onclick="store.add(${t.id},-50)">-50</button>
+                <button style="width:40px;" onclick="store.add(${t.id},-40)">-40</button>
+                <button style="width:40px;" onclick="store.add(${t.id},-30)">-30</button>
+                <button style="width:40px;" onclick="store.add(${t.id},-20)">-20</button>
+                <button style="width:40px;" onclick="store.add(${t.id},-10)">-10</button>
+                <button class="toggle" style="width:80px;" onclick="store.toggle(${t.id})">
+                  ${t.paused ? "Resume" : "Pause"}
+                </button>
+                <button style="width:40px;" onclick="store.add(${t.id},10); goedSound.currentTime=0; goedSound.play();">+10</button>
+                <button style="width:40px;" onclick="store.add(${t.id},20); goedSound.currentTime=0; goedSound.play();">+20</button>
+                <button style="width:40px;" onclick="store.add(${t.id},30); goedSound.currentTime=0; goedSound.play();">+30</button>
+                <button style="width:40px;" onclick="store.add(${t.id},40); goedSound.currentTime=0; goedSound.play();">+40</button>
+                <button style="width:40px;" onclick="store.add(${t.id},50); goedSound.currentTime=0; goedSound.play();">+50</button>
+              </div>
+            `;
             addDragEvents(card);
-
             container.appendChild(card);
           });
         }
-
         store.notify();
       }
 
-      /* DRAG SORT */
-
+      /* UTILITIES (Keep original functions) */
       let draggedIndex = null;
-
       function addDragEvents(el) {
-        el.addEventListener("dragstart", (e) => {
-          draggedIndex = Number(el.dataset.index);
-        });
-
-        el.addEventListener("dragover", (e) => {
-          e.preventDefault();
-        });
-
+        el.addEventListener("dragstart", (e) => { draggedIndex = Number(el.dataset.index); });
+        el.addEventListener("dragover", (e) => { e.preventDefault(); });
         el.addEventListener("drop", (e) => {
           const targetIndex = Number(el.dataset.index);
-
           const timers = [...store.timers];
-
           const item = timers.splice(draggedIndex, 1)[0];
-
           timers.splice(targetIndex, 0, item);
-
           store.reorder(timers);
         });
       }
 
-      /* ADD TIMER */
-
       function addTimer() {
-        const id = Date.now();
-
-        store.timers.push({
-          id: id,
-          name: "New Timer",
-          seconds: 0,
-          paused: true,
-        });
-
+        store.timers.push({ id: Date.now(), name: "New Timer", seconds: 0, paused: true });
         store.notify();
       }
 
-      /* OPEN DISPLAY */
-
       function openDisplay() {
-        window.open(
-          location.pathname + "?display=1",
-          "_blank",
-          "width=1400,height=500",
-        );
+        window.open(location.pathname + "?display=1", "_blank", "width=1400,height=500");
       }
 
-      /* FULLSCREEN */
-
       function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen();
-        } else {
-          document.exitFullscreen();
-        }
+        if (!document.fullscreenElement) { document.documentElement.requestFullscreen(); } 
+        else { document.exitFullscreen(); }
       }
 
       function removeTimer(id) {
         store.timers = store.timers.filter((t) => t.id !== id);
-
         store.notify();
       }
 
       function stopAllAudio() {
-        [
-          introSound,
-          bumperSound,
-          goedSound,
-          foutSound,
-          resumeSound,
-          pauseSound,
-          finaleSound,
-          finaleMuziekSound,
-        ].forEach((a) => {
+        [introSound, bumperSound, goedSound, foutSound, resumeSound, pauseSound, finaleSound, finaleMuziekSound].forEach((a) => {
           a.pause();
           a.currentTime = 0;
         });
       }
 
       const checkbox = document.getElementById("isFinaleCheck");
-
       checkbox.addEventListener("change", function () {
         AppState.isFinale = checkbox.checked;
       });
