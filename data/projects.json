@@ -1,0 +1,468 @@
+{
+  "breachers": {
+    "varName": "breachers",
+    "lang": {
+      "label": "C#",
+      "cls": "lb-cs"
+    },
+    "image": "images/breachers.jpg",
+    "name": "Breachers VR",
+    "meta": {
+      "icon": "fa-solid fa-briefcase",
+      "text": "Triangle Factory · 2022–now"
+    },
+    "desc": "One of the most popular VR shooters on Meta Quest (2023). Contributed to audio systems, gameplay mechanics, and server stability using Unity &amp; Wwise.",
+    "tags": [
+      "Unity",
+      "Wwise",
+      "VR",
+      "Meta Quest",
+      "SteamVR",
+      "C#"
+    ],
+    "cardLinks": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Trailer",
+        "url": "https://www.youtube.com/embed/A1ksWrOgdFI"
+      },
+      {
+        "ico": "fa-solid fa-arrow-up-right-from-square",
+        "label": "Meta Store",
+        "url": "https://www.meta.com/en-gb/experiences/breachers/4900985259994498/"
+      }
+    ],
+    "title": "Breachers VR",
+    "videos": [
+      {
+        "id": "A1ksWrOgdFI",
+        "label": "Trailer"
+      }
+    ],
+    "body": "<p class=\"pm-p\">I'm incredibly thankful for the opportunity to contribute to the production of <em>Breachers</em> as a game programmer at Triangle Factory. It was a challenging but deeply rewarding experience, collaborating with an amazing team to push the limits of what mobile VR hardware could achieve. Seeing <em>Breachers</em> become one of the most popular shooters on the Meta Quest in 2023 was a proud moment for all of us.</p>\n<p class=\"pm-p\">I've mainly been focusing on <strong>audio features</strong> and fixing bugs in <strong>game development</strong>, with a lot of attention to <strong>sound design</strong>, making sure the audio works well, and solving any in-game audio issues. I've also worked on improving <strong>gameplay mechanics</strong> and addressing <strong>server problems</strong> to make sure the game runs smoothly for both players and servers. With plenty of experience in <strong>Wwise</strong> and <strong>Unity</strong>, I've been able to integrate complex <strong>audio systems</strong> and add high-quality <strong>sound effects</strong> that really elevate the game experience.</p>\n<h2 class=\"pm-h2\">Key Areas</h2>\n<h3 class=\"pm-h3\">Audio Implementation</h3>\n<p class=\"pm-p\">Added and fine-tuned various sound effects — explosions, gunshots, player actions, and special sounds (syringes and defusers). Used Wwise and Unity to integrate and manage complex audio systems.</p>\n<h3 class=\"pm-h3\">Bug Fixes</h3>\n<p class=\"pm-p\">Fixed various audio bugs including wrong sounds, audio delays, and null references. Worked on sound trigger issues and syncing audio properly using Wwise.</p>\n<h3 class=\"pm-h3\">Gameplay Features</h3>\n<p class=\"pm-p\">Worked on sound mechanics tied to gameplay — tracking rewards in competitive modes and adding immersion with sounds for door blockers and drones.</p>\n<h3 class=\"pm-h3\">Multiplayer &amp; Server</h3>\n<p class=\"pm-p\">Fixed issues with matchmaking, rejoining, server crashes, and overall server stability to enhance the multiplayer experience. Ensured audio runs smoothly during online matches.</p>\n<h3 class=\"pm-h3\">UI/UX</h3>\n<p class=\"pm-p\">Improved UI-related audio — button clicks, progression sounds, and match-found notifications — keeping gameplay flow smooth.</p>",
+    "links": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Trailer",
+        "url": "https://www.youtube.com/watch?v=A1ksWrOgdFI"
+      },
+      {
+        "ico": "fa-solid fa-arrow-up-right-from-square",
+        "label": "Meta Store",
+        "url": "https://www.meta.com/en-gb/experiences/breachers/4900985259994498/"
+      }
+    ]
+  },
+  "gbemu": {
+    "varName": "gbemu",
+    "lang": {
+      "label": "C++",
+      "cls": "lb-cpp"
+    },
+    "image": "images/prog/pic07.jpg",
+    "name": "Game Boy Emulator",
+    "meta": {
+      "icon": "fa-solid fa-graduation-cap",
+      "text": "DAE — Gradwork · 2023"
+    },
+    "desc": "Cycle-accurate DMG emulator in C++. Implemented MBC1/MBC5, full opcode set, and custom sprite renderer. Runs Zelda: Link's Awakening and Kirby's Dream Land.",
+    "tags": [
+      "emulation",
+      "low-level",
+      "MBC",
+      "CPU"
+    ],
+    "cardLinks": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Demo",
+        "url": "https://www.youtube.com/watch?v=2bc5L7RZ1i8"
+      },
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Zelda",
+        "url": "https://www.youtube.com/watch?v=HsLH8Jg_2xU"
+      },
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Kirby",
+        "url": "https://www.youtube.com/watch?v=OWSOsolaPH0"
+      },
+      {
+        "ico": "fa-brands fa-github",
+        "label": "Repo",
+        "url": "https://github.com/IsaacSauer/GameboyEmulator"
+      },
+      {
+        "ico": "fa-solid fa-download",
+        "label": "Download",
+        "url": "https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/GW_2122_Isaac_Sauer_NL_Executable.zip"
+      }
+    ],
+    "title": "Game Boy Emulator",
+    "videos": [
+      {
+        "id": "2bc5L7RZ1i8",
+        "label": "Demo"
+      },
+      {
+        "id": "HsLH8Jg_2xU",
+        "label": "Zelda: Link's Awakening"
+      },
+      {
+        "id": "OWSOsolaPH0",
+        "label": "Kirby's Dream Land"
+      }
+    ],
+    "body": "<p class=\"pm-p\">The initial project was limited to playing Tetris, so significant work was needed to enable support for additional games. By utilizing an opcode tester, opcodes could be evaluated quickly and efficiently to ensure they functioned correctly. This streamlined the process of implementing missing or malfunctioning opcodes. Test ROMs were also used to validate the opcodes in a realistic setting, leading to functional opcode support, except for the timer implementation.</p>\n<p class=\"pm-p\">To accommodate a wider range of games, a memory bank controller (MBC) was added, enabling support for not only ROM-only games but also those requiring an MBC chip. Implementations for MBC1 and MBC5 were included, paving the way for emulating more complex games like The Legend of Zelda: Link's Awakening and Hoshi no Kirby.</p>\n<p class=\"pm-p\">Additionally, a new sprite rendering system was introduced, allowing broader game compatibility. This change slightly reduced performance, though future optimizations could address this.</p>",
+    "links": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Demo",
+        "url": "https://www.youtube.com/watch?v=2bc5L7RZ1i8"
+      },
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Zelda Demo",
+        "url": "https://www.youtube.com/watch?v=HsLH8Jg_2xU"
+      },
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Kirby Demo",
+        "url": "https://www.youtube.com/watch?v=OWSOsolaPH0"
+      },
+      {
+        "ico": "fa-brands fa-github",
+        "label": "Repo",
+        "url": "https://github.com/IsaacSauer/GameboyEmulator"
+      },
+      {
+        "ico": "fa-solid fa-download",
+        "label": "Download",
+        "url": "https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/GW_2122_Isaac_Sauer_NL_Executable.zip"
+      }
+    ]
+  },
+  "crash": {
+    "varName": "crash",
+    "lang": {
+      "label": "C++",
+      "cls": "lb-cpp"
+    },
+    "image": "images/prog/pic01.jpg",
+    "name": "Crash Bandicoot",
+    "meta": {
+      "icon": "fa-solid fa-graduation-cap",
+      "text": "DAE — DirectX 11 · 2022"
+    },
+    "desc": "Recreation of a Crash Bandicoot level using a custom DirectX 11 renderer. Built from scratch with a scene graph, component system, and collision detection.",
+    "tags": [
+      "DirectX 11",
+      "rendering",
+      "HLSL"
+    ],
+    "cardLinks": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Demo",
+        "url": "https://www.youtube.com/watch?v=Wh_rlE3rpng"
+      },
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Walkthrough",
+        "url": "https://www.youtube.com/watch?v=5h1pKG7gvOY"
+      },
+      {
+        "ico": "fa-brands fa-github",
+        "label": "Repo",
+        "url": "https://github.com/IsaacSauer/CrashBandicootGame-Overlord"
+      },
+      {
+        "ico": "fa-solid fa-download",
+        "label": "Download",
+        "url": "https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/crash_game.zip"
+      }
+    ],
+    "title": "Crash Bandicoot Remake",
+    "videos": [
+      {
+        "id": "Wh_rlE3rpng",
+        "label": "Demo"
+      },
+      {
+        "id": "5h1pKG7gvOY",
+        "label": "Walkthrough"
+      }
+    ],
+    "body": "<p class=\"pm-p\">This was the final assignment for the \"Graphics Programming 2\" course in my second year at Digital Arts &amp; Entertainment. We were given a basic game engine, and the task was to add the required graphics and gameplay features for a chosen game.</p>\n<h2 class=\"pm-h2\">Key Features Implemented</h2>\n<ul class=\"pm-ul\">\n<li>Shadow Mapping</li><li>Sprite Rendering</li><li>Text Rendering</li><li>SkyBox</li>\n<li>Post Processing</li><li>Particles</li><li>Skinned Model Animations</li>\n<li>Character Controller</li><li>FMOD Sound System</li><li>Rig Rail Camera System</li>\n<li>State Pattern</li><li>Invoker System</li><li>... and more!</li>\n</ul>",
+    "links": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Demo",
+        "url": "https://www.youtube.com/watch?v=Wh_rlE3rpng"
+      },
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Walkthrough",
+        "url": "https://www.youtube.com/watch?v=5h1pKG7gvOY"
+      },
+      {
+        "ico": "fa-brands fa-github",
+        "label": "Repo",
+        "url": "https://github.com/IsaacSauer/CrashBandicootGame-Overlord"
+      },
+      {
+        "ico": "fa-solid fa-download",
+        "label": "Download",
+        "url": "https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/crash_game.zip"
+      }
+    ]
+  },
+  "capcig": {
+    "varName": "captainCigarr",
+    "lang": {
+      "label": "C#",
+      "cls": "lb-cs"
+    },
+    "image": "images/prog/pic02.jpg",
+    "name": "Captain CigArrr",
+    "meta": {
+      "icon": "fa-solid fa-users",
+      "text": "DAE — Group Project · 2022"
+    },
+    "desc": "Pirate-themed game made as a team project. Worked on core gameplay systems, enemy AI, and audio integration in Unity.",
+    "tags": [
+      "Team",
+      "Unity",
+      "C#"
+    ],
+    "cardLinks": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Trailer",
+        "url": "https://www.youtube.com/watch?v=gVmt003c3iU"
+      },
+      {
+        "ico": "fa-brands fa-itch-io",
+        "label": "itch.io",
+        "url": "https://zacsvae.itch.io/captain-cigarrr"
+      }
+    ],
+    "title": "Captain CigArrr",
+    "videos": [
+      {
+        "id": "gVmt003c3iU",
+        "label": "Trailer"
+      }
+    ],
+    "body": "<p class=\"pm-p\">Captain CigARRR is a game made by me and other students for the \"Game Projects\" course in the second year at Digital Arts &amp; Entertainment. We had 11 weeks to bring the idea to life, from brainstorming to the final polish.</p>\n<h2 class=\"pm-h2\">The Game</h2>\n<p class=\"pm-p\">You control a small ship in a cluster of islands, trying to survive waves of enemies. Collect resources and abilities to upgrade your ship and take on even more challenges. The more you upgrade, the more infamous you become, and the more enemies will come after you! See how long you can survive this never-ending storm of chaos.</p>\n<h2 class=\"pm-h2\">Made By</h2>\n<ul class=\"pm-ul\">\n<li>Jonathan Steylaerts (Artist)</li><li>Nathan Goffin (Artist)</li>\n<li>Jef Bernaers (Artist)</li><li>Diedrik Droesbeke (Artist)</li>\n<li>Marnick Huysmans (Programmer)</li><li>Isaac Sauer (Programmer)</li>\n</ul>\n<h2 class=\"pm-h2\">Controls</h2>\n<p class=\"pm-p\">Requires a controller. Left joystick to move. B to interact with the seapost. Y fires main cannons. X for side cannons and blunderbuss. A for a quick boost or roll. Shoulder buttons rotate the camera. Left Trigger activates your special ability. Right Trigger boosts the ship using the sails.</p>",
+    "links": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Trailer",
+        "url": "https://www.youtube.com/watch?v=gVmt003c3iU"
+      },
+      {
+        "ico": "fa-brands fa-itch-io",
+        "label": "itch.io",
+        "url": "https://zacsvae.itch.io/captain-cigarrr"
+      }
+    ]
+  },
+  "gdm": {
+    "varName": "grandDadMania",
+    "lang": {
+      "label": "C++",
+      "cls": "lb-cpp"
+    },
+    "image": "images/prog/pic03.jpg",
+    "name": "Grand Dad Mania",
+    "meta": {
+      "icon": "fa-solid fa-graduation-cap",
+      "text": "DAE — Programming 2 — 2021"
+    },
+    "desc": "Built for a \"Programming 2\" final project, Grand Dad Mania Revived is a retro pixel-art platformer where you control a club-wielding caveman navigating prehistoric stages and fighting enemies.",
+    "tags": [
+      "SDL2",
+      "C++"
+    ],
+    "cardLinks": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Trailer",
+        "url": "https://www.youtube.com/watch?v=DRwC__L0VYQ"
+      },
+      {
+        "ico": "fa-solid fa-download",
+        "label": "Download",
+        "url": "https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/Sauer_Isaac_GrandDadMania_Final_Release_Discord_API.zip"
+      }
+    ],
+    "title": "Grand Dad Mania",
+    "videos": [
+      {
+        "id": "DRwC__L0VYQ",
+        "label": "Trailer"
+      }
+    ],
+    "body": "<p class=\"pm-p\">I created Grand Dad Mania as my final project for the \"Programming 2\" course. The assignment was to build a platformer game that met certain criteria in the grading rubric. Later on, I added the Discord SDK to try out the Discord RPC feature.</p>\n<h2 class=\"pm-h2\">The Game</h2>\n<p class=\"pm-p\">Grand Dad Mania is based on a canceled SiIvaGunner game, which was basically a parody of Sonic Mania. It was originally featured as a high-quality rip in the \"Trailer Theme (In-Game Mix) - Sonic Mania\" video.</p>",
+    "links": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Trailer",
+        "url": "https://www.youtube.com/watch?v=DRwC__L0VYQ"
+      },
+      {
+        "ico": "fa-solid fa-download",
+        "label": "Download",
+        "url": "https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/Sauer_Isaac_GrandDadMania_Final_Release_Discord_API.zip"
+      }
+    ]
+  },
+  "astar": {
+    "varName": "fasterAStar",
+    "lang": {
+      "label": "C++",
+      "cls": "lb-cpp"
+    },
+    "image": "images/prog/pic04.jpg",
+    "name": "Faster A* Algorithm",
+    "meta": {
+      "icon": "fa-solid fa-graduation-cap",
+      "text": "DAE — Gameplay Programming · 2022"
+    },
+    "desc": "Optimised A* pathfinding with hierarchical graph decomposition. Significant performance gains over naive implementations on large grids.",
+    "tags": [
+      "pathfinding",
+      "algorithms",
+      "optimization"
+    ],
+    "cardLinks": [
+      {
+        "ico": "fa-brands fa-github",
+        "label": "Repo",
+        "url": "https://github.com/IsaacSauer/faster-a-star-for-games"
+      },
+      {
+        "ico": "fa-solid fa-download",
+        "label": "Download",
+        "url": "https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/gameplay_prog_astar.zip"
+      }
+    ],
+    "title": "Faster A* For Games",
+    "videos": [],
+    "body": "<h2 class=\"pm-h2\">Introduction</h2>\n<p class=\"pm-p\">The technique used is called Goal Bounding — an optimization for pathfinding algorithms that can be applied to any static search graph. Based on a paper by <strong>Steve Rabin</strong> and <strong>Nathan R. Sturtevant</strong>, it prunes large chunks of the search space using precomputed bounding boxes, making the runtime algorithm significantly faster.</p>\n<h2 class=\"pm-h2\">Main Goal</h2>\n<p class=\"pm-p\">At runtime, bounding boxes precomputed for each node connection are used to prune areas that couldn't possibly lead to the goal. Computation time scales with graph size, but it happens before runtime. The graph must be static — changes would require recomputing all boxes. For large NavMeshes, precomputations happen before release and data is saved to a binary file loaded into RAM at initialization.</p>\n<h2 class=\"pm-h2\">Implementation</h2>\n<p class=\"pm-p\">An enhanced Dijkstra method floods the whole graph (no goal node) and stores, for each node, the optimal starting connection. The connection ID is passed to children each time a new record is pushed to the open list. This gives us the bounding box for each connection of each node.</p>\n<p class=\"pm-p\">At runtime, before exploring a connection, we check whether the goal position falls within that connection's bounding box. If it doesn't, we skip it. Dynamic start and goal nodes (added at runtime) are exempt from the check via a simple guard.</p>\n<h2 class=\"pm-h2\">Conclusion</h2>\n<p class=\"pm-p\">Goal Bounding can meaningfully speed up pathfinding when applied to static graphs with the right data structure. It provided a broader perspective on just how much room there is for optimization in the pathfinding space.</p>",
+    "links": [
+      {
+        "ico": "fa-brands fa-github",
+        "label": "Repo",
+        "url": "https://github.com/IsaacSauer/faster-a-star-for-games"
+      },
+      {
+        "ico": "fa-solid fa-download",
+        "label": "Download",
+        "url": "https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/gameplay_prog_astar.zip"
+      }
+    ]
+  },
+  "minigin": {
+    "varName": "minigin",
+    "lang": {
+      "label": "C++",
+      "cls": "lb-cpp"
+    },
+    "image": "images/prog/pic05.jpg",
+    "name": "Minigin — Game Engine",
+    "meta": {
+      "icon": "fa-solid fa-graduation-cap",
+      "text": "DAE — Programming 4 · 2022"
+    },
+    "desc": "Custom game engine with ECS architecture, scene graph, event system, audio manager, and SDL2 renderer.",
+    "tags": [
+      "engine",
+      "ECS",
+      "SDL2",
+      "architecture"
+    ],
+    "cardLinks": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Demo",
+        "url": "https://www.youtube.com/watch?v=qDLBfyyX3-E"
+      },
+      {
+        "ico": "fa-brands fa-github",
+        "label": "Repo",
+        "url": "https://github.com/IsaacSauer/2DAE08_Minigin_Engine_Isaac_Sauer"
+      },
+      {
+        "ico": "fa-solid fa-download",
+        "label": "Download",
+        "url": "https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/qbert_game.zip"
+      }
+    ],
+    "title": "Minigin — Game Engine",
+    "videos": [
+      {
+        "id": "qDLBfyyX3-E",
+        "label": "Demo (Qbert)"
+      }
+    ],
+    "body": "<p class=\"pm-p\">For the \"Programming 4\" course in my second year at DAE Howest, I built a game engine from scratch and used it to create Qbert.</p>\n<h2 class=\"pm-h2\">Design Patterns &amp; Choices</h2>\n<h3 class=\"pm-h3\">Command Pattern</h3>\n<p class=\"pm-p\">The Input System uses commands to trigger events. Override \"Command\" and \"Execute\", or use \"CommandFunc\" with a function pointer (with bound parameters if needed).</p>\n<h3 class=\"pm-h3\">Flyweight Pattern</h3>\n<p class=\"pm-p\">Resources like textures are stored in a map keyed by file path, ensuring each is loaded only once. Requesting an already-loaded Texture2D returns the cached instance.</p>\n<h3 class=\"pm-h3\">Observer Pattern</h3>\n<p class=\"pm-p\">Create an Observer class with event methods and connect it to a Subject. Call \"notify\" on the subject with the observer's function pointer — supports bound parameters.</p>\n<h3 class=\"pm-h3\">Singleton</h3>\n<p class=\"pm-p\">Two variants: static stack allocation for simple cases, static smart pointer for heap allocation. Prevents manual instance management.</p>\n<h3 class=\"pm-h3\">State Machine</h3>\n<p class=\"pm-p\">Object-oriented state machine. Create a class inheriting from \"State\" and implement Enter, Exit, HandleInput, Update, and FixedUpdate. Call these from component update methods.</p>\n<h3 class=\"pm-h3\">Game Loop</h3>\n<p class=\"pm-p\">Uses the \"Play Catch Up\" pattern for both physics (Fixed Update) and regular frame updates (Update).</p>\n<h3 class=\"pm-h3\">Component System</h3>\n<p class=\"pm-p\">Each GameObject can have modular components. The parent manages the lifecycle: Initialize, LateInitialize, Start (called on each activation), Update, FixedUpdate.</p>\n<h3 class=\"pm-h3\">Event Queue (Sound)</h3>\n<p class=\"pm-p\">Audio runs on a separate thread. Sound requests create tasks added to a queue; the audio thread processes them as they arrive.</p>\n<h3 class=\"pm-h3\">Service Locator</h3>\n<p class=\"pm-p\">Used for sound system management. SDL is the current backend, but swapping it requires no changes to code that consumes the sound system.</p>\n<h3 class=\"pm-h3\">Dirty Flag</h3>\n<p class=\"pm-p\">Each GameObject stores only its local transform. A cached world transform is kept and only recalculated when the Dirty Flag is set — avoiding redundant hierarchy traversals.</p>",
+    "links": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Demo",
+        "url": "https://www.youtube.com/watch?v=qDLBfyyX3-E"
+      },
+      {
+        "ico": "fa-brands fa-github",
+        "label": "Repo",
+        "url": "https://github.com/IsaacSauer/2DAE08_Minigin_Engine_Isaac_Sauer"
+      },
+      {
+        "ico": "fa-solid fa-download",
+        "label": "Download",
+        "url": "https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/qbert_game.zip"
+      }
+    ]
+  },
+  "rickmorty": {
+    "varName": "rickMortyTool",
+    "lang": {
+      "label": "C#",
+      "cls": "lb-cs"
+    },
+    "image": "images/prog/pic06.jpg",
+    "name": "Rick & Morty Characters",
+    "meta": {
+      "icon": "fa-solid fa-graduation-cap",
+      "text": "DAE — Tool Development · 2021"
+    },
+    "desc": "Desktop tool fetching Rick & Morty API data, displaying characters with filters. Built with C#/.NET with a clean MVVM architecture.",
+    "tags": [
+      "REST API",
+      "C#",
+      "XAML",
+      "MVVM",
+      ".NET"
+    ],
+    "cardLinks": [
+      {
+        "ico": "fa-solid fa-download",
+        "label": "Download",
+        "url": "https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/tooldev_rick_and_morty_tool.zip"
+      }
+    ],
+    "title": "Rick & Morty Characters Tool",
+    "videos": [],
+    "body": "<p class=\"pm-p\">For the \"Tool Development\" course in my 2nd year at DAE Howest, I built a desktop tool using C#/.NET that retrieves and displays character data from the Rick and Morty API with filtering and sorting options.</p>\n<h2 class=\"pm-h2\">Overview Page Features</h2>\n<h3 class=\"pm-h3\">Data Source</h3>\n<p class=\"pm-p\">Switch between Online and Offline data via the \"Data Source\" dropdown — useful when not connected to the internet to still preview characters.</p>\n<h3 class=\"pm-h3\">Sorting &amp; Filtering</h3>\n<p class=\"pm-p\">Show or hide dead/alive characters and sort by various criteria. Characters with unknown status are hidden in both dead and alive filters.</p>\n<h3 class=\"pm-h3\">Page Navigation</h3>\n<p class=\"pm-p\">Navigate between pages. The max page count updates automatically according to your current viewing options.</p>\n<h3 class=\"pm-h3\">Search Bar</h3>\n<p class=\"pm-p\">Search for specific characters by name. Reset results by submitting an empty search query.</p>\n<h2 class=\"pm-h2\">Detail Page</h2>\n<p class=\"pm-p\">Select a character and press \"Show Details\" to open a detail page. From there you can navigate back to the overview or save the current page as an image — stored in a \"saves\" folder next to the executable.</p>",
+    "links": [
+      {
+        "ico": "fa-solid fa-download",
+        "label": "Download",
+        "url": "https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/tooldev_rick_and_morty_tool.zip"
+      }
+    ]
+  }
+}
