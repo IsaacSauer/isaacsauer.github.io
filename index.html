@@ -13,12 +13,12 @@
     :root{
       --bg:#282c34;--bg-dark:#21252b;--bg-light:#2c313c;
       --sidebar-bg:#21252b;--activity-bg:#1d2128;
-      --border:#181a1f;--text:#abb2bf;--text-muted:#5c6370;--text-bright:#d7dae0;
+      --border:#181a1f;--text:#bfc7d5;--text-muted:#9da6b2;--text-bright:#e0e4eb;
       --blue:#61afef;--green:#98c379;--orange:#e5c07b;
       --red:#e06c75;--purple:#c678dd;--cyan:#56b6c2;--yellow:#d19a66;
       --highlight:#3e4452;--gutter:#4b5263;
-      --tab-h:35px;--activity-w:48px;--sidebar-w:240px;
-      --statusbar-h:22px;--titlebar-h:30px;
+      --tab-h:38px;--activity-w:52px;--sidebar-w:260px;
+      --statusbar-h:24px;--titlebar-h:34px;
     }
 
     html,body{height:100%;font-family:'JetBrains Mono',monospace;background:var(--bg-dark);color:var(--text);overflow:hidden}
@@ -30,7 +30,7 @@
     .tb-dots{position:absolute;left:12px;display:flex;gap:6px}
     .tb-dot{width:12px;height:12px;border-radius:50%;cursor:pointer}
     .tb-dot.r{background:#ff5f57}.tb-dot.y{background:#ffbd2e}.tb-dot.g{background:#28c940}
-    .tb-title{font-size:12px;color:var(--text-muted)}
+    .tb-title{font-size:13px;color:var(--text-muted)}
 
     .ide-body{display:flex;overflow:hidden;height:100%}
 
@@ -45,15 +45,15 @@
     /* sidebar */
     .sidebar{width:var(--sidebar-w);background:var(--sidebar-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;transition:width .2s}
     .sidebar.collapsed{width:0}
-    .sb-head{padding:8px 12px;font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;flex-shrink:0}
+    .sb-head{padding:8px 12px;font-size:12px;font-weight:700;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;flex-shrink:0}
     .file-tree{overflow-y:auto;flex:1;padding-bottom:16px}
     .file-tree::-webkit-scrollbar{width:6px}
     .file-tree::-webkit-scrollbar-thumb{background:var(--gutter);border-radius:3px}
 
-    .ti{display:flex;align-items:center;gap:6px;padding:2px 8px 2px 16px;cursor:pointer;font-size:13px;color:var(--text);white-space:nowrap;user-select:none;border-radius:2px;margin:0 4px;transition:background .1s}
+    .ti{display:flex;align-items:center;gap:6px;padding:4px 8px 4px 16px;cursor:pointer;font-size:14px;color:var(--text);white-space:nowrap;user-select:none;border-radius:2px;margin:0 4px;transition:background .1s}
     .ti:hover{background:var(--highlight)}
     .ti.active{background:var(--highlight);color:var(--text-bright)}
-    .ti .ico{font-size:13px;width:16px;flex-shrink:0}
+    .ti .ico{font-size:14px;width:16px;flex-shrink:0}
     .ti .ico.ts{color:var(--blue)}.ti .ico.json{color:var(--yellow)}.ti .ico.tsx{color:var(--cyan)}.ti .ico.folder{color:var(--orange)}
     .ti-children{padding-left:16px}
     .ti-children.hidden{display:none}
@@ -64,14 +64,14 @@
     .tab-bar{display:flex;background:var(--bg-dark);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;overflow-y:hidden;height:var(--tab-h)}
     .tab-bar::-webkit-scrollbar{height:3px}
     .tab-bar::-webkit-scrollbar-thumb{background:var(--gutter)}
-    .tab{display:flex;align-items:center;gap:8px;padding:0 16px;height:100%;background:var(--bg-dark);border-right:1px solid var(--border);cursor:pointer;font-size:12px;color:var(--text-muted);white-space:nowrap;flex-shrink:0;transition:background .1s,color .1s}
+    .tab{display:flex;align-items:center;gap:8px;padding:0 16px;height:100%;background:var(--bg-dark);border-right:1px solid var(--border);cursor:pointer;font-size:13px;color:var(--text-muted);white-space:nowrap;flex-shrink:0;transition:background .1s,color .1s}
     .tab:hover{color:var(--text);background:var(--bg-light)}
     .tab.active{background:var(--bg);color:var(--text-bright);border-top:1px solid var(--blue)}
     .tab .t-ico.ts{color:var(--blue)}.tab .t-ico.json{color:var(--yellow)}.tab .t-ico.tsx{color:var(--cyan)}
-    .tab .t-x{opacity:0;font-size:12px;transition:opacity .1s;line-height:1}
+    .tab .t-x{opacity:0;font-size:13px;transition:opacity .1s;line-height:1}
     .tab:hover .t-x{opacity:1}
 
-    .breadcrumb{padding:3px 16px;font-size:12px;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;display:flex;align-items:center;gap:4px}
+    .breadcrumb{padding:3px 16px;font-size:13px;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;display:flex;align-items:center;gap:4px}
     .breadcrumb .bc-sep{color:var(--gutter)}
     .breadcrumb .bc-cur{color:var(--text)}
 
@@ -86,8 +86,8 @@
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
     /* code view */
-    .code-view{display:flex;min-height:100%;font-size:13px;line-height:21px}
-    .ln{padding:16px 12px 16px 0;background:var(--bg);color:var(--text-muted);text-align:right;user-select:none;flex-shrink:0;min-width:48px;border-right:1px solid var(--border);font-size:12px;line-height:21px;padding-top:16px}
+    .code-view{display:flex;min-height:100%;font-size:14px;line-height:21px}
+    .ln{padding:16px 12px 16px 0;background:var(--bg);color:var(--text-muted);text-align:right;user-select:none;flex-shrink:0;min-width:48px;border-right:1px solid var(--border);font-size:13px;line-height:21px;padding-top:16px}
     .ln span{display:block}
     .cc{flex:1;padding:16px 24px;white-space:pre-wrap;word-break:break-word}
     .cl{display:block;min-height:21px}
@@ -99,7 +99,7 @@
     .key{color:var(--red)}.val{color:var(--green)}.num-val{color:var(--yellow)}
 
     /* status bar */
-    .status-bar{height:var(--statusbar-h);background:var(--blue);display:flex;align-items:center;padding:0 8px;font-size:11px;color:rgba(0,0,0,.8);user-select:none;flex-shrink:0}
+    .status-bar{height:var(--statusbar-h);background:var(--blue);display:flex;align-items:center;padding:0 8px;font-size:12px;color:rgba(0,0,0,.8);user-select:none;flex-shrink:0}
     .si{padding:0 8px;height:100%;display:flex;align-items:center;gap:4px;cursor:pointer;transition:background .1s}
     .si:hover{background:rgba(0,0,0,.15)}
     .si-spacer{flex:1}
@@ -108,8 +108,8 @@
     /* terminal */
     .term-panel{background:var(--bg-dark);border-top:1px solid var(--border);height:0;overflow:hidden;transition:height .2s;flex-shrink:0}
     .term-panel.open{height:180px}
-    .term-head{padding:4px 16px;font-size:11px;color:var(--text-muted);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
-    .term-out{padding:8px 16px;font-size:12px;line-height:1.6;overflow-y:auto;height:calc(100% - 25px)}
+    .term-head{padding:4px 16px;font-size:12px;color:var(--text-muted);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+    .term-out{padding:8px 16px;font-size:13px;line-height:1.6;overflow-y:auto;height:calc(100% - 25px)}
     .term-out::-webkit-scrollbar{width:6px}
     .term-out::-webkit-scrollbar-thumb{background:var(--gutter)}
     .tp{color:var(--green)}.tc{color:var(--blue)}.to{color:var(--text-muted)}.ts-ok{color:var(--green)}.ts-err{color:var(--red)}
@@ -120,50 +120,66 @@
     .cmd-box{width:580px;max-width:90vw;background:var(--bg-light);border:1px solid var(--gutter);border-radius:6px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6)}
     .cmd-inp-wrap{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
     .cmd-inp-wrap i{color:var(--text-muted)}
-    .cmd-inp{flex:1;background:none;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--text-bright)}
+    .cmd-inp{flex:1;background:none;border:none;outline:none;font-family:inherit;font-size:15px;color:var(--text-bright)}
     .cmd-results{max-height:280px;overflow-y:auto}
-    .cmd-r{padding:8px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:var(--text);transition:background .1s}
+    .cmd-r{padding:8px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px;color:var(--text);transition:background .1s}
     .cmd-r:hover,.cmd-r.sel{background:var(--highlight);color:var(--text-bright)}
     .cmd-r i{color:var(--text-muted);width:16px}
-    .cmd-hint{padding:6px 16px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border)}
+    .cmd-hint{padding:6px 16px;font-size:12px;color:var(--text-muted);border-top:1px solid var(--border)}
 
     /* projects grid */
     .projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding:16px 24px}
-    .pc{background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s,transform .2s;cursor:default}
+    .pc{background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s,transform .2s;cursor:pointer}
     .pc:hover{border-color:var(--blue);transform:translateY(-2px)}
-    .pc-head{padding:10px 14px;background:var(--bg-light);font-size:12px;color:var(--text-muted);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+    .pc-head{padding:10px 14px;background:var(--bg-light);font-size:13px;color:var(--text-muted);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
     .pc-head code{color:var(--blue);font-family:inherit}
     .pc-img{width:100%;height:160px;object-fit:cover;display:block;opacity:.85;transition:opacity .2s}
     .pc:hover .pc-img{opacity:1}
     .pc-no-img{width:100%;height:120px;background:var(--bg-light);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:28px}
     .pc-body{padding:12px 14px}
-    .pc-name{font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:4px}
-    .pc-desc{font-size:12px;color:var(--text);line-height:1.6;margin-bottom:10px}
-    .pc-meta{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--text-muted);margin-bottom:8px}
+    .pc-name{font-size:15px;font-weight:600;color:var(--text-bright);margin-bottom:4px}
+    .pc-desc{font-size:13px;color:var(--text);line-height:1.6;margin-bottom:10px}
+    .pc-meta{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-muted);margin-bottom:8px}
     .pc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
-    .tag{font-size:10px;padding:2px 6px;background:var(--highlight);color:var(--text-muted);border-radius:3px}
-    .lang-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+    .tag{font-size:11px;padding:2px 6px;background:var(--highlight);color:var(--text-muted);border-radius:3px}
+    .lang-badge{font-size:11px;padding:2px 7px;border-radius:10px;font-weight:600}
     .lb-cpp{background:rgba(97,175,239,.15);color:var(--blue)}
     .lb-cs{background:rgba(198,120,221,.15);color:var(--purple)}
     .lb-js{background:rgba(229,192,123,.15);color:var(--orange)}
     .lb-java{background:rgba(224,108,117,.15);color:var(--red)}
     .lb-multi{background:rgba(86,182,194,.15);color:var(--cyan)}
     .pc-links{display:flex;gap:8px}
-    .pc-link{font-size:11px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;transition:opacity .15s}
+    .pc-link{font-size:12px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;transition:opacity .15s}
     .pc-link:hover{opacity:.75}
+    /* Project modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .2s}
+    .modal-backdrop.open{opacity:1;pointer-events:all}
+    .modal{background:var(--bg-dark);border:1px solid var(--blue);border-radius:8px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;transform:translateY(12px);transition:transform .2s;display:flex;flex-direction:column}
+    .modal-backdrop.open .modal{transform:translateY(0)}
+    .modal-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg-light);border-bottom:1px solid var(--border);border-radius:8px 8px 0 0;gap:12px}
+    .modal-header code{color:var(--blue);font-size:13px}
+    .modal-close{background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;line-height:1;padding:2px 6px;border-radius:3px;transition:color .15s,background .15s}
+    .modal-close:hover{color:var(--text-bright);background:var(--highlight)}
+    .modal-img{width:100%;max-height:260px;object-fit:cover;display:block}
+    .modal-body{padding:20px}
+    .modal-title{font-size:18px;font-weight:700;color:var(--text-bright);margin-bottom:6px}
+    .modal-meta{font-size:13px;color:var(--text-muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+    .modal-desc{font-size:14px;color:var(--text);line-height:1.7;margin-bottom:14px}
+    .modal-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+    .modal-links{display:flex;gap:10px;flex-wrap:wrap}
 
     /* gallery */
     .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;padding:16px 24px}
     .gi{background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;overflow:hidden}
-    .gi-head{padding:8px 12px;background:var(--bg-light);font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border)}
+    .gi-head{padding:8px 12px;background:var(--bg-light);font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border)}
     .gi-head i{color:var(--cyan)}
     .gi-embed{position:relative;padding-top:60%}
     .gi-embed iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
-    .gi-caption{padding:8px 12px;font-size:11px;color:var(--text-muted)}
+    .gi-caption{padding:8px 12px;font-size:12px;color:var(--text-muted)}
 
     /* music */
     .music-section{padding:16px 24px}
-    .music-section h3{font-size:12px;color:var(--text-muted);margin:16px 0 10px;text-transform:uppercase;letter-spacing:.06em}
+    .music-section h3{font-size:13px;color:var(--text-muted);margin:16px 0 10px;text-transform:uppercase;letter-spacing:.06em}
     .music-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px;margin-bottom:24px}
     .sp-compact iframe{border-radius:6px;display:block}
     .albums-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
@@ -171,17 +187,17 @@
 
     /* contact */
     .contact-wrap{max-width:580px;padding:24px}
-    .form-file-head{font-size:12px;color:var(--text-muted);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+    .form-file-head{font-size:13px;color:var(--text-muted);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
     .form-file-head code{color:var(--blue)}
     .fg{margin-bottom:14px}
-    .fl{display:block;font-size:11px;color:var(--text-muted);margin-bottom:5px}
-    .fi{width:100%;background:var(--bg-dark);border:1px solid var(--border);border-radius:4px;padding:8px 12px;font-family:inherit;font-size:13px;color:var(--text);outline:none;transition:border-color .2s}
+    .fl{display:block;font-size:12px;color:var(--text-muted);margin-bottom:5px}
+    .fi{width:100%;background:var(--bg-dark);border:1px solid var(--border);border-radius:4px;padding:8px 12px;font-family:inherit;font-size:14px;color:var(--text);outline:none;transition:border-color .2s}
     .fi:focus{border-color:var(--blue)}
     .fi-ta{height:110px;resize:vertical}
-    .btn-submit{background:var(--blue);color:#1a1d24;border:none;padding:8px 22px;border-radius:4px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s}
+    .btn-submit{background:var(--blue);color:#1a1d24;border:none;padding:8px 22px;border-radius:4px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s}
     .btn-submit:hover{opacity:.85}
     .btn-submit:disabled{opacity:.5;cursor:not-allowed}
-    #form-msg{margin-top:10px;font-size:12px;color:var(--green)}
+    #form-msg{margin-top:10px;font-size:13px;color:var(--green)}
     #form-msg.err{color:var(--red)}
 
     .social-links{display:flex;gap:12px;margin-top:24px;padding-top:16px;border-top:1px solid var(--border)}
@@ -193,15 +209,15 @@
     .about-hero{display:flex;align-items:center;gap:24px;margin-bottom:28px}
     .about-photo{width:88px;height:88px;border-radius:50%;object-fit:cover;border:2px solid var(--blue);flex-shrink:0}
     .about-name{font-size:26px;font-weight:700;color:var(--text-bright);margin-bottom:4px}
-    .about-role{font-size:14px;color:var(--blue);margin-bottom:10px}
+    .about-role{font-size:15px;color:var(--blue);margin-bottom:10px}
     .about-chips{display:flex;flex-wrap:wrap;gap:8px}
-    .about-chip{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:5px}
-    .about-chip i{font-size:10px}
+    .about-chip{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:5px}
+    .about-chip i{font-size:11px}
     .about-chip+.about-chip::before{content:'·';margin-right:0;color:var(--gutter)}
-    .about-bio{font-size:13px;color:var(--text);line-height:1.8;margin-bottom:28px;border-left:2px solid var(--highlight);padding-left:16px}
+    .about-bio{font-size:14px;color:var(--text);line-height:1.8;margin-bottom:28px;border-left:2px solid var(--highlight);padding-left:16px}
     .skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
     .skill-group{}
-    .skill-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:6px}
+    .skill-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:6px}
     .skill-tags{display:flex;flex-wrap:wrap;gap:4px}
 
     /* experience section */
@@ -209,21 +225,21 @@
     .exp-card{background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;border-left:3px solid var(--blue);padding:20px;margin-bottom:16px}
     .exp-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
     .exp-company{font-size:16px;font-weight:700;color:var(--text-bright)}
-    .exp-period{font-size:11px;color:var(--text-muted);flex-shrink:0;padding-top:3px}
-    .exp-role{font-size:13px;color:var(--blue);margin-bottom:8px}
-    .exp-highlight{font-size:12px;color:var(--green);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+    .exp-period{font-size:12px;color:var(--text-muted);flex-shrink:0;padding-top:3px}
+    .exp-role{font-size:14px;color:var(--blue);margin-bottom:8px}
+    .exp-highlight{font-size:13px;color:var(--green);margin-bottom:12px;display:flex;align-items:center;gap:6px}
     .exp-list{padding-left:16px;margin-bottom:14px}
-    .exp-list li{font-size:12px;color:var(--text);line-height:1.8}
+    .exp-list li{font-size:13px;color:var(--text);line-height:1.8}
     .exp-stack{display:flex;flex-wrap:wrap;gap:5px}
     .edu-card{background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;border-left:3px solid var(--orange);padding:16px 20px;display:flex;align-items:center;gap:16px}
     .edu-card i{color:var(--orange);font-size:20px;flex-shrink:0}
-    .edu-school{font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:4px}
-    .edu-sub{font-size:12px;color:var(--text-muted)}
-    .exp-section-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:10px;margin-top:24px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+    .edu-school{font-size:15px;font-weight:600;color:var(--text-bright);margin-bottom:4px}
+    .edu-sub{font-size:13px;color:var(--text-muted)}
+    .exp-section-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:10px;margin-top:24px;padding-bottom:6px;border-bottom:1px solid var(--border)}
     .exp-section-label:first-child{margin-top:0}
 
     /* notification toast */
-    .notif{position:fixed;bottom:32px;right:20px;background:var(--bg-light);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:6px;padding:10px 16px;font-size:12px;color:var(--text);z-index:500;animation:slideIn .3s ease;max-width:280px;pointer-events:none;display:none}
+    .notif{position:fixed;bottom:32px;right:20px;background:var(--bg-light);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:6px;padding:10px 16px;font-size:13px;color:var(--text);z-index:500;animation:slideIn .3s ease;max-width:280px;pointer-events:none;display:none}
     @keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
 
     /* mobile */
@@ -234,10 +250,35 @@
       body,html{overflow:hidden}
     }
     .mobile-nav{display:none;position:fixed;bottom:var(--statusbar-h);left:0;right:0;background:var(--bg-dark);border-top:1px solid var(--border);z-index:100;padding:4px 0}
-    .mn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px;cursor:pointer;font-size:9px;color:var(--text-muted);transition:color .15s}
+    .mn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px;cursor:pointer;font-size:10px;color:var(--text-muted);transition:color .15s}
     .mn-item i{font-size:17px}
     .mn-item.active{color:var(--blue)}
     @media(max-width:768px){.editor-area{padding-bottom:60px}}
+
+    /* ── project detail modal ── */
+    .proj-modal{position:fixed;inset:0;z-index:500;display:none;background:rgba(0,0,0,.65);backdrop-filter:blur(2px);align-items:flex-start;justify-content:center;padding:48px 16px;overflow-y:auto}
+    .proj-modal.open{display:flex}
+    .pm-box{background:var(--bg);border:1px solid var(--border);border-radius:6px;width:100%;max-width:800px;box-shadow:0 24px 80px rgba(0,0,0,.8);flex-shrink:0}
+    .pm-head{background:var(--activity-bg);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);border-radius:6px 6px 0 0}
+    .pm-title{font-size:14px;color:var(--text-bright);font-weight:600}
+    .pm-close{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:20px;line-height:1;padding:0 4px;border-radius:3px;transition:color .1s}
+    .pm-close:hover{color:var(--red)}
+    .pm-body{padding:24px 28px;max-height:calc(100vh - 180px);overflow-y:auto}
+    .pm-body::-webkit-scrollbar{width:8px}
+    .pm-body::-webkit-scrollbar-thumb{background:var(--gutter);border-radius:4px}
+    .pm-video{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:4px;margin-bottom:20px;background:var(--bg-dark)}
+    .pm-video iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+    .pm-videos{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:20px}
+    .pm-vid-label{font-size:12px;color:var(--text-muted);text-align:center;margin-top:4px}
+    .pm-h2{font-size:14px;font-weight:700;color:var(--text-bright);margin:20px 0 8px;border-left:2px solid var(--blue);padding-left:10px}
+    .pm-h3{font-size:13px;font-weight:600;color:var(--blue);margin:14px 0 5px}
+    .pm-p{font-size:13px;color:var(--text);line-height:1.75;margin-bottom:10px}
+    .pm-ul{font-size:13px;color:var(--text);line-height:1.75;padding-left:20px;margin-bottom:12px}
+    .pm-ul li{margin-bottom:2px}
+    .pm-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+    .pm-link{display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-light);border:1px solid var(--gutter);border-radius:4px;color:var(--blue);font-size:13px;text-decoration:none;transition:background .1s,border-color .1s}
+    .pm-link:hover{background:var(--highlight);border-color:var(--blue)}
+    .pc{cursor:pointer}
   </style>
 </head>
 <body>
@@ -427,7 +468,7 @@
           <div class="projects-grid">
 
             <!-- Breachers VR -->
-            <div class="pc">
+            <div class="pc" onclick="openProject('breachers')">
               <div class="pc-head">
                 <code>const breachers: Project = {</code>
                 <span class="lang-badge lb-cs">C#</span>
@@ -440,7 +481,7 @@
                 <div class="pc-tags">
                   <span class="tag">Unity</span><span class="tag">Wwise</span><span class="tag">VR</span><span class="tag">Meta Quest</span><span class="tag">SteamVR</span>
                 </div>
-                <div class="pc-links">
+                <div class="pc-links" onclick="event.stopPropagation()">
                   <a class="pc-link" href="https://www.youtube.com/embed/A1ksWrOgdFI" target="_blank"><i class="fa-brands fa-youtube"></i> Trailer</a>
                   <a class="pc-link" href="https://www.meta.com/en-gb/experiences/breachers/4900985259994498/" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Meta Store</a>
                 </div>
@@ -448,7 +489,7 @@
             </div>
 
             <!-- GB Emulator -->
-            <div class="pc">
+            <div class="pc" onclick="openProject('gbemu')">
               <div class="pc-head">
                 <code>const gbemu: Project = {</code>
                 <span class="lang-badge lb-cpp">C++</span>
@@ -461,14 +502,18 @@
                 <div class="pc-tags">
                   <span class="tag">emulation</span><span class="tag">low-level</span><span class="tag">MBC</span><span class="tag">CPU</span>
                 </div>
-                <div class="pc-links">
+                <div class="pc-links" onclick="event.stopPropagation()">
                   <a class="pc-link" href="https://www.youtube.com/watch?v=2bc5L7RZ1i8" target="_blank"><i class="fa-brands fa-youtube"></i> Demo</a>
+                  <a class="pc-link" href="https://www.youtube.com/watch?v=HsLH8Jg_2xU" target="_blank"><i class="fa-brands fa-youtube"></i> Zelda</a>
+                  <a class="pc-link" href="https://www.youtube.com/watch?v=OWSOsolaPH0" target="_blank"><i class="fa-brands fa-youtube"></i> Kirby</a>
+                  <a class="pc-link" href="https://github.com/IsaacSauer/GameboyEmulator" target="_blank"><i class="fa-brands fa-github"></i> Repo</a>
+                  <a class="pc-link" href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/GW_2122_Isaac_Sauer_NL_Executable.zip" target="_blank"><i class="fa-solid fa-download"></i> Download</a>
                 </div>
               </div>
             </div>
 
             <!-- Crash Bandicoot -->
-            <div class="pc">
+            <div class="pc" onclick="openProject('crash')">
               <div class="pc-head">
                 <code>const crash: Project = {</code>
                 <span class="lang-badge lb-cpp">C++</span>
@@ -481,11 +526,17 @@
                 <div class="pc-tags">
                   <span class="tag">DirectX 11</span><span class="tag">rendering</span><span class="tag">HLSL</span>
                 </div>
+                <div class="pc-links" onclick="event.stopPropagation()">
+                  <a class="pc-link" href="https://www.youtube.com/watch?v=Wh_rlE3rpng" target="_blank"><i class="fa-brands fa-youtube"></i> Demo</a>
+                  <a class="pc-link" href="https://www.youtube.com/watch?v=5h1pKG7gvOY" target="_blank"><i class="fa-brands fa-youtube"></i> Walkthrough</a>
+                  <a class="pc-link" href="https://github.com/IsaacSauer/CrashBandicootGame-Overlord" target="_blank"><i class="fa-brands fa-github"></i> Repo</a>
+                  <a class="pc-link" href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/crash_game.zip" target="_blank"><i class="fa-solid fa-download"></i> Download</a>
+                </div>
               </div>
             </div>
 
             <!-- Captain CigArrr -->
-            <div class="pc">
+            <div class="pc" onclick="openProject('capcig')">
               <div class="pc-head">
                 <code>const captainCigarr: Project = {</code>
                 <span class="lang-badge lb-cpp">C++</span>
@@ -498,11 +549,15 @@
                 <div class="pc-tags">
                   <span class="tag">platformer</span><span class="tag">team</span><span class="tag">AI</span>
                 </div>
+                <div class="pc-links" onclick="event.stopPropagation()">
+                  <a class="pc-link" href="https://www.youtube.com/watch?v=gVmt003c3iU" target="_blank"><i class="fa-brands fa-youtube"></i> Trailer</a>
+                  <a class="pc-link" href="https://zacsvae.itch.io/captain-cigarrr" target="_blank"><i class="fa-brands fa-itch-io"></i> itch.io</a>
+                </div>
               </div>
             </div>
 
             <!-- Grand Dad Mania -->
-            <div class="pc">
+            <div class="pc" onclick="openProject('gdm')">
               <div class="pc-head">
                 <code>const grandDadMania: Project = {</code>
                 <span class="lang-badge lb-cpp">C++</span>
@@ -515,11 +570,15 @@
                 <div class="pc-tags">
                   <span class="tag">grid</span><span class="tag">SDL2</span><span class="tag">retro</span>
                 </div>
+                <div class="pc-links" onclick="event.stopPropagation()">
+                  <a class="pc-link" href="https://www.youtube.com/watch?v=DRwC__L0VYQ" target="_blank"><i class="fa-brands fa-youtube"></i> Trailer</a>
+                  <a class="pc-link" href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/Sauer_Isaac_GrandDadMania_Final_Release_Discord_API.zip" target="_blank"><i class="fa-solid fa-download"></i> Download</a>
+                </div>
               </div>
             </div>
 
             <!-- A* -->
-            <div class="pc">
+            <div class="pc" onclick="openProject('astar')">
               <div class="pc-head">
                 <code>const fasterAStar: Project = {</code>
                 <span class="lang-badge lb-cpp">C++</span>
@@ -532,11 +591,15 @@
                 <div class="pc-tags">
                   <span class="tag">pathfinding</span><span class="tag">algorithms</span><span class="tag">optimization</span>
                 </div>
+                <div class="pc-links" onclick="event.stopPropagation()">
+                  <a class="pc-link" href="https://github.com/IsaacSauer/faster-a-star-for-games" target="_blank"><i class="fa-brands fa-github"></i> Repo</a>
+                  <a class="pc-link" href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/gameplay_prog_astar.zip" target="_blank"><i class="fa-solid fa-download"></i> Download</a>
+                </div>
               </div>
             </div>
 
             <!-- Minigin -->
-            <div class="pc">
+            <div class="pc" onclick="openProject('minigin')">
               <div class="pc-head">
                 <code>const minigin: Project = {</code>
                 <span class="lang-badge lb-cpp">C++</span>
@@ -549,11 +612,16 @@
                 <div class="pc-tags">
                   <span class="tag">engine</span><span class="tag">ECS</span><span class="tag">SDL2</span><span class="tag">architecture</span>
                 </div>
+                <div class="pc-links" onclick="event.stopPropagation()">
+                  <a class="pc-link" href="https://www.youtube.com/watch?v=qDLBfyyX3-E" target="_blank"><i class="fa-brands fa-youtube"></i> Demo</a>
+                  <a class="pc-link" href="https://github.com/IsaacSauer/2DAE08_Minigin_Engine_Isaac_Sauer" target="_blank"><i class="fa-brands fa-github"></i> Repo</a>
+                  <a class="pc-link" href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/qbert_game.zip" target="_blank"><i class="fa-solid fa-download"></i> Download</a>
+                </div>
               </div>
             </div>
 
             <!-- Rick & Morty App -->
-            <div class="pc">
+            <div class="pc" onclick="openProject('rickmorty')">
               <div class="pc-head">
                 <code>const rickMortyTool: Project = {</code>
                 <span class="lang-badge lb-java">Java</span>
@@ -565,6 +633,9 @@
                 <div class="pc-desc">Desktop tool fetching Rick &amp; Morty API data, displaying characters with filters. Built with Java/JavaFX with a clean MVC architecture.</div>
                 <div class="pc-tags">
                   <span class="tag">Java</span><span class="tag">JavaFX</span><span class="tag">REST API</span><span class="tag">MVC</span>
+                </div>
+                <div class="pc-links" onclick="event.stopPropagation()">
+                  <a class="pc-link" href="https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/tooldev_rick_and_morty_tool.zip" target="_blank"><i class="fa-solid fa-download"></i> Download</a>
                 </div>
               </div>
             </div>
@@ -749,7 +820,7 @@
       <div class="term-panel" id="termPanel">
         <div class="term-head" onclick="toggleTerminal()">
           <span>TERMINAL</span>
-          <span style="font-size:10px">×</span>
+          <span style="font-size:11px">×</span>
         </div>
         <div class="term-out" id="termOut"></div>
       </div>
@@ -780,6 +851,17 @@
     </div>
     <div class="cmd-results" id="cmdResults"></div>
     <div class="cmd-hint"><kbd>↑↓</kbd> navigate &nbsp;·&nbsp; <kbd>Enter</kbd> open &nbsp;·&nbsp; <kbd>Esc</kbd> close</div>
+  </div>
+</div>
+
+<!-- Project detail modal -->
+<div class="proj-modal" id="projModal" onclick="closeProjModal(event)">
+  <div class="pm-box" id="pmBox">
+    <div class="pm-head">
+      <span class="pm-title" id="pmTitle"></span>
+      <button class="pm-close" onclick="closeProjModal(null,true)">×</button>
+    </div>
+    <div class="pm-body" id="pmBody"></div>
   </div>
 </div>
 
@@ -991,7 +1073,10 @@ function cmdSelect(id) {
 document.getElementById('cmdInput').addEventListener('input', e => renderCmdResults(e.target.value));
 document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'p') { e.preventDefault(); openCmd(); }
-  if (e.key === 'Escape') document.getElementById('cmdOverlay').classList.remove('open');
+  if (e.key === 'Escape') {
+    document.getElementById('cmdOverlay').classList.remove('open');
+    closeProjModal(null, true);
+  }
 });
 
 // ── Mobile nav ────────────────────────────────────────────────────
@@ -1007,6 +1092,191 @@ function toast(msg) {
   el.style.display = 'block';
   clearTimeout(el._t);
   el._t = setTimeout(() => { el.style.display = 'none'; }, 3500);
+}
+
+// ── Project detail modal ─────────────────────────────────────────
+const PROJECTS = {
+  breachers: {
+    title: 'Breachers VR',
+    videos: [{id:'A1ksWrOgdFI',label:'Trailer'}],
+    body: `<p class="pm-p">I'm incredibly thankful for the opportunity to contribute to the production of <em>Breachers</em> as a game programmer at Triangle Factory. It was a challenging but deeply rewarding experience, collaborating with an amazing team to push the limits of what mobile VR hardware could achieve. Seeing <em>Breachers</em> become one of the most popular shooters on the Meta Quest in 2023 was a proud moment for all of us.</p>
+<p class="pm-p">I've mainly been focusing on <strong>audio features</strong> and fixing bugs in <strong>game development</strong>, with a lot of attention to <strong>sound design</strong>, making sure the audio works well, and solving any in-game audio issues. I've also worked on improving <strong>gameplay mechanics</strong> and addressing <strong>server problems</strong> to make sure the game runs smoothly for both players and servers. With plenty of experience in <strong>Wwise</strong> and <strong>Unity</strong>, I've been able to integrate complex <strong>audio systems</strong> and add high-quality <strong>sound effects</strong> that really elevate the game experience.</p>
+<h2 class="pm-h2">Key Areas</h2>
+<h3 class="pm-h3">Audio Implementation</h3>
+<p class="pm-p">Added and fine-tuned various sound effects — explosions, gunshots, player actions, and special sounds (syringes and defusers). Used Wwise and Unity to integrate and manage complex audio systems.</p>
+<h3 class="pm-h3">Bug Fixes</h3>
+<p class="pm-p">Fixed various audio bugs including wrong sounds, audio delays, and null references. Worked on sound trigger issues and syncing audio properly using Wwise.</p>
+<h3 class="pm-h3">Gameplay Features</h3>
+<p class="pm-p">Worked on sound mechanics tied to gameplay — tracking rewards in competitive modes and adding immersion with sounds for door blockers and drones.</p>
+<h3 class="pm-h3">Multiplayer &amp; Server</h3>
+<p class="pm-p">Fixed issues with matchmaking, rejoining, server crashes, and overall server stability to enhance the multiplayer experience. Ensured audio runs smoothly during online matches.</p>
+<h3 class="pm-h3">UI/UX</h3>
+<p class="pm-p">Improved UI-related audio — button clicks, progression sounds, and match-found notifications — keeping gameplay flow smooth.</p>`,
+    links: [
+      {ico:'fa-brands fa-youtube',label:'Trailer',url:'https://www.youtube.com/watch?v=A1ksWrOgdFI'},
+      {ico:'fa-solid fa-arrow-up-right-from-square',label:'Meta Store',url:'https://www.meta.com/en-gb/experiences/breachers/4900985259994498/'},
+    ]
+  },
+  gbemu: {
+    title: 'Game Boy Emulator',
+    videos: [{id:'2bc5L7RZ1i8',label:'Demo'},{id:'HsLH8Jg_2xU',label:"Zelda: Link's Awakening"},{id:'OWSOsolaPH0',label:"Kirby's Dream Land"}],
+    body: `<p class="pm-p">The initial project was limited to playing Tetris, so significant work was needed to enable support for additional games. By utilizing an opcode tester, opcodes could be evaluated quickly and efficiently to ensure they functioned correctly. This streamlined the process of implementing missing or malfunctioning opcodes. Test ROMs were also used to validate the opcodes in a realistic setting, leading to functional opcode support, except for the timer implementation.</p>
+<p class="pm-p">To accommodate a wider range of games, a memory bank controller (MBC) was added, enabling support for not only ROM-only games but also those requiring an MBC chip. Implementations for MBC1 and MBC5 were included, paving the way for emulating more complex games like The Legend of Zelda: Link's Awakening and Hoshi no Kirby.</p>
+<p class="pm-p">Additionally, a new sprite rendering system was introduced, allowing broader game compatibility. This change slightly reduced performance, though future optimizations could address this.</p>`,
+    links: [
+      {ico:'fa-brands fa-youtube',label:'Demo',url:'https://www.youtube.com/watch?v=2bc5L7RZ1i8'},
+      {ico:'fa-brands fa-youtube',label:'Zelda Demo',url:'https://www.youtube.com/watch?v=HsLH8Jg_2xU'},
+      {ico:'fa-brands fa-youtube',label:'Kirby Demo',url:'https://www.youtube.com/watch?v=OWSOsolaPH0'},
+      {ico:'fa-brands fa-github',label:'Repo',url:'https://github.com/IsaacSauer/GameboyEmulator'},
+      {ico:'fa-solid fa-download',label:'Download',url:'https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/GW_2122_Isaac_Sauer_NL_Executable.zip'},
+    ]
+  },
+  crash: {
+    title: 'Crash Bandicoot Remake',
+    videos: [{id:'Wh_rlE3rpng',label:'Demo'},{id:'5h1pKG7gvOY',label:'Walkthrough'}],
+    body: `<p class="pm-p">This was the final assignment for the "Graphics Programming 2" course in my second year at Digital Arts &amp; Entertainment. We were given a basic game engine, and the task was to add the required graphics and gameplay features for a chosen game.</p>
+<h2 class="pm-h2">Key Features Implemented</h2>
+<ul class="pm-ul">
+<li>Shadow Mapping</li><li>Sprite Rendering</li><li>Text Rendering</li><li>SkyBox</li>
+<li>Post Processing</li><li>Particles</li><li>Skinned Model Animations</li>
+<li>Character Controller</li><li>FMOD Sound System</li><li>Rig Rail Camera System</li>
+<li>State Pattern</li><li>Invoker System</li><li>... and more!</li>
+</ul>`,
+    links: [
+      {ico:'fa-brands fa-youtube',label:'Demo',url:'https://www.youtube.com/watch?v=Wh_rlE3rpng'},
+      {ico:'fa-brands fa-youtube',label:'Walkthrough',url:'https://www.youtube.com/watch?v=5h1pKG7gvOY'},
+      {ico:'fa-brands fa-github',label:'Repo',url:'https://github.com/IsaacSauer/CrashBandicootGame-Overlord'},
+      {ico:'fa-solid fa-download',label:'Download',url:'https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/crash_game.zip'},
+    ]
+  },
+  capcig: {
+    title: 'Captain CigArrr',
+    videos: [{id:'gVmt003c3iU',label:'Trailer'}],
+    body: `<p class="pm-p">Captain CigARRR is a game made by students for the "Game Projects" course in the second year at Digital Arts &amp; Entertainment. We had 11 weeks to bring the idea to life, from brainstorming to the final polish.</p>
+<h2 class="pm-h2">The Game</h2>
+<p class="pm-p">You control a small ship in a cluster of islands, trying to survive waves of enemies. Collect resources and abilities to upgrade your ship and take on even more challenges. The more you upgrade, the more infamous you become, and the more enemies will come after you! See how long you can survive this never-ending storm of chaos.</p>
+<h2 class="pm-h2">Made By</h2>
+<ul class="pm-ul">
+<li>Jonathan Steylaerts (Artist)</li><li>Nathan Goffin (Artist)</li>
+<li>Jef Bernaers (Artist)</li><li>Diedrik Droesbeke (Artist)</li>
+<li>Marnick Huysmans (Programmer)</li><li>Isaac Sauer (Programmer)</li>
+</ul>
+<h2 class="pm-h2">Controls</h2>
+<p class="pm-p">Requires a controller. Left joystick to move. B to interact with the seapost. Y fires main cannons. X for side cannons and blunderbuss. A for a quick boost or roll. Shoulder buttons rotate the camera. Left Trigger activates your special ability. Right Trigger boosts the ship using the sails.</p>`,
+    links: [
+      {ico:'fa-brands fa-youtube',label:'Trailer',url:'https://www.youtube.com/watch?v=gVmt003c3iU'},
+      {ico:'fa-brands fa-itch-io',label:'itch.io',url:'https://zacsvae.itch.io/captain-cigarrr'},
+    ]
+  },
+  gdm: {
+    title: 'Grand Dad Mania',
+    videos: [{id:'DRwC__L0VYQ',label:'Trailer'}],
+    body: `<p class="pm-p">I created Grand Dad Mania as my final project for the "Programming 2" course. The assignment was to build a platformer game that met certain criteria in the grading rubric. Later on, I added the Discord SDK to try out the Discord RPC feature.</p>
+<h2 class="pm-h2">The Game</h2>
+<p class="pm-p">Grand Dad Mania is based on a canceled SiIvaGunner game, which was basically a parody of Sonic Mania. It was originally featured as a high-quality rip in the "Trailer Theme (In-Game Mix) - Sonic Mania" video.</p>`,
+    links: [
+      {ico:'fa-brands fa-youtube',label:'Trailer',url:'https://www.youtube.com/watch?v=DRwC__L0VYQ'},
+      {ico:'fa-solid fa-download',label:'Download',url:'https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/Sauer_Isaac_GrandDadMania_Final_Release_Discord_API.zip'},
+    ]
+  },
+  astar: {
+    title: 'Faster A* For Games',
+    videos: [],
+    body: `<h2 class="pm-h2">Introduction</h2>
+<p class="pm-p">The technique used is called Goal Bounding — an optimization for pathfinding algorithms that can be applied to any static search graph. Based on a paper by <strong>Steve Rabin</strong> and <strong>Nathan R. Sturtevant</strong>, it prunes large chunks of the search space using precomputed bounding boxes, making the runtime algorithm significantly faster.</p>
+<h2 class="pm-h2">Main Goal</h2>
+<p class="pm-p">At runtime, bounding boxes precomputed for each node connection are used to prune areas that couldn't possibly lead to the goal. Computation time scales with graph size, but it happens before runtime. The graph must be static — changes would require recomputing all boxes. For large NavMeshes, precomputations happen before release and data is saved to a binary file loaded into RAM at initialization.</p>
+<h2 class="pm-h2">Implementation</h2>
+<p class="pm-p">An enhanced Dijkstra method floods the whole graph (no goal node) and stores, for each node, the optimal starting connection. The connection ID is passed to children each time a new record is pushed to the open list. This gives us the bounding box for each connection of each node.</p>
+<p class="pm-p">At runtime, before exploring a connection, we check whether the goal position falls within that connection's bounding box. If it doesn't, we skip it. Dynamic start and goal nodes (added at runtime) are exempt from the check via a simple guard.</p>
+<h2 class="pm-h2">Conclusion</h2>
+<p class="pm-p">Goal Bounding can meaningfully speed up pathfinding when applied to static graphs with the right data structure. It provided a broader perspective on just how much room there is for optimization in the pathfinding space.</p>`,
+    links: [
+      {ico:'fa-brands fa-github',label:'Repo',url:'https://github.com/IsaacSauer/faster-a-star-for-games'},
+      {ico:'fa-solid fa-download',label:'Download',url:'https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/gameplay_prog_astar.zip'},
+    ]
+  },
+  minigin: {
+    title: 'Minigin — Game Engine',
+    videos: [{id:'qDLBfyyX3-E',label:'Demo (Qbert)'}],
+    body: `<p class="pm-p">For the "Programming 4" course in my second year at DAE Howest, I built a game engine from scratch and used it to create Qbert.</p>
+<h2 class="pm-h2">Design Patterns &amp; Choices</h2>
+<h3 class="pm-h3">Command Pattern</h3>
+<p class="pm-p">The Input System uses commands to trigger events. Override "Command" and "Execute", or use "CommandFunc" with a function pointer (with bound parameters if needed).</p>
+<h3 class="pm-h3">Flyweight Pattern</h3>
+<p class="pm-p">Resources like textures are stored in a map keyed by file path, ensuring each is loaded only once. Requesting an already-loaded Texture2D returns the cached instance.</p>
+<h3 class="pm-h3">Observer Pattern</h3>
+<p class="pm-p">Create an Observer class with event methods and connect it to a Subject. Call "notify" on the subject with the observer's function pointer — supports bound parameters.</p>
+<h3 class="pm-h3">Singleton</h3>
+<p class="pm-p">Two variants: static stack allocation for simple cases, static smart pointer for heap allocation. Prevents manual instance management.</p>
+<h3 class="pm-h3">State Machine</h3>
+<p class="pm-p">Object-oriented state machine. Create a class inheriting from "State" and implement Enter, Exit, HandleInput, Update, and FixedUpdate. Call these from component update methods.</p>
+<h3 class="pm-h3">Game Loop</h3>
+<p class="pm-p">Uses the "Play Catch Up" pattern for both physics (Fixed Update) and regular frame updates (Update).</p>
+<h3 class="pm-h3">Component System</h3>
+<p class="pm-p">Each GameObject can have modular components. The parent manages the lifecycle: Initialize, LateInitialize, Start (called on each activation), Update, FixedUpdate.</p>
+<h3 class="pm-h3">Event Queue (Sound)</h3>
+<p class="pm-p">Audio runs on a separate thread. Sound requests create tasks added to a queue; the audio thread processes them as they arrive.</p>
+<h3 class="pm-h3">Service Locator</h3>
+<p class="pm-p">Used for sound system management. SDL is the current backend, but swapping it requires no changes to code that consumes the sound system.</p>
+<h3 class="pm-h3">Dirty Flag</h3>
+<p class="pm-p">Each GameObject stores only its local transform. A cached world transform is kept and only recalculated when the Dirty Flag is set — avoiding redundant hierarchy traversals.</p>`,
+    links: [
+      {ico:'fa-brands fa-youtube',label:'Demo',url:'https://www.youtube.com/watch?v=qDLBfyyX3-E'},
+      {ico:'fa-brands fa-github',label:'Repo',url:'https://github.com/IsaacSauer/2DAE08_Minigin_Engine_Isaac_Sauer'},
+      {ico:'fa-solid fa-download',label:'Download',url:'https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/qbert_game.zip'},
+    ]
+  },
+  rickmorty: {
+    title: 'Rick & Morty Characters Tool',
+    videos: [],
+    body: `<p class="pm-p">For the "Tool Development" course in my 2nd year at DAE Howest, I built a desktop tool using Java/JavaFX that retrieves and displays character data from the Rick and Morty API with filtering and sorting options.</p>
+<h2 class="pm-h2">Overview Page Features</h2>
+<h3 class="pm-h3">Data Source</h3>
+<p class="pm-p">Switch between Online and Offline data via the "Data Source" dropdown — useful when not connected to the internet to still preview characters.</p>
+<h3 class="pm-h3">Sorting &amp; Filtering</h3>
+<p class="pm-p">Show or hide dead/alive characters and sort by various criteria. Characters with unknown status are hidden in both dead and alive filters.</p>
+<h3 class="pm-h3">Page Navigation</h3>
+<p class="pm-p">Navigate between pages. The max page count updates automatically according to your current viewing options.</p>
+<h3 class="pm-h3">Search Bar</h3>
+<p class="pm-p">Search for specific characters by name. Reset results by submitting an empty search query.</p>
+<h2 class="pm-h2">Detail Page</h2>
+<p class="pm-p">Select a character and press "Show Details" to open a detail page. From there you can navigate back to the overview or save the current page as an image — stored in a "saves" folder next to the executable.</p>`,
+    links: [
+      {ico:'fa-solid fa-download',label:'Download',url:'https://github.com/IsaacSauer/isaacsauer.github.io/raw/main/files/tooldev_rick_and_morty_tool.zip'},
+    ]
+  },
+};
+
+function openProject(id) {
+  const p = PROJECTS[id];
+  if (!p) return;
+  document.getElementById('pmTitle').textContent = p.title;
+  const body = document.getElementById('pmBody');
+  let html = '';
+  if (p.videos.length === 1) {
+    html += `<div class="pm-video"><iframe src="https://www.youtube.com/embed/${p.videos[0].id}" allowfullscreen loading="lazy"></iframe></div>`;
+  } else if (p.videos.length > 1) {
+    html += `<div class="pm-videos">${p.videos.map(v =>
+      `<div><div class="pm-video"><iframe src="https://www.youtube.com/embed/${v.id}" allowfullscreen loading="lazy"></iframe></div><div class="pm-vid-label">${v.label}</div></div>`
+    ).join('')}</div>`;
+  }
+  html += p.body;
+  if (p.links.length) {
+    html += `<div class="pm-links">${p.links.map(l =>
+      `<a class="pm-link" href="${l.url}" target="_blank"><i class="${l.ico}"></i> ${l.label}</a>`
+    ).join('')}</div>`;
+  }
+  body.innerHTML = html;
+  document.getElementById('projModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProjModal(e, force) {
+  if (!force && e && e.target !== document.getElementById('projModal')) return;
+  document.getElementById('projModal').classList.remove('open');
+  document.getElementById('pmBody').innerHTML = '';
+  document.body.style.overflow = '';
 }
 
 // ── Konami code easter egg ────────────────────────────────────────
@@ -1064,6 +1334,81 @@ document.getElementById('editorArea').addEventListener('scroll', function() {
 });
 
 // ── Init ──────────────────────────────────────────────────────────
+</script>
+
+<!-- Project modal -->
+<div class="modal-backdrop" id="projModal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-header">
+      <code id="mHead"></code>
+      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+    </div>
+    <img class="modal-img" id="mImg" src="" alt="" />
+    <div class="modal-body">
+      <div class="modal-title" id="mTitle"></div>
+      <div class="modal-meta" id="mMeta"></div>
+      <div class="modal-desc" id="mDesc"></div>
+      <div class="modal-tags" id="mTags"></div>
+      <div class="modal-links" id="mLinks"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const backdrop = document.getElementById('projModal');
+  const mHead = document.getElementById('mHead');
+  const mImg  = document.getElementById('mImg');
+  const mTitle= document.getElementById('mTitle');
+  const mMeta = document.getElementById('mMeta');
+  const mDesc = document.getElementById('mDesc');
+  const mTags = document.getElementById('mTags');
+  const mLinks= document.getElementById('mLinks');
+
+  function openModal(card){
+    mHead.textContent  = card.querySelector('.pc-head code')?.textContent || '';
+    const oldBadge = backdrop.querySelector('.modal-header .lang-badge');
+    if(oldBadge) oldBadge.remove();
+    const badge = card.querySelector('.pc-head .lang-badge');
+    if(badge) mHead.insertAdjacentHTML('afterend', badge.outerHTML);
+
+    const img = card.querySelector('.pc-img');
+    if(img && img.style.display !== 'none'){
+      mImg.src = img.src; mImg.alt = img.alt; mImg.style.display = 'block';
+    } else {
+      mImg.style.display = 'none';
+    }
+
+    mTitle.textContent = card.querySelector('.pc-name')?.textContent || '';
+    mMeta.innerHTML    = card.querySelector('.pc-meta')?.innerHTML   || '';
+    mDesc.textContent  = card.querySelector('.pc-desc')?.textContent || '';
+    mTags.innerHTML    = card.querySelector('.pc-tags')?.innerHTML   || '';
+    mLinks.innerHTML   = card.querySelector('.pc-links')?.innerHTML  || '';
+
+    // reopen links in new tab (already have target=_blank but clone loses nothing)
+    mLinks.querySelectorAll('a').forEach(a => a.setAttribute('target','_blank'));
+
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(){
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.pc').forEach(card => {
+    card.addEventListener('click', function(e){
+      // don't trigger when clicking a link inside the card
+      if(e.target.closest('a')) return;
+      openModal(card);
+    });
+  });
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  backdrop.addEventListener('click', function(e){ if(e.target === backdrop) closeModal(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+})();
 </script>
 </body>
 </html>
