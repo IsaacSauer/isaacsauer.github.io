@@ -1,561 +1,1069 @@
-<!DOCTYPE HTML>
-<!--
-	Astral by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Isaac Sauer - Portfolio</title>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport" />
-    <link href="assets/css/main.css" rel="stylesheet" />
-    <link href="assets/css/responsive.css" rel="stylesheet" />
-    <noscript>
-        <link href="assets/css/noscript.css" rel="stylesheet" />
-    </noscript>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Isaac Sauer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+    :root{
+      --bg:#282c34;--bg-dark:#21252b;--bg-light:#2c313c;
+      --sidebar-bg:#21252b;--activity-bg:#1d2128;
+      --border:#181a1f;--text:#abb2bf;--text-muted:#5c6370;--text-bright:#d7dae0;
+      --blue:#61afef;--green:#98c379;--orange:#e5c07b;
+      --red:#e06c75;--purple:#c678dd;--cyan:#56b6c2;--yellow:#d19a66;
+      --highlight:#3e4452;--gutter:#4b5263;
+      --tab-h:35px;--activity-w:48px;--sidebar-w:240px;
+      --statusbar-h:22px;--titlebar-h:30px;
+    }
+
+    html,body{height:100%;font-family:'JetBrains Mono',monospace;background:var(--bg-dark);color:var(--text);overflow:hidden}
+
+    /* ── IDE shell ── */
+    .ide{display:grid;grid-template-rows:var(--titlebar-h) 1fr var(--statusbar-h);height:100vh;width:100vw}
+
+    .titlebar{background:var(--activity-bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;position:relative;user-select:none;z-index:100}
+    .tb-dots{position:absolute;left:12px;display:flex;gap:6px}
+    .tb-dot{width:12px;height:12px;border-radius:50%;cursor:pointer}
+    .tb-dot.r{background:#ff5f57}.tb-dot.y{background:#ffbd2e}.tb-dot.g{background:#28c940}
+    .tb-title{font-size:12px;color:var(--text-muted)}
+
+    .ide-body{display:flex;overflow:hidden;height:100%}
+
+    /* activity bar */
+    .activity-bar{width:var(--activity-w);background:var(--activity-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:4px;flex-shrink:0;z-index:10}
+    .ai{width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;border-radius:4px;font-size:18px;transition:color .15s,background .15s;position:relative}
+    .ai:hover{color:var(--text-bright)}
+    .ai.active{color:var(--text-bright)}
+    .ai.active::before{content:'';position:absolute;left:-8px;width:3px;height:22px;background:var(--blue);border-radius:0 2px 2px 0}
+    .ai-spacer{flex:1}
+
+    /* sidebar */
+    .sidebar{width:var(--sidebar-w);background:var(--sidebar-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;transition:width .2s}
+    .sidebar.collapsed{width:0}
+    .sb-head{padding:8px 12px;font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;flex-shrink:0}
+    .file-tree{overflow-y:auto;flex:1;padding-bottom:16px}
+    .file-tree::-webkit-scrollbar{width:6px}
+    .file-tree::-webkit-scrollbar-thumb{background:var(--gutter);border-radius:3px}
+
+    .ti{display:flex;align-items:center;gap:6px;padding:2px 8px 2px 16px;cursor:pointer;font-size:13px;color:var(--text);white-space:nowrap;user-select:none;border-radius:2px;margin:0 4px;transition:background .1s}
+    .ti:hover{background:var(--highlight)}
+    .ti.active{background:var(--highlight);color:var(--text-bright)}
+    .ti .ico{font-size:13px;width:16px;flex-shrink:0}
+    .ti .ico.ts{color:var(--blue)}.ti .ico.json{color:var(--yellow)}.ti .ico.tsx{color:var(--cyan)}.ti .ico.folder{color:var(--orange)}
+    .ti-children{padding-left:16px}
+    .ti-children.hidden{display:none}
+
+    /* main area */
+    .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+    .tab-bar{display:flex;background:var(--bg-dark);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;overflow-y:hidden;height:var(--tab-h)}
+    .tab-bar::-webkit-scrollbar{height:3px}
+    .tab-bar::-webkit-scrollbar-thumb{background:var(--gutter)}
+    .tab{display:flex;align-items:center;gap:8px;padding:0 16px;height:100%;background:var(--bg-dark);border-right:1px solid var(--border);cursor:pointer;font-size:12px;color:var(--text-muted);white-space:nowrap;flex-shrink:0;transition:background .1s,color .1s}
+    .tab:hover{color:var(--text);background:var(--bg-light)}
+    .tab.active{background:var(--bg);color:var(--text-bright);border-top:1px solid var(--blue)}
+    .tab .t-ico.ts{color:var(--blue)}.tab .t-ico.json{color:var(--yellow)}.tab .t-ico.tsx{color:var(--cyan)}
+    .tab .t-x{opacity:0;font-size:12px;transition:opacity .1s;line-height:1}
+    .tab:hover .t-x{opacity:1}
+
+    .breadcrumb{padding:3px 16px;font-size:12px;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;display:flex;align-items:center;gap:4px}
+    .breadcrumb .bc-sep{color:var(--gutter)}
+    .breadcrumb .bc-cur{color:var(--text)}
+
+    .editor-area{flex:1;overflow-y:auto;overflow-x:hidden;background:var(--bg)}
+    .editor-area::-webkit-scrollbar{width:8px}
+    .editor-area::-webkit-scrollbar-track{background:var(--bg-dark)}
+    .editor-area::-webkit-scrollbar-thumb{background:var(--gutter);border-radius:4px}
+
+    /* sections */
+    .section{display:none;animation:fadeIn .15s ease}
+    .section.active{display:block}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+    /* code view */
+    .code-view{display:flex;min-height:100%;font-size:13px;line-height:21px}
+    .ln{padding:16px 12px 16px 0;background:var(--bg);color:var(--text-muted);text-align:right;user-select:none;flex-shrink:0;min-width:48px;border-right:1px solid var(--border);font-size:12px;line-height:21px;padding-top:16px}
+    .ln span{display:block}
+    .cc{flex:1;padding:16px 24px;white-space:pre-wrap;word-break:break-word}
+    .cl{display:block;min-height:21px}
+
+    /* syntax */
+    .kw{color:var(--purple)}.fn{color:var(--blue)}.str{color:var(--green)}
+    .num{color:var(--yellow)}.bool{color:var(--yellow)}.cm{color:var(--text-muted);font-style:italic}
+    .ty{color:var(--cyan)}.prop{color:var(--red)}.bracket{color:var(--orange)}
+    .key{color:var(--red)}.val{color:var(--green)}.num-val{color:var(--yellow)}
+
+    /* status bar */
+    .status-bar{height:var(--statusbar-h);background:var(--blue);display:flex;align-items:center;padding:0 8px;font-size:11px;color:rgba(0,0,0,.8);user-select:none;flex-shrink:0}
+    .si{padding:0 8px;height:100%;display:flex;align-items:center;gap:4px;cursor:pointer;transition:background .1s}
+    .si:hover{background:rgba(0,0,0,.15)}
+    .si-spacer{flex:1}
+    .si.warn{background:#e5c07b;color:#000}
+
+    /* terminal */
+    .term-panel{background:var(--bg-dark);border-top:1px solid var(--border);height:0;overflow:hidden;transition:height .2s;flex-shrink:0}
+    .term-panel.open{height:180px}
+    .term-head{padding:4px 16px;font-size:11px;color:var(--text-muted);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+    .term-out{padding:8px 16px;font-size:12px;line-height:1.6;overflow-y:auto;height:calc(100% - 25px)}
+    .term-out::-webkit-scrollbar{width:6px}
+    .term-out::-webkit-scrollbar-thumb{background:var(--gutter)}
+    .tp{color:var(--green)}.tc{color:var(--blue)}.to{color:var(--text-muted)}.ts-ok{color:var(--green)}.ts-err{color:var(--red)}
+
+    /* command palette */
+    .cmd-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none;align-items:flex-start;justify-content:center;padding-top:80px}
+    .cmd-overlay.open{display:flex}
+    .cmd-box{width:580px;max-width:90vw;background:var(--bg-light);border:1px solid var(--gutter);border-radius:6px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+    .cmd-inp-wrap{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+    .cmd-inp-wrap i{color:var(--text-muted)}
+    .cmd-inp{flex:1;background:none;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--text-bright)}
+    .cmd-results{max-height:280px;overflow-y:auto}
+    .cmd-r{padding:8px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:var(--text);transition:background .1s}
+    .cmd-r:hover,.cmd-r.sel{background:var(--highlight);color:var(--text-bright)}
+    .cmd-r i{color:var(--text-muted);width:16px}
+    .cmd-hint{padding:6px 16px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border)}
+
+    /* projects grid */
+    .projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding:16px 24px}
+    .pc{background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s,transform .2s;cursor:default}
+    .pc:hover{border-color:var(--blue);transform:translateY(-2px)}
+    .pc-head{padding:10px 14px;background:var(--bg-light);font-size:12px;color:var(--text-muted);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+    .pc-head code{color:var(--blue);font-family:inherit}
+    .pc-img{width:100%;height:160px;object-fit:cover;display:block;opacity:.85;transition:opacity .2s}
+    .pc:hover .pc-img{opacity:1}
+    .pc-no-img{width:100%;height:120px;background:var(--bg-light);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:28px}
+    .pc-body{padding:12px 14px}
+    .pc-name{font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:4px}
+    .pc-desc{font-size:12px;color:var(--text);line-height:1.6;margin-bottom:10px}
+    .pc-meta{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--text-muted);margin-bottom:8px}
+    .pc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+    .tag{font-size:10px;padding:2px 6px;background:var(--highlight);color:var(--text-muted);border-radius:3px}
+    .lang-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+    .lb-cpp{background:rgba(97,175,239,.15);color:var(--blue)}
+    .lb-cs{background:rgba(198,120,221,.15);color:var(--purple)}
+    .lb-js{background:rgba(229,192,123,.15);color:var(--orange)}
+    .lb-java{background:rgba(224,108,117,.15);color:var(--red)}
+    .lb-multi{background:rgba(86,182,194,.15);color:var(--cyan)}
+    .pc-links{display:flex;gap:8px}
+    .pc-link{font-size:11px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;transition:opacity .15s}
+    .pc-link:hover{opacity:.75}
+
+    /* gallery */
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;padding:16px 24px}
+    .gi{background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+    .gi-head{padding:8px 12px;background:var(--bg-light);font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border)}
+    .gi-head i{color:var(--cyan)}
+    .gi-embed{position:relative;padding-top:60%}
+    .gi-embed iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+    .gi-caption{padding:8px 12px;font-size:11px;color:var(--text-muted)}
+
+    /* music */
+    .music-section{padding:16px 24px}
+    .music-section h3{font-size:12px;color:var(--text-muted);margin:16px 0 10px;text-transform:uppercase;letter-spacing:.06em}
+    .music-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px;margin-bottom:24px}
+    .sp-compact iframe{border-radius:6px;display:block}
+    .albums-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+    .albums-grid iframe{border-radius:8px;display:block}
+
+    /* contact */
+    .contact-wrap{max-width:580px;padding:24px}
+    .form-file-head{font-size:12px;color:var(--text-muted);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+    .form-file-head code{color:var(--blue)}
+    .fg{margin-bottom:14px}
+    .fl{display:block;font-size:11px;color:var(--text-muted);margin-bottom:5px}
+    .fi{width:100%;background:var(--bg-dark);border:1px solid var(--border);border-radius:4px;padding:8px 12px;font-family:inherit;font-size:13px;color:var(--text);outline:none;transition:border-color .2s}
+    .fi:focus{border-color:var(--blue)}
+    .fi-ta{height:110px;resize:vertical}
+    .btn-submit{background:var(--blue);color:#1a1d24;border:none;padding:8px 22px;border-radius:4px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s}
+    .btn-submit:hover{opacity:.85}
+    .btn-submit:disabled{opacity:.5;cursor:not-allowed}
+    #form-msg{margin-top:10px;font-size:12px;color:var(--green)}
+    #form-msg.err{color:var(--red)}
+
+    .social-links{display:flex;gap:12px;margin-top:24px;padding-top:16px;border-top:1px solid var(--border)}
+    .soc-link{color:var(--text-muted);font-size:22px;transition:color .15s;text-decoration:none}
+    .soc-link:hover{color:var(--text-bright)}
+
+    /* about section */
+    .about-wrap{padding:32px 40px;max-width:720px}
+    .about-hero{display:flex;align-items:center;gap:24px;margin-bottom:28px}
+    .about-photo{width:88px;height:88px;border-radius:50%;object-fit:cover;border:2px solid var(--blue);flex-shrink:0}
+    .about-name{font-size:26px;font-weight:700;color:var(--text-bright);margin-bottom:4px}
+    .about-role{font-size:14px;color:var(--blue);margin-bottom:10px}
+    .about-chips{display:flex;flex-wrap:wrap;gap:8px}
+    .about-chip{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:5px}
+    .about-chip i{font-size:10px}
+    .about-chip+.about-chip::before{content:'·';margin-right:0;color:var(--gutter)}
+    .about-bio{font-size:13px;color:var(--text);line-height:1.8;margin-bottom:28px;border-left:2px solid var(--highlight);padding-left:16px}
+    .skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+    .skill-group{}
+    .skill-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:6px}
+    .skill-tags{display:flex;flex-wrap:wrap;gap:4px}
+
+    /* experience section */
+    .exp-wrap{padding:24px 40px;max-width:720px}
+    .exp-card{background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;border-left:3px solid var(--blue);padding:20px;margin-bottom:16px}
+    .exp-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
+    .exp-company{font-size:16px;font-weight:700;color:var(--text-bright)}
+    .exp-period{font-size:11px;color:var(--text-muted);flex-shrink:0;padding-top:3px}
+    .exp-role{font-size:13px;color:var(--blue);margin-bottom:8px}
+    .exp-highlight{font-size:12px;color:var(--green);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+    .exp-list{padding-left:16px;margin-bottom:14px}
+    .exp-list li{font-size:12px;color:var(--text);line-height:1.8}
+    .exp-stack{display:flex;flex-wrap:wrap;gap:5px}
+    .edu-card{background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;border-left:3px solid var(--orange);padding:16px 20px;display:flex;align-items:center;gap:16px}
+    .edu-card i{color:var(--orange);font-size:20px;flex-shrink:0}
+    .edu-school{font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:4px}
+    .edu-sub{font-size:12px;color:var(--text-muted)}
+    .exp-section-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:10px;margin-top:24px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+    .exp-section-label:first-child{margin-top:0}
+
+    /* notification toast */
+    .notif{position:fixed;bottom:32px;right:20px;background:var(--bg-light);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:6px;padding:10px 16px;font-size:12px;color:var(--text);z-index:500;animation:slideIn .3s ease;max-width:280px;pointer-events:none;display:none}
+    @keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+    /* mobile */
+    @media(max-width:768px){
+      :root{--sidebar-w:0px;--activity-w:0px}
+      .activity-bar{display:none}.sidebar{display:none}
+      .mobile-nav{display:flex!important}
+      body,html{overflow:hidden}
+    }
+    .mobile-nav{display:none;position:fixed;bottom:var(--statusbar-h);left:0;right:0;background:var(--bg-dark);border-top:1px solid var(--border);z-index:100;padding:4px 0}
+    .mn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px;cursor:pointer;font-size:9px;color:var(--text-muted);transition:color .15s}
+    .mn-item i{font-size:17px}
+    .mn-item.active{color:var(--blue)}
+    @media(max-width:768px){.editor-area{padding-bottom:60px}}
+  </style>
 </head>
+<body>
 
-<body class="is-preload">
-    <!-- Wrapper-->
-    <div id="wrapper">
+<div class="ide">
 
-        <!-- Nav -->
-        <nav id="nav">
-            <a class="icon solid fa-home" href="#"><span>Home</span></a>
-            <a class="icon solid fa-code" href="#projects"><span>Projects</span></a>
-            <a class="icon solid fa-paint-brush" href="#art"><span>Art</span></a>
-            <a class="icon solid fa-headphones" href="#music"><span>Music</span></a>
-            <a href="#contact" class="icon solid fa-envelope"><span>Contact</span></a>
-        </nav>
-        
-        <!-- Main -->
-        <div id="main">
+  <!-- ── Title Bar ── -->
+  <div class="titlebar">
+    <div class="tb-dots">
+      <div class="tb-dot r"></div>
+      <div class="tb-dot y"></div>
+      <div class="tb-dot g"></div>
+    </div>
+    <span class="tb-title">isaac-sauer — portfolio</span>
+  </div>
 
-            <!-- Me -->
-            <article class="panel intro" id="home">
-                <header>
-                    <h1>Isaac Sauer</h1>
-                    <p>Game Developer - Music Producer</p>
+  <!-- ── IDE Body ── -->
+  <div class="ide-body">
 
-                    <hr>
-                    <blockquote>
-                        My name is Isaac Sauer, born in 2000. My passion is
-                        all about Game Development, Game Design, Sound
-                        Design and Music Production.
-                    </blockquote>
-
-                </header>
-
-                <a class="jumplink pic" href="#projects">
-                    <span class="arrow icon solid fa-chevron-right"><span>See
-                            my work</span></span>
-                    <img alt src="images/me.jpg" />
-                </a>
-
-            </article>
-
-            <!-- Programming -->
-            <article class="panel" id="projects">
-                <header>
-                    <h2>Work Experience</h2>
-                </header>
-                <section>
-                    <div class="row">
-                        <div class="col-4 col-6-medium col-12-small">
-                            <a class="image fit" href="pages/breachersvr.html#projects"><img alt
-                                    src="images/breachers.jpg"></a>
-                            <p>Breachers VR - Triangle Factory</p>
-                        </div>
-                    </div>
-                </section>
-                <header>
-                    <h2>Personal Projects</h2>
-                </header>
-                <section>
-                    <div class="row">
-                        <div class="col-4 col-6-medium col-12-small">
-                            <a class="image fit" href="pages/gbemu.html#projects"><img alt
-                                    src="images/prog/pic07.jpg"></a>
-                            <p>Gameboy Emulator - Gradwork Project @ DAE</p>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <a class="image fit" href="pages/crash.html#projects"><img alt
-                                    src="images/prog/pic01.jpg"></a>
-                            <p>Crash Bandicoot - DirectX 11 Project @
-                                DAE</p>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <a class="image fit" href="pages/capcig.html#projects"><img alt
-                                    src="images/prog/pic02.jpg"></a>
-                            <p>Captain CigArrr - Group Project @ DAE</p>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <a class="image fit" href="pages/gdm.html#projects"><img alt
-                                    src="images/prog/pic03.jpg"></a>
-                            <p>Grand Dad Mania - Programming 2 @ DAE</p>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <a class="image fit" href="pages/astar.html#projects"><img alt
-                                    src="images/prog/pic04.jpg"></a>
-                            <p>Faster A* - Gameplay Programming @ DAE</p>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <a class="image fit" href="pages/minigin.html#projects"><img alt
-                                    src="images/prog/pic05.jpg"></a>
-                            <p>Game Engine - Programming 4 @ DAE</p>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <a class="image fit" href="pages/rickandmortyapp.html#projects"><img alt
-                                    src="images/prog/pic06.jpg"></a>
-                            <p>Rick And Morty Characters - Tool Development
-                                @ DAE</p>
-                        </div>
-                    </div>
-                </section>
-            </article>
-
-            <!-- Art -->
-            <article class="panel" id="art">
-                <header>
-                    <h2>Art</h2>
-                </header>
-                <hr>
-                <section>
-                    <div>
-                        <div
-                            style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; width: 100%;">
-                            <iframe class="mobile" frameborder="0" height="100%" loading="lazy"
-                                mozallowfullscreen="true"
-                                src="https://sketchfab.com/models/41959b57f8454cbfb4b22ad951edf9e9/embed?preload=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                                webkitallowfullscreen="true"
-                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                            </iframe>
-                        </div>
-
-                        <p>Sentry Gun: Made for the Module High Poly in my
-                            second year at DAE Howest.</p>
-
-                        <div
-                            style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-                            <iframe src="https://www.youtube.com/embed/0ISOjfu5o2A" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
-                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-                        </div>
-                        <h3>Sci-Fi themed subway station</h3>
-                        <p>Made for the module "Environments 1" in my second
-                            year at DAE Howest.</p>
-
-                        <iframe frameborder="0" height="165" loading="lazy"
-                            src="https://itch.io/embed/888111?border_width=0&amp;dark=true" width="206"><a
-                                href="https://zacsvae.itch.io/sci-fi-subway-station-environment">Sci-Fi
-                                Subway Station
-                                Environment by Zac Svae</a></iframe>
-
-                        <div
-                            style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; width: 100%;">
-                            <iframe class="mobile" frameborder="0" height="100%" loading="lazy"
-                                mozallowfullscreen="true"
-                                src="https://sketchfab.com/models/0fd4b2be2ac14406bdb7b0d0d45050df/embed?preload=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                                webkitallowfullscreen="true"
-                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                            </iframe>
-                        </div>
-
-                        <p>Kyoto - City Scene: Made for the module
-                            "3D Low Poly" in my first year at DAE
-                            Howest.</p>
-                    </div>
-
-                    <hr>
-                    <div class="row">
-                        <iframe class="mobile" frameborder="0" height="480" loading="lazy" mozallowfullscreen="true"
-                            src="https://sketchfab.com/models/415f71f0c2be49979eb36b255826a810/embed?preload=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                            webkitallowfullscreen="true" width="550">
-                        </iframe>
-
-                        <iframe class="mobile" frameborder="0" height="480" loading="lazy" mozallowfullscreen="true"
-                            src="https://sketchfab.com/models/f9f622f4a80c40ac9ddfec572ad4142e/embed?preload=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                            webkitallowfullscreen="true" width="550">
-                        </iframe>
-
-                        <iframe class="mobile" frameborder="0" height="480" loading="lazy" mozallowfullscreen="true"
-                            src="https://sketchfab.com/models/46fab129a650486b84abbb2ec2665503/embed?preload=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                            webkitallowfullscreen="true" width="550">
-                        </iframe>
-
-                        <iframe class="mobile" frameborder="0" height="480" loading="lazy" mozallowfullscreen="true"
-                            src="https://sketchfab.com/models/f4b052c3cbaa4d21ba35652b556cc982/embed?preload=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                            webkitallowfullscreen="true" width="550">
-                        </iframe>
-
-                        <iframe class="mobile" frameborder="0" height="480" loading="lazy" mozallowfullscreen="true"
-                            src="https://sketchfab.com/models/94326636ad9a48c092987bc07f802830/embed?preload=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                            webkitallowfullscreen="true" width="550">
-                        </iframe>
-
-                        <iframe class="mobile" frameborder="0" height="480" loading="lazy" mozallowfullscreen="true"
-                            src="https://sketchfab.com/models/d55eca37a92a4e8298044c07434bac3d/embed?preload=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                            webkitallowfullscreen="true" width="550">
-                        </iframe>
-
-                        <iframe class="mobile" frameborder="0" height="480" loading="lazy" mozallowfullscreen="true"
-                            src="https://sketchfab.com/models/f063b8f5883a4d309b0cf3c13ea5df4d/embed?preload=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                            webkitallowfullscreen="true" width="550">
-                        </iframe>
-
-                        <iframe class="mobile" frameborder="0" height="480" loading="lazy" mozallowfullscreen="true"
-                            src="https://sketchfab.com/models/df1c3b922fae447c8290904c0432b171/embed?preload=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                            webkitallowfullscreen="true" width="550">
-                        </iframe>
-                    </div>
-
-                </section>
-            </article>
-
-            <!-- Music -->
-            <article class="panel" id="music">
-                <header>
-                    <h2>Music</h2>
-                </header>
-
-                <section>
-                    <script defer src="https://apps.elfsight.com/p/platform.js"></script>
-                    <div class="elfsight-app-3437d6f2-852d-4b88-8249-4aa3707fbd8d"></div>
-                </section>
-
-                <p>
-                    Singles:
-                </p>
-                <hr>
-
-                <section>
-                    <div class="row">
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/3ZVw2wf8YghnWysfJTy6ln?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/6MMETOAQu8ycho87WtTlIS?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/4yKFRgoTzR5NZ89WXCVEmU?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/70R9ZN40gmC7qZjjN2D0hr?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/624ZuW347NazlEhVQxNB7a?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/5sMbx2r3d7DqcSAdYsBtZg?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/5rSYnKfE8l091ARpd1pNat?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/1v4JjJLVUjnrltLExqGgWF?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/4yJOrE0fMjoKFmQX2D4C1S?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/2PWsLKKQlCZt9RHDfoRx0Q?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/72nmewtAeivaVreAHtEl0P?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/76Qw9ASFu3dIeuJemebJqI?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/2R3nRK9D4CSMD5X7fMQuL8?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/6Wnp5xCGhlCIwyjYz2GxT7?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/4DgIIMfOdxEk04WPBCkekQ?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/62qlPe3gjZOumbJCupngpR?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/4GPgfUSu82d0lj46YpsgC5?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/70GMG3k628poEjD9H4iKWn?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/5amy4nCIpoFccAcyDT8GeQ?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/2B15OBnHXNAEdFVjH8xTKr?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/6ElraMOg1KhgoiTRQ0YmZM?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/6Mws1rpJpCjCIYexVT5FpN?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/5cM6wUElXat09aHTtVLCvN?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/4fAZa5Mi3vsQZpZEC67l5j?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/5veto8MUBYoyULXJbgdEsA?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/0Fc9O20o7wXgTckR4IKNRO?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/track/7FroVd6FweZR90kTe2Y1Zl?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                    </div>
-                </section>
-
-                <p>
-                    Albums:
-                </p>
-                <hr>
-                <section>
-                    <div class="row">
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/album/3VZWYh7nKBPEAX6tyUvhmZ?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                        <div class="col-4 col-6-medium col-12-small">
-                            <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                allowfullscreen frameBorder="0" height="380" loading="lazy"
-                                src="https://open.spotify.com/embed/album/72kmViO8jTcPQzj19VNh3R?utm_source=generator"
-                                style="border-radius:12px" width="100%"></iframe>
-                        </div>
-                    </div>
-                </section>
-            </article>
-
-            <!-- Contact -->
-            <article id="contact" class="panel">
-                <header>
-                    <h2>Contact Me</h2>
-                </header>
-                <form id="emailForm">
-                    <div>
-                        <div class="row">
-                            <div class="col-6 col-12-medium">
-                                <input type="text" id="name" name="name" placeholder="Name" required />
-                            </div>
-                            <div class="col-6 col-12-medium">
-                                <input type="email" id="email" name="email" placeholder="Email" required />
-                            </div>
-                            <div class="col-12">
-                                <input type="text" id="subject" name="subject" placeholder="Subject" required />
-                            </div>
-                            <div class="col-12">
-                                <textarea id="message" name="message" placeholder="Message" rows="6"
-                                    required></textarea>
-                            </div>
-                            <div class="col-12">
-                                <input type="submit" value="Send Message" />
-                            </div>
-                            <div id="response"></div>
-                        </div>
-                    </div>
-                </form>
-            </article>
-
-        </div>
-
-        <div id="footer"></div>
-        <script>
-            fetch('/elements/footer.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('footer').innerHTML = data;
-                });
-        </script>
-
+    <!-- Activity Bar -->
+    <div class="activity-bar">
+      <div class="ai active" data-tip="Explorer" onclick="toggleSidebar()"><i class="fa-solid fa-folder-open"></i></div>
+      <div class="ai" data-tip="Search" onclick="openCmd()"><i class="fa-solid fa-magnifying-glass"></i></div>
+      <div class="ai" data-tip="Source Control"><i class="fa-solid fa-code-branch"></i></div>
+      <div class="ai" data-tip="Terminal" onclick="toggleTerminal()"><i class="fa-solid fa-terminal"></i></div>
+      <div class="ai-spacer"></div>
+      <div class="ai" data-tip="EPC QR Tool" onclick="window.open('qrcode/epc-qr.html','_blank')"><i class="fa-solid fa-qrcode"></i></div>
     </div>
 
-    <!-- Scripts -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/browser.min.js"></script>
-    <script src="assets/js/breakpoints.min.js"></script>
-    <script src="assets/js/util.js"></script>
-    <script src="assets/js/main.js"></script>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sb-head">Explorer</div>
+      <div class="file-tree">
+        <div class="ti folder" onclick="toggleFolder(this)">
+          <i class="ico folder fa-solid fa-chevron-down" id="root-chevron"></i>
+          <i class="ico folder fa-solid fa-folder-open"></i>
+          <span>ISAAC-SAUER</span>
+        </div>
+        <div class="ti-children" id="root-children">
+          <div class="ti active" data-section="about" onclick="openSection('about',this)">
+            <i class="ico ts fa-brands fa-js"></i>
+            <span>about.ts</span>
+          </div>
+          <div class="ti" data-section="experience" onclick="openSection('experience',this)">
+            <i class="ico json fa-solid fa-file-code"></i>
+            <span>experience.json</span>
+          </div>
+          <div class="ti folder" onclick="toggleFolder(this)">
+            <i class="ico folder fa-solid fa-chevron-right" id="proj-chevron"></i>
+            <i class="ico folder fa-solid fa-folder"></i>
+            <span>projects/</span>
+          </div>
+          <div class="ti-children hidden" id="proj-children">
+            <div class="ti" data-section="projects" onclick="openSection('projects',this)">
+              <i class="ico ts fa-brands fa-js"></i>
+              <span>index.ts</span>
+            </div>
+          </div>
+          <div class="ti" data-section="gallery" onclick="openSection('gallery',this)">
+            <i class="ico tsx fa-brands fa-js"></i>
+            <span>gallery.tsx</span>
+          </div>
+          <div class="ti" data-section="music" onclick="openSection('music',this)">
+            <i class="ico tsx fa-brands fa-js"></i>
+            <span>music.tsx</span>
+          </div>
+          <div class="ti" data-section="contact" onclick="openSection('contact',this)">
+            <i class="ico ts fa-brands fa-js"></i>
+            <span>contact.ts</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-    </script>
-    <script type="text/javascript">
-        (function () {
-            emailjs.init({
-                publicKey: "x8sJ8w_rEMgrHYxjP",
-            });
-        })();
-    </script>
-    <script>
-        const emailForm = document.getElementById('emailForm');
-        const submitButton = emailForm.querySelector('input[type="submit"]');
-        isSending = false;
-        emailForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const responseDiv = document.getElementById('response');
+    <!-- Main Area -->
+    <div class="main-area">
 
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
+      <!-- Tab Bar -->
+      <div class="tab-bar" id="tabBar">
+        <div class="tab active" data-section="about" onclick="openSection('about',null,this)">
+          <i class="t-ico ts fa-brands fa-js"></i>
+          <span>about.ts</span>
+          <span class="t-x" onclick="closeTab(event,'about')">×</span>
+        </div>
+      </div>
 
-            const emailParams = {
-                subject: subject,
-                name: name,
-                email: email,
-                message: message
-            };
-            console.log(emailParams);
+      <!-- Breadcrumb -->
+      <div class="breadcrumb" id="breadcrumb">
+        <span>isaac-sauer</span>
+        <span class="bc-sep">›</span>
+        <span class="bc-cur" id="bc-current">about.ts</span>
+      </div>
 
-            SetButtonSending(true, submitButton);
-            emailjs.send('service_8gj9t52', 'template_axjzm4k', emailParams).then(
-                (response) => {
-                    SetInnerHtmlWithFadeOutAfterTime(responseDiv, 'Email sent successfully!', 5000);
-                    SetButtonSending(false, submitButton);
-                    console.log('SUCCESS!', response.status, response.text);
-                    emailForm.reset();
-                },
-                (error) => {
-                    SetInnerHtmlWithFadeOutAfterTime(responseDiv, 'Error sending email: ' + response.text, 5000);
-                    SetButtonSending(false, submitButton);
-                    console.log('FAILED...', error);
-                },
-            );
-        });
+      <!-- Editor -->
+      <div class="editor-area" id="editorArea">
 
-        let fadeOutTimeout;
-        function SetInnerHtmlWithFadeOutAfterTime(htmlElement, content, time) {
-            htmlElement.innerHTML = content;
-            htmlElement.style.opacity = '1'; // Reset opacity to 1 to make it visible again
-            htmlElement.style.transition = 'none'; // Remove transition for an instant reset
+        <!-- ── about.ts ── -->
+        <div class="section active" id="sec-about">
+          <div class="about-wrap">
+            <div class="about-hero">
+              <img class="about-photo" src="images/me.jpg" alt="Isaac Sauer" />
+              <div>
+                <div class="about-name">Isaac Sauer</div>
+                <div class="about-role">Game Developer &amp; Music Producer</div>
+                <div class="about-chips">
+                  <span class="about-chip"><i class="fa-solid fa-location-dot"></i> Belgium</span>
+                  <span class="about-chip"><i class="fa-solid fa-building"></i> Triangle Factory</span>
+                  <span class="about-chip"><i class="fa-solid fa-gamepad"></i> Breachers VR</span>
+                </div>
+              </div>
+            </div>
 
-            // Fade out after 5 seconds
-            clearTimeout(fadeOutTimeout); // Clear any existing timeouts
-            fadeOutTimeout = setTimeout(() => {
-                htmlElement.style.transition = 'opacity 1s'; // Add a smooth transition effect
-                htmlElement.style.opacity = '0'; // Set opacity to 0 to fade out
-            }, time);
-        }
+            <p class="about-bio">Born in 2000. My passion is Game Development, Game Design, Sound Design and Music Production. Currently building Breachers VR at Triangle Factory — one of the most popular VR shooters on Meta Quest. Graduate of Digital Arts &amp; Entertainment at Howest.</p>
 
-        // Check if the input is a valid email
-        function validateEmail(email) {
-            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            <div class="skills-grid">
+              <div class="skill-group">
+                <div class="skill-label">Languages</div>
+                <div class="skill-tags">
+                  <span class="tag">C#</span><span class="tag">C++</span><span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">Java</span>
+                </div>
+              </div>
+              <div class="skill-group">
+                <div class="skill-label">Engines</div>
+                <div class="skill-tags">
+                  <span class="tag">Unity</span><span class="tag">Minigin (custom)</span><span class="tag">DirectX 11</span>
+                </div>
+              </div>
+              <div class="skill-group">
+                <div class="skill-label">Platforms</div>
+                <div class="skill-tags">
+                  <span class="tag">Meta Quest</span><span class="tag">SteamVR</span><span class="tag">PSVR2</span><span class="tag">PC</span>
+                </div>
+              </div>
+              <div class="skill-group">
+                <div class="skill-label">Audio</div>
+                <div class="skill-tags">
+                  <span class="tag">Wwise</span><span class="tag">FMOD</span><span class="tag">FL Studio</span>
+                </div>
+              </div>
+              <div class="skill-group">
+                <div class="skill-label">Tools</div>
+                <div class="skill-tags">
+                  <span class="tag">Git</span><span class="tag">Visual Studio</span><span class="tag">Rider</span><span class="tag">Blender</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            if (emailPattern.test(email)) {
-                console.log('Valid email address');
-                return true; // Valid email
-            } else {
-                return false; // Invalid email
-            }
-        }
+        <!-- ── experience.json ── -->
+        <div class="section" id="sec-experience">
+          <div class="exp-wrap">
+            <div class="exp-section-label">Work Experience</div>
 
-        function SetButtonSending(isSending, button) {
-            if (isSending == false) {
-                // Restore button text after sending
-                submitButton.value = "Send Message";
-                submitButton.disabled = false; // Re-enable the button if needed
-            }
-            else {
-                // Change the button text to "Sending..."
-                submitButton.value = "Sending...";
-                submitButton.disabled = true; // Optional: Disable the button to prevent multiple submissions
-            }
-        }
+            <div class="exp-card">
+              <div class="exp-header">
+                <div class="exp-company">Triangle Factory</div>
+                <div class="exp-period">2022 — present</div>
+              </div>
+              <div class="exp-role">Game Programmer &nbsp;·&nbsp; Breachers VR</div>
+              <div class="exp-highlight"><i class="fa-solid fa-star"></i> One of the most popular shooters on Meta Quest (2023)</div>
+              <ul class="exp-list">
+                <li>Audio integration — Wwise, SFX systems, ambient audio</li>
+                <li>Gameplay mechanics &amp; bug fixing</li>
+                <li>Server performance &amp; stability</li>
+                <li>VR interaction systems</li>
+              </ul>
+              <div class="exp-stack">
+                <span class="tag">C#</span><span class="tag">Unity</span><span class="tag">Wwise</span><span class="tag">Meta XR SDK</span><span class="tag">SteamVR SDK</span><span class="tag">Meta Quest 2/3</span><span class="tag">PSVR2</span>
+              </div>
+            </div>
 
-    </script>
+            <div class="exp-section-label">Education</div>
+
+            <div class="edu-card">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <div>
+                <div class="edu-school">Howest — Digital Arts &amp; Entertainment</div>
+                <div class="edu-sub">Game Development &nbsp;·&nbsp; Kortrijk, Belgium &nbsp;·&nbsp; Graduated 2023</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── projects/index.ts ── -->
+        <div class="section" id="sec-projects">
+          <div class="projects-grid">
+
+            <!-- Breachers VR -->
+            <div class="pc">
+              <div class="pc-head">
+                <code>const breachers: Project = {</code>
+                <span class="lang-badge lb-cs">C#</span>
+              </div>
+              <img class="pc-img" src="images/breachers.jpg" alt="Breachers VR" loading="lazy" />
+              <div class="pc-body">
+                <div class="pc-name">Breachers VR</div>
+                <div class="pc-meta"><i class="fa-solid fa-briefcase"></i> Triangle Factory &nbsp;·&nbsp; <span>2022–now</span></div>
+                <div class="pc-desc">One of the most popular VR shooters on Meta Quest (2023). Contributed to audio systems, gameplay mechanics, and server stability using Unity &amp; Wwise.</div>
+                <div class="pc-tags">
+                  <span class="tag">Unity</span><span class="tag">Wwise</span><span class="tag">VR</span><span class="tag">Meta Quest</span><span class="tag">SteamVR</span>
+                </div>
+                <div class="pc-links">
+                  <a class="pc-link" href="https://www.youtube.com/embed/A1ksWrOgdFI" target="_blank"><i class="fa-brands fa-youtube"></i> Trailer</a>
+                  <a class="pc-link" href="https://www.meta.com/en-gb/experiences/breachers/4900985259994498/" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Meta Store</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- GB Emulator -->
+            <div class="pc">
+              <div class="pc-head">
+                <code>const gbemu: Project = {</code>
+                <span class="lang-badge lb-cpp">C++</span>
+              </div>
+              <img class="pc-img" src="images/prog/pic07.jpg" alt="Gameboy Emulator" loading="lazy" onerror="this.style.display='none'" />
+              <div class="pc-body">
+                <div class="pc-name">Game Boy Emulator</div>
+                <div class="pc-meta"><i class="fa-solid fa-graduation-cap"></i> DAE — Gradwork &nbsp;·&nbsp; <span>2023</span></div>
+                <div class="pc-desc">Cycle-accurate DMG emulator in C++. Implemented MBC1/MBC5, full opcode set, and custom sprite renderer. Runs Zelda: Link's Awakening and Kirby's Dream Land.</div>
+                <div class="pc-tags">
+                  <span class="tag">emulation</span><span class="tag">low-level</span><span class="tag">MBC</span><span class="tag">CPU</span>
+                </div>
+                <div class="pc-links">
+                  <a class="pc-link" href="https://www.youtube.com/watch?v=2bc5L7RZ1i8" target="_blank"><i class="fa-brands fa-youtube"></i> Demo</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Crash Bandicoot -->
+            <div class="pc">
+              <div class="pc-head">
+                <code>const crash: Project = {</code>
+                <span class="lang-badge lb-cpp">C++</span>
+              </div>
+              <img class="pc-img" src="images/prog/pic01.jpg" alt="Crash Bandicoot" loading="lazy" onerror="this.style.display='none'" />
+              <div class="pc-body">
+                <div class="pc-name">Crash Bandicoot</div>
+                <div class="pc-meta"><i class="fa-solid fa-graduation-cap"></i> DAE — DirectX 11 &nbsp;·&nbsp; <span>2022</span></div>
+                <div class="pc-desc">Recreation of a Crash Bandicoot level using a custom DirectX 11 renderer. Built from scratch with a scene graph, component system, and collision detection.</div>
+                <div class="pc-tags">
+                  <span class="tag">DirectX 11</span><span class="tag">rendering</span><span class="tag">HLSL</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Captain CigArrr -->
+            <div class="pc">
+              <div class="pc-head">
+                <code>const captainCigarr: Project = {</code>
+                <span class="lang-badge lb-cpp">C++</span>
+              </div>
+              <img class="pc-img" src="images/prog/pic02.jpg" alt="Captain CigArrr" loading="lazy" onerror="this.style.display='none'" />
+              <div class="pc-body">
+                <div class="pc-name">Captain CigArrr</div>
+                <div class="pc-meta"><i class="fa-solid fa-users"></i> DAE — Group Project &nbsp;·&nbsp; <span>2022</span></div>
+                <div class="pc-desc">Pirate-themed platformer made as a team project. Worked on core gameplay systems, enemy AI, and audio integration in a custom game engine.</div>
+                <div class="pc-tags">
+                  <span class="tag">platformer</span><span class="tag">team</span><span class="tag">AI</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Grand Dad Mania -->
+            <div class="pc">
+              <div class="pc-head">
+                <code>const grandDadMania: Project = {</code>
+                <span class="lang-badge lb-cpp">C++</span>
+              </div>
+              <img class="pc-img" src="images/prog/pic03.jpg" alt="Grand Dad Mania" loading="lazy" onerror="this.style.display='none'" />
+              <div class="pc-body">
+                <div class="pc-name">Grand Dad Mania</div>
+                <div class="pc-meta"><i class="fa-solid fa-graduation-cap"></i> DAE — Programming 2 &nbsp;·&nbsp; <span>2021</span></div>
+                <div class="pc-desc">Game Boy style game inspired by Dr. Mario. Implemented grid-based gameplay, match-detection algorithms, and tile-based rendering.</div>
+                <div class="pc-tags">
+                  <span class="tag">grid</span><span class="tag">SDL2</span><span class="tag">retro</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- A* -->
+            <div class="pc">
+              <div class="pc-head">
+                <code>const fasterAStar: Project = {</code>
+                <span class="lang-badge lb-cpp">C++</span>
+              </div>
+              <img class="pc-img" src="images/prog/pic04.jpg" alt="Faster A*" loading="lazy" onerror="this.style.display='none'" />
+              <div class="pc-body">
+                <div class="pc-name">Faster A* Algorithm</div>
+                <div class="pc-meta"><i class="fa-solid fa-graduation-cap"></i> DAE — Gameplay Programming &nbsp;·&nbsp; <span>2022</span></div>
+                <div class="pc-desc">Optimised A* pathfinding with hierarchical graph decomposition. Significant performance gains over naive implementations on large grids.</div>
+                <div class="pc-tags">
+                  <span class="tag">pathfinding</span><span class="tag">algorithms</span><span class="tag">optimization</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Minigin -->
+            <div class="pc">
+              <div class="pc-head">
+                <code>const minigin: Project = {</code>
+                <span class="lang-badge lb-cpp">C++</span>
+              </div>
+              <img class="pc-img" src="images/prog/pic05.jpg" alt="Minigin Engine" loading="lazy" onerror="this.style.display='none'" />
+              <div class="pc-body">
+                <div class="pc-name">Minigin — Game Engine</div>
+                <div class="pc-meta"><i class="fa-solid fa-graduation-cap"></i> DAE — Programming 4 &nbsp;·&nbsp; <span>2022</span></div>
+                <div class="pc-desc">Custom game engine with ECS architecture, scene graph, event system, audio manager, and SDL2 renderer. Used as the base for multiple projects.</div>
+                <div class="pc-tags">
+                  <span class="tag">engine</span><span class="tag">ECS</span><span class="tag">SDL2</span><span class="tag">architecture</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rick & Morty App -->
+            <div class="pc">
+              <div class="pc-head">
+                <code>const rickMortyTool: Project = {</code>
+                <span class="lang-badge lb-java">Java</span>
+              </div>
+              <img class="pc-img" src="images/prog/pic06.jpg" alt="Rick and Morty App" loading="lazy" onerror="this.style.display='none'" />
+              <div class="pc-body">
+                <div class="pc-name">Rick &amp; Morty Characters</div>
+                <div class="pc-meta"><i class="fa-solid fa-graduation-cap"></i> DAE — Tool Development &nbsp;·&nbsp; <span>2021</span></div>
+                <div class="pc-desc">Desktop tool fetching Rick &amp; Morty API data, displaying characters with filters. Built with Java/JavaFX with a clean MVC architecture.</div>
+                <div class="pc-tags">
+                  <span class="tag">Java</span><span class="tag">JavaFX</span><span class="tag">REST API</span><span class="tag">MVC</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── gallery.tsx ── -->
+        <div class="section" id="sec-gallery">
+          <div class="gallery-grid">
+
+            <div class="gi">
+              <div class="gi-head"><i class="fa-solid fa-cube"></i> sentry-gun.fbx</div>
+              <div class="gi-embed">
+                <iframe loading="lazy" src="https://sketchfab.com/models/41959b57f8454cbfb4b22ad951edf9e9/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
+              </div>
+              <div class="gi-caption">Sentry Gun — High Poly module, DAE year 2</div>
+            </div>
+
+            <div class="gi">
+              <div class="gi-head"><i class="fa-brands fa-youtube"></i> scifi-subway.mp4</div>
+              <div class="gi-embed">
+                <iframe loading="lazy" src="https://www.youtube.com/embed/0ISOjfu5o2A" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+              <div class="gi-caption">Sci-Fi Subway Station — Environments 1, DAE year 2</div>
+            </div>
+
+            <div class="gi">
+              <div class="gi-head"><i class="fa-solid fa-cube"></i> kyoto-city.fbx</div>
+              <div class="gi-embed">
+                <iframe loading="lazy" src="https://sketchfab.com/models/0fd4b2be2ac14406bdb7b0d0d45050df/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
+              </div>
+              <div class="gi-caption">Kyoto City Scene — 3D Low Poly, DAE year 1</div>
+            </div>
+
+            <div class="gi">
+              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-04.fbx</div>
+              <div class="gi-embed">
+                <iframe loading="lazy" src="https://sketchfab.com/models/415f71f0c2be49979eb36b255826a810/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
+              </div>
+              <div class="gi-caption">3D Model — DAE</div>
+            </div>
+
+            <div class="gi">
+              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-05.fbx</div>
+              <div class="gi-embed">
+                <iframe loading="lazy" src="https://sketchfab.com/models/f9f622f4a80c40ac9ddfec572ad4142e/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
+              </div>
+              <div class="gi-caption">3D Model — DAE</div>
+            </div>
+
+            <div class="gi">
+              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-06.fbx</div>
+              <div class="gi-embed">
+                <iframe loading="lazy" src="https://sketchfab.com/models/46fab129a650486b84abbb2ec2665503/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
+              </div>
+              <div class="gi-caption">3D Model — DAE</div>
+            </div>
+
+            <div class="gi">
+              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-07.fbx</div>
+              <div class="gi-embed">
+                <iframe loading="lazy" src="https://sketchfab.com/models/f4b052c3cbaa4d21ba35652b556cc982/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
+              </div>
+              <div class="gi-caption">3D Model — DAE</div>
+            </div>
+
+            <div class="gi">
+              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-08.fbx</div>
+              <div class="gi-embed">
+                <iframe loading="lazy" src="https://sketchfab.com/models/94326636ad9a48c092987bc07f802830/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
+              </div>
+              <div class="gi-caption">3D Model — DAE</div>
+            </div>
+
+            <div class="gi">
+              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-09.fbx</div>
+              <div class="gi-embed">
+                <iframe loading="lazy" src="https://sketchfab.com/models/d55eca37a92a4e8298044c07434bac3d/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
+              </div>
+              <div class="gi-caption">3D Model — DAE</div>
+            </div>
+
+            <div class="gi">
+              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-10.fbx</div>
+              <div class="gi-embed">
+                <iframe loading="lazy" src="https://sketchfab.com/models/f063b8f5883a4d309b0cf3c13ea5df4d/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
+              </div>
+              <div class="gi-caption">3D Model — DAE</div>
+            </div>
+
+            <div class="gi">
+              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-11.fbx</div>
+              <div class="gi-embed">
+                <iframe loading="lazy" src="https://sketchfab.com/models/df1c3b922fae447c8290904c0432b171/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
+              </div>
+              <div class="gi-caption">3D Model — DAE</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── music.tsx ── -->
+        <div class="section" id="sec-music">
+          <div class="music-section">
+            <h3>// Albums</h3>
+            <div class="albums-grid">
+              <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="352" loading="lazy" src="https://open.spotify.com/embed/album/3VZWYh7nKBPEAX6tyUvhmZ?utm_source=generator" width="100%"></iframe>
+              <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="352" loading="lazy" src="https://open.spotify.com/embed/album/72kmViO8jTcPQzj19VNh3R?utm_source=generator" width="100%"></iframe>
+            </div>
+
+            <h3>// Singles</h3>
+            <div class="music-grid">
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/3ZVw2wf8YghnWysfJTy6ln?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/6MMETOAQu8ycho87WtTlIS?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/4yKFRgoTzR5NZ89WXCVEmU?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/70R9ZN40gmC7qZjjN2D0hr?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/624ZuW347NazlEhVQxNB7a?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/5sMbx2r3d7DqcSAdYsBtZg?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/5rSYnKfE8l091ARpd1pNat?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/1v4JjJLVUjnrltLExqGgWF?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/4yJOrE0fMjoKFmQX2D4C1S?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/2PWsLKKQlCZt9RHDfoRx0Q?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/72nmewtAeivaVreAHtEl0P?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/76Qw9ASFu3dIeuJemebJqI?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/2R3nRK9D4CSMD5X7fMQuL8?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/6Wnp5xCGhlCIwyjYz2GxT7?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/4DgIIMfOdxEk04WPBCkekQ?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/62qlPe3gjZOumbJCupngpR?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/4GPgfUSu82d0lj46YpsgC5?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/70GMG3k628poEjD9H4iKWn?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/5amy4nCIpoFccAcyDT8GeQ?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/2B15OBnHXNAEdFVjH8xTKr?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/6ElraMOg1KhgoiTRQ0YmZM?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/6Mws1rpJpCjCIYexVT5FpN?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/5cM6wUElXat09aHTtVLCvN?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/4fAZa5Mi3vsQZpZEC67l5j?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/5veto8MUBYoyULXJbgdEsA?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/0Fc9O20o7wXgTckR4IKNRO?utm_source=generator" width="100%"></iframe></div>
+              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/7FroVd6FweZR90kTe2Y1Zl?utm_source=generator" width="100%"></iframe></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── contact.ts ── -->
+        <div class="section" id="sec-contact">
+          <div class="contact-wrap">
+            <div class="form-file-head">Get in touch — I'll get back to you shortly.</div>
+            <form id="emailForm">
+              <div class="fg">
+                <label class="fl" for="name">Name</label>
+                <input class="fi" id="name" name="name" placeholder="Your name" required type="text" />
+              </div>
+              <div class="fg">
+                <label class="fl" for="email">Email</label>
+                <input class="fi" id="email" name="email" placeholder="your@email.com" required type="email" />
+              </div>
+              <div class="fg">
+                <label class="fl" for="subject">Subject</label>
+                <input class="fi" id="subject" name="subject" placeholder="Subject" required type="text" />
+              </div>
+              <div class="fg">
+                <label class="fl" for="message">Message</label>
+                <textarea class="fi fi-ta" id="message" name="message" placeholder="Hello Isaac, ..." required></textarea>
+              </div>
+              <button class="btn-submit" id="submitBtn" type="submit">Send message</button>
+              <div id="form-msg"></div>
+            </form>
+
+            <div class="social-links">
+              <a class="soc-link" href="https://github.com/isaacsauer" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+              <a class="soc-link" href="https://www.linkedin.com/in/isaac-sauer/" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+              <a class="soc-link" href="https://zacsvae.itch.io/" target="_blank" title="itch.io"><i class="fa-brands fa-itch-io"></i></a>
+              <a class="soc-link" href="qrcode/epc-qr.html" target="_blank" title="EPC QR Tool"><i class="fa-solid fa-qrcode"></i></a>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /editor-area -->
+
+      <!-- Terminal Panel -->
+      <div class="term-panel" id="termPanel">
+        <div class="term-head" onclick="toggleTerminal()">
+          <span>TERMINAL</span>
+          <span style="font-size:10px">×</span>
+        </div>
+        <div class="term-out" id="termOut"></div>
+      </div>
+
+    </div><!-- /main-area -->
+  </div><!-- /ide-body -->
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <div class="si" onclick="openCmd()"><i class="fa-solid fa-code-branch"></i> main</div>
+    <div class="si"><i class="fa-solid fa-circle-check"></i> 0</div>
+    <div class="si warn" title="TODO: fix segfault in production"><i class="fa-solid fa-triangle-exclamation"></i> 1</div>
+    <div class="si-spacer"></div>
+    <div class="si" id="sb-lang">TypeScript</div>
+    <div class="si">UTF-8</div>
+    <div class="si" id="sb-pos">Ln 1, Col 1</div>
+    <div class="si" onclick="toggleTerminal()"><i class="fa-solid fa-terminal"></i></div>
+  </div>
+
+</div><!-- /ide -->
+
+<!-- Command Palette -->
+<div class="cmd-overlay" id="cmdOverlay" onclick="closeCmd(event)">
+  <div class="cmd-box">
+    <div class="cmd-inp-wrap">
+      <i class="fa-solid fa-chevron-right"></i>
+      <input class="cmd-inp" id="cmdInput" placeholder="Go to file…" autocomplete="off" />
+    </div>
+    <div class="cmd-results" id="cmdResults"></div>
+    <div class="cmd-hint"><kbd>↑↓</kbd> navigate &nbsp;·&nbsp; <kbd>Enter</kbd> open &nbsp;·&nbsp; <kbd>Esc</kbd> close</div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div class="notif" id="notif"></div>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav">
+  <div class="mn-item active" onclick="openSection('about',null);setMobileActive(this)"><i class="fa-brands fa-js"></i><span>about</span></div>
+  <div class="mn-item" onclick="openSection('experience',null);setMobileActive(this)"><i class="fa-solid fa-file-code"></i><span>exp</span></div>
+  <div class="mn-item" onclick="openSection('projects',null);setMobileActive(this)"><i class="fa-solid fa-folder"></i><span>projects</span></div>
+  <div class="mn-item" onclick="openSection('gallery',null);setMobileActive(this)"><i class="fa-solid fa-cube"></i><span>gallery</span></div>
+  <div class="mn-item" onclick="openSection('music',null);setMobileActive(this)"><i class="fa-solid fa-headphones"></i><span>music</span></div>
+  <div class="mn-item" onclick="openSection('contact',null);setMobileActive(this)"><i class="fa-solid fa-envelope"></i><span>contact</span></div>
+</div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+// ── EmailJS ──────────────────────────────────────────────────────
+emailjs.init({ publicKey: "x8sJ8w_rEMgrHYxjP" });
+
+// ── Section metadata ─────────────────────────────────────────────
+const SECTIONS = {
+  about:      { label: 'about.ts',        icon: 'ts',   lang: 'TypeScript',  crumb: ['isaac-sauer', 'about.ts'] },
+  experience: { label: 'experience.json', icon: 'json', lang: 'JSON',        crumb: ['isaac-sauer', 'experience.json'] },
+  projects:   { label: 'index.ts',        icon: 'ts',   lang: 'TypeScript',  crumb: ['isaac-sauer', 'projects', 'index.ts'] },
+  gallery:    { label: 'gallery.tsx',     icon: 'tsx',  lang: 'TSX',         crumb: ['isaac-sauer', 'gallery.tsx'] },
+  music:      { label: 'music.tsx',       icon: 'tsx',  lang: 'TSX',         crumb: ['isaac-sauer', 'music.tsx'] },
+  contact:    { label: 'contact.ts',      icon: 'ts',   lang: 'TypeScript',  crumb: ['isaac-sauer', 'contact.ts'] },
+};
+
+let currentSection = 'about';
+let openTabs = ['about'];
+let sidebarOpen = true;
+let terminalOpen = false;
+
+// ── Line numbers ──────────────────────────────────────────────────
+function buildLineNumbers(sectionId) {
+  const container = document.querySelector(`#sec-${sectionId} .cc`);
+  const lnDiv = document.getElementById(`ln-${sectionId}`);
+  if (!container || !lnDiv) return;
+  const lines = container.querySelectorAll('.cl').length;
+  lnDiv.innerHTML = Array.from({length: lines}, (_, i) => `<span>${i + 1}</span>`).join('');
+}
+
+// ── Section switching ─────────────────────────────────────────────
+function openSection(id, treeItemEl, tabEl) {
+  if (!SECTIONS[id]) return;
+
+  // hide old section
+  document.getElementById(`sec-${currentSection}`)?.classList.remove('active');
+
+  // show new section
+  document.getElementById(`sec-${id}`)?.classList.add('active');
+  currentSection = id;
+
+  // update sidebar active state
+  document.querySelectorAll('.ti').forEach(el => el.classList.remove('active'));
+  if (treeItemEl) treeItemEl.classList.add('active');
+  else {
+    document.querySelectorAll(`.ti[data-section="${id}"]`).forEach(el => el.classList.add('active'));
+  }
+
+  // update or add tab
+  if (!openTabs.includes(id)) {
+    openTabs.push(id);
+    addTab(id);
+  }
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  const existingTab = tabEl || document.querySelector(`.tab[data-section="${id}"]`);
+  if (existingTab) existingTab.classList.add('active');
+
+  // update breadcrumb
+  const meta = SECTIONS[id];
+  const crumbs = meta.crumb;
+  const bcEl = document.getElementById('breadcrumb');
+  bcEl.innerHTML = crumbs.map((c, i) =>
+    i < crumbs.length - 1
+      ? `<span>${c}</span><span class="bc-sep">›</span>`
+      : `<span class="bc-cur">${c}</span>`
+  ).join('');
+
+  // update status bar
+  document.getElementById('sb-lang').textContent = meta.lang;
+  document.getElementById('sb-pos').textContent = 'Ln 1, Col 1';
+
+  // scroll to top
+  document.getElementById('editorArea').scrollTop = 0;
+}
+
+function addTab(id) {
+  const meta = SECTIONS[id];
+  const tab = document.createElement('div');
+  tab.className = 'tab';
+  tab.dataset.section = id;
+  tab.innerHTML = `<i class="t-ico ${meta.icon} fa-brands fa-js"></i><span>${meta.label}</span><span class="t-x" onclick="closeTab(event,'${id}')">×</span>`;
+  tab.onclick = function(e) {
+    if (e.target.classList.contains('t-x')) return;
+    openSection(id, null, this);
+  };
+  document.getElementById('tabBar').appendChild(tab);
+}
+
+function closeTab(e, id) {
+  e.stopPropagation();
+  openTabs = openTabs.filter(t => t !== id);
+  document.querySelector(`.tab[data-section="${id}"]`)?.remove();
+  if (currentSection === id) {
+    const fallback = openTabs[openTabs.length - 1] || 'about';
+    if (!openTabs.includes(fallback)) {
+      openTabs = ['about'];
+      addTab('about');
+    }
+    openSection(fallback, null);
+  }
+}
+
+// ── Sidebar toggle ────────────────────────────────────────────────
+function toggleSidebar() {
+  sidebarOpen = !sidebarOpen;
+  const sb = document.getElementById('sidebar');
+  sb.classList.toggle('collapsed', !sidebarOpen);
+  document.querySelectorAll('.ai')[0].classList.toggle('active', sidebarOpen);
+}
+
+// ── Folder toggle ─────────────────────────────────────────────────
+function toggleFolder(el) {
+  const chevron = el.querySelector('.fa-chevron-right, .fa-chevron-down');
+  const siblings = el.nextElementSibling;
+  if (!siblings || !siblings.classList.contains('ti-children')) return;
+  const hidden = siblings.classList.toggle('hidden');
+  if (chevron) {
+    chevron.classList.toggle('fa-chevron-right', hidden);
+    chevron.classList.toggle('fa-chevron-down', !hidden);
+  }
+  // change folder icon
+  const folderIcon = el.querySelectorAll('.fa-folder, .fa-folder-open')[0] ||
+                     el.querySelector('.fa-folder-open, .fa-folder');
+  if (folderIcon) {
+    folderIcon.classList.toggle('fa-folder', !hidden);
+    folderIcon.classList.toggle('fa-folder-open', hidden);
+  }
+}
+
+// ── Terminal ──────────────────────────────────────────────────────
+const TERMINAL_LINES = [
+  ['tp', '$ '],['tc', 'git log --oneline -5'],
+  ['to', '3985f07 rename play sfx'],
+  ['to', '1f9b388 finalize'],
+  ['to', '1a00622 quiz view'],
+  ['to', 'dc3ae84 push quiz editor'],
+  ['to', '0a97c37 500 push'],
+  ['', ''],
+  ['tp', '$ '],['tc', 'npm run build'],
+  ['to', '> portfolio build'],
+  ['ts-ok', '✓ compiled in 420ms'],
+  ['ts-ok', '✓ 0 errors · 1 warning (TODO: fix segfault in prod)'],
+  ['', ''],
+  ['tp', '$ '],['tc', '_'],
+];
+
+function buildTerminal() {
+  const out = document.getElementById('termOut');
+  out.innerHTML = TERMINAL_LINES.map(([cls, text]) =>
+    `<span class="${cls}">${text}</span>`
+  ).join('') + '<br/>';
+}
+
+function toggleTerminal() {
+  terminalOpen = !terminalOpen;
+  document.getElementById('termPanel').classList.toggle('open', terminalOpen);
+  if (terminalOpen && !document.getElementById('termOut').innerHTML) buildTerminal();
+}
+
+// ── Command palette ───────────────────────────────────────────────
+const CMD_ITEMS = Object.entries(SECTIONS).map(([id, m]) => ({id, label: m.label, icon: m.icon}));
+
+function openCmd() {
+  document.getElementById('cmdOverlay').classList.add('open');
+  const inp = document.getElementById('cmdInput');
+  inp.value = '';
+  inp.focus();
+  renderCmdResults('');
+}
+
+function closeCmd(e) {
+  if (e.target === document.getElementById('cmdOverlay') || !e) {
+    document.getElementById('cmdOverlay').classList.remove('open');
+  }
+}
+
+function renderCmdResults(query) {
+  const q = query.toLowerCase();
+  const filtered = CMD_ITEMS.filter(it => it.label.toLowerCase().includes(q));
+  const el = document.getElementById('cmdResults');
+  el.innerHTML = filtered.map((it, i) =>
+    `<div class="cmd-r${i === 0 ? ' sel' : ''}" onclick="cmdSelect('${it.id}')">
+      <i class="fa-brands fa-js" style="color:${it.icon === 'json' ? '#d19a66' : it.icon === 'tsx' ? '#56b6c2' : '#61afef'}"></i>
+      ${it.label}
+    </div>`
+  ).join('');
+}
+
+function cmdSelect(id) {
+  document.getElementById('cmdOverlay').classList.remove('open');
+  openSection(id, null);
+}
+
+document.getElementById('cmdInput').addEventListener('input', e => renderCmdResults(e.target.value));
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'p') { e.preventDefault(); openCmd(); }
+  if (e.key === 'Escape') document.getElementById('cmdOverlay').classList.remove('open');
+});
+
+// ── Mobile nav ────────────────────────────────────────────────────
+function setMobileActive(el) {
+  document.querySelectorAll('.mn-item').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── Toast ─────────────────────────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById('notif');
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.display = 'none'; }, 3500);
+}
+
+// ── Konami code easter egg ────────────────────────────────────────
+const KONAMI = [38,38,40,40,37,39,37,39,66,65];
+let konamiIdx = 0;
+document.addEventListener('keydown', e => {
+  if (e.keyCode === KONAMI[konamiIdx]) {
+    konamiIdx++;
+    if (konamiIdx === KONAMI.length) {
+      konamiIdx = 0;
+      toast('🎮 Achievement unlocked: Konami Code — You know what\'s up.');
+      document.querySelector('.tb-title').textContent = 'isaac-sauer — CHEAT MODE ACTIVATED';
+      setTimeout(() => document.querySelector('.tb-title').textContent = 'isaac-sauer — portfolio', 4000);
+    }
+  } else {
+    konamiIdx = 0;
+  }
+});
+
+// ── Contact form ──────────────────────────────────────────────────
+const emailForm = document.getElementById('emailForm');
+const submitBtn = document.getElementById('submitBtn');
+const formMsg = document.getElementById('form-msg');
+
+emailForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending…';
+  formMsg.textContent = '';
+  formMsg.className = '';
+
+  emailjs.send('service_8gj9t52', 'template_axjzm4k', {
+    subject: document.getElementById('subject').value,
+    name: document.getElementById('name').value,
+    email: document.getElementById('email').value,
+    message: document.getElementById('message').value,
+  }).then(() => {
+    formMsg.textContent = 'Message sent successfully!';
+    formMsg.className = '';
+    emailForm.reset();
+  }, () => {
+    formMsg.textContent = 'Failed to send. Try again or email directly.';
+    formMsg.className = 'err';
+  }).finally(() => {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send message';
+    setTimeout(() => { formMsg.textContent = ''; formMsg.className = ''; }, 6000);
+  });
+});
+
+// ── Status bar line/col update ────────────────────────────────────
+document.getElementById('editorArea').addEventListener('scroll', function() {
+  const approxLine = Math.floor(this.scrollTop / 21) + 1;
+  document.getElementById('sb-pos').textContent = `Ln ${approxLine}, Col 1`;
+});
+
+// ── Init ──────────────────────────────────────────────────────────
+</script>
 </body>
-
 </html>
