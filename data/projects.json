@@ -1,6 +1,7 @@
 {
   "breachers": {
     "varName": "breachers",
+    "category": "game",
     "lang": {
       "label": "C#",
       "cls": "lb-cs"
@@ -55,6 +56,7 @@
   },
   "gbemu": {
     "varName": "gbemu",
+    "category": "systems",
     "lang": {
       "label": "C++",
       "cls": "lb-cpp"
@@ -145,6 +147,7 @@
   },
   "crash": {
     "varName": "crash",
+    "category": "game",
     "lang": {
       "label": "C++",
       "cls": "lb-cpp"
@@ -220,6 +223,7 @@
   },
   "capcig": {
     "varName": "captainCigarr",
+    "category": "game",
     "lang": {
       "label": "C#",
       "cls": "lb-cs"
@@ -271,6 +275,7 @@
   },
   "gdm": {
     "varName": "grandDadMania",
+    "category": "game",
     "lang": {
       "label": "C++",
       "cls": "lb-cpp"
@@ -321,6 +326,7 @@
   },
   "astar": {
     "varName": "fasterAStar",
+    "category": "systems",
     "lang": {
       "label": "C++",
       "cls": "lb-cpp"
@@ -367,6 +373,7 @@
   },
   "minigin": {
     "varName": "minigin",
+    "category": "systems",
     "lang": {
       "label": "C++",
       "cls": "lb-cpp"
@@ -429,6 +436,7 @@
   },
   "rickmorty": {
     "varName": "rickMortyTool",
+    "category": "tool",
     "lang": {
       "label": "C#",
       "cls": "lb-cs"

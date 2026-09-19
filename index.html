@@ -1,448 +1,111 @@
-﻿<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Isaac Sauer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-
-<div class="ide">
-
-  <!-- ── Title Bar ── -->
-  <div class="titlebar">
-    <div class="tb-dots">
-      <div class="tb-dot r"></div>
-      <div class="tb-dot y"></div>
-      <div class="tb-dot g"></div>
-    </div>
-    <span class="tb-title">isaac-sauer — portfolio</span>
-  </div>
-
-  <!-- ── IDE Body ── -->
-  <div class="ide-body">
-
-    <!-- Activity Bar -->
-    <div class="activity-bar">
-      <div class="ai active" data-tip="Explorer" onclick="toggleSidebar()"><i class="fa-solid fa-folder-open"></i></div>
-      <div class="ai" data-tip="Search" onclick="openCmd()"><i class="fa-solid fa-magnifying-glass"></i></div>
-      <div class="ai" data-tip="Source Control"><i class="fa-solid fa-code-branch"></i></div>
-      <div class="ai" data-tip="Terminal" onclick="toggleTerminal()"><i class="fa-solid fa-terminal"></i></div>
-      <div class="ai-spacer"></div>
-    </div>
-
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-      <div class="sb-head">Explorer</div>
-      <div class="file-tree">
-        <div class="ti folder" onclick="toggleFolder(this)">
-          <i class="ico folder fa-solid fa-chevron-down" id="root-chevron"></i>
-          <i class="ico folder fa-solid fa-folder-open"></i>
-          <span>ISAAC-SAUER</span>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Isaac Sauer — Game Developer & Music Producer</title>
+    <meta
+      name="description"
+      content="Game developer and music producer building VR experiences at Triangle Factory."
+    />
+    <meta name="theme-color" content="#071013" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23071013'/%3E%3Cpath d='M13 14h9v36h-9zm18 0h20v8H39v6h9v8h-9v6h12v8H31z' fill='%23c8ff3d'/%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header>
+      <nav class="wrap" aria-label="Primary navigation">
+        <a class="brand" href="/" aria-current="page"
+          >ISAAC<span>_</span>SAUER</a
+        ><button
+          class="menu"
+          aria-expanded="false"
+          aria-controls="navlinks"
+          aria-label="Open navigation"
+        >
+          ☰
+        </button>
+        <div class="navlinks" id="navlinks">
+          <a href="/about/">About</a><a href="/experience/">Experience</a
+          ><a href="/projects/">Projects</a><a href="/gallery/">3D</a
+          ><a href="/music/">Music</a
+          ><a class="contact-pill" href="/contact/">Contact</a>
         </div>
-        <div class="ti-children" id="root-children">
-          <div class="ti active" data-section="about" onclick="openSection('about',this)">
-            <i class="ico ts fa-brands fa-js"></i>
-            <span>about.ts</span>
-          </div>
-          <div class="ti" data-section="experience" onclick="openSection('experience',this)">
-            <i class="ico json fa-solid fa-file-code"></i>
-            <span>experience.json</span>
-          </div>
-          <div class="ti folder" onclick="toggleFolder(this)">
-            <i class="ico folder fa-solid fa-chevron-right" id="proj-chevron"></i>
-            <i class="ico folder fa-solid fa-folder"></i>
-            <span>projects/</span>
-          </div>
-          <div class="ti-children hidden" id="proj-children">
-            <div class="ti" data-section="projects" onclick="openSection('projects',this)">
-              <i class="ico ts fa-brands fa-js"></i>
-              <span>index.ts</span>
-            </div>
-          </div>
-          <div class="ti" data-section="gallery" onclick="openSection('gallery',this)">
-            <i class="ico tsx fa-brands fa-js"></i>
-            <span>gallery.tsx</span>
-          </div>
-          <div class="ti" data-section="music" onclick="openSection('music',this)">
-            <i class="ico tsx fa-brands fa-js"></i>
-            <span>music.tsx</span>
-          </div>
-          <div class="ti" data-section="contact" onclick="openSection('contact',this)">
-            <i class="ico ts fa-brands fa-js"></i>
-            <span>contact.ts</span>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="hero wrap">
+        <div>
+          <div class="eyebrow">Game Developer · Belgium</div>
+          <h1>ISAAC<br /><span class="outline">SAUER</span></h1>
+          <p class="intro">
+            I build systems that make games
+            <strong>feel, sound and run better</strong> — from multiplayer VR
+            mechanics to low-level emulation and audio implementation.
+          </p>
+          <div class="actions">
+            <a class="btn primary" href="/projects/">Explore my work ↘</a
+            ><a
+              class="btn"
+              href="https://www.zacsvae.com"
+              target="_blank"
+              rel="noreferrer"
+              >zacsvae.com ↗</a
+            >
           </div>
         </div>
+        <aside class="hero-side">
+          <div class="stat"><b>Current</b><span>Triangle Factory</span></div>
+          <div class="stat"><b>Building</b><span>Forefront VR</span></div>
+          <div class="stat"><b>Focus</b><span>Gameplay · Audio · VR</span></div>
+          <div class="stat"><b>Education</b><span>DAE Howest, 2022</span></div>
+        </aside>
+      </section>
+      <div class="wrap category-grid reveal">
+        <a class="category" href="/about/"
+          ><small>01 / PROFILE</small>
+          <h2>About</h2>
+          <p>Background, education and technical toolkit.</p>
+          <b>Open page ↗</b></a
+        ><a class="category" href="/experience/"
+          ><small>02 / CAREER</small>
+          <h2>Experience</h2>
+          <p>Production work at Triangle Factory.</p>
+          <b>Open page ↗</b></a
+        ><a class="category" href="/projects/"
+          ><small>03 / WORK</small>
+          <h2>Projects</h2>
+          <p>Games, engines, algorithms and tools.</p>
+          <b>Open page ↗</b></a
+        ><a class="category" href="/gallery/"
+          ><small>04 / VISUAL</small>
+          <h2>3D Gallery</h2>
+          <p>Interactive models and environments.</p>
+          <b>Open page ↗</b></a
+        ><a class="category" href="/music/"
+          ><small>05 / AUDIO</small>
+          <h2>Music</h2>
+          <p>Albums and original releases.</p>
+          <b>Open page ↗</b></a
+        ><a class="category" href="/contact/"
+          ><small>06 / CONNECT</small>
+          <h2>Contact</h2>
+          <p>GitHub, LinkedIn, itch.io and website.</p>
+          <b>Open page ↗</b></a
+        >
       </div>
-    </div>
-
-    <!-- Main Area -->
-    <div class="main-area">
-
-      <!-- Tab Bar -->
-      <div class="tab-bar" id="tabBar">
-        <div class="tab active" data-section="about" onclick="openSection('about',null,this)">
-          <i class="t-ico ts fa-brands fa-js"></i>
-          <span>about.ts</span>
-          <span class="t-x" onclick="closeTab(event,'about')">×</span>
-        </div>
+    </main>
+    <footer>
+      <div class="wrap foot">
+        <span>© <span data-year></span> ISAAC SAUER</span
+        ><span>GAME DEVELOPMENT · SOUND · MUSIC</span>
       </div>
-
-      <!-- Breadcrumb -->
-      <div class="breadcrumb" id="breadcrumb">
-        <span>isaac-sauer</span>
-        <span class="bc-sep">›</span>
-        <span class="bc-cur" id="bc-current">about.ts</span>
-      </div>
-
-      <!-- Editor -->
-      <div class="editor-area" id="editorArea">
-
-        <!-- ── about.ts ── -->
-        <div class="section active" id="sec-about">
-          <div class="about-wrap">
-            <div class="about-hero">
-              <img class="about-photo" src="images/me.jpg" alt="Isaac Sauer" />
-              <div>
-                <div class="about-name">Isaac Sauer</div>
-                <div class="about-role">Game Developer &amp; Music Producer</div>
-                <div class="about-chips">
-                  <span class="about-chip"><i class="fa-solid fa-location-dot"></i> Belgium</span>
-                  <span class="about-chip"><i class="fa-solid fa-building"></i> Triangle Factory</span>
-                  <span class="about-chip"><i class="fa-solid fa-gamepad"></i> Forefront VR</span>
-                </div>
-              </div>
-            </div>
-
-            <p class="about-bio">Born in 2000. My passion is Game Development, Game Design, Sound Design and Music Production. Currently building Forefront VR at Triangle Factory — one of the most popular VR shooters on Meta Quest. Graduate of Digital Arts &amp; Entertainment at Howest.</p>
-
-            <div class="skills-grid">
-              <div class="skill-group">
-                <div class="skill-label">Languages</div>
-                <div class="skill-tags">
-                  <span class="tag">C#</span>
-                  <span class="tag">C++</span>
-                  <span class="tag">Python</span>
-                  <span class="tag">JavaScript</span>
-                  <span class="tag">Java</span>
-                </div>
-              </div>
-              <div class="skill-group">
-                <div class="skill-label">Engines</div>
-                <div class="skill-tags">
-                  <span class="tag">Unity</span>
-                  <span class="tag">Unreal Engine</span>
-                  <span class="tag">DirectX 11</span>
-                </div>
-              </div>
-              <div class="skill-group">
-                <div class="skill-label">Platforms</div>
-                <div class="skill-tags">
-                  <span class="tag">Meta Quest</span>
-                  <span class="tag">SteamVR</span>
-                  <span class="tag">PC</span>
-                </div>
-              </div>
-              <div class="skill-group">
-                <div class="skill-label">Audio</div>
-                <div class="skill-tags">
-                  <span class="tag">Wwise</span>
-                  <span class="tag">FMOD</span>
-                  <span class="tag">FL Studio</span>
-                </div>
-              </div>
-              <div class="skill-group">
-                <div class="skill-label">Tools</div>
-                <div class="skill-tags">
-                  <span class="tag">Git</span>
-                  <span class="tag">Visual Studio</span>
-                  <span class="tag">Rider</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── experience.json ── -->
-        <div class="section" id="sec-experience">
-          <div class="exp-wrap">
-            <div class="exp-section-label">Work Experience</div>
-
-            <div class="exp-card">
-              <div class="exp-header">
-                <div class="exp-company">Triangle Factory</div>
-                <div class="exp-period">2022 — present</div>
-              </div>
-              <div class="exp-role">Game Programmer &nbsp;·&nbsp; Breachers VR</div>
-              <div class="exp-highlight"><i class="fa-solid fa-star"></i> One of the most popular shooters on Meta Quest (2023)</div>
-              <ul class="exp-list">
-                <li>Audio integration — Wwise, SFX systems, ambient audio</li>
-                <li>Gameplay mechanics &amp; bug fixing</li>
-                <li>Server performance &amp; stability</li>
-                <li>VR interaction systems</li>
-              </ul>
-              <div class="exp-stack">
-                <span class="tag">C#</span><span class="tag">Unity</span><span class="tag">Wwise</span><span class="tag">Meta XR SDK</span><span class="tag">SteamVR SDK</span><span class="tag">Meta Quest 2/3</span><span class="tag">PSVR2</span>
-              </div>
-            </div>
-
-            <div class="exp-section-label">Education</div>
-
-            <div class="edu-card">
-              <i class="fa-solid fa-graduation-cap"></i>
-              <div>
-                <div class="edu-school">Howest — Digital Arts &amp; Entertainment</div>
-                <div class="edu-sub">Game Development &nbsp;·&nbsp; Kortrijk, Belgium &nbsp;·&nbsp; Graduated 2022</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── projects/index.ts ── -->
-        <div class="section" id="sec-projects">
-          <div class="projects-grid" id="projectsGrid"></div>
-        </div>
-
-        <!-- ── gallery.tsx ── -->
-        <div class="section" id="sec-gallery">
-          <div class="gallery-grid">
-
-            <div class="gi">
-              <div class="gi-head"><i class="fa-solid fa-cube"></i> sentry-gun.fbx</div>
-              <div class="gi-embed">
-                <iframe loading="lazy" src="https://sketchfab.com/models/41959b57f8454cbfb4b22ad951edf9e9/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
-              </div>
-              <div class="gi-caption">Sentry Gun — High Poly module, DAE year 2</div>
-            </div>
-
-            <div class="gi">
-              <div class="gi-head"><i class="fa-brands fa-youtube"></i> scifi-subway.mp4</div>
-              <div class="gi-embed">
-                <iframe loading="lazy" src="https://www.youtube.com/embed/0ISOjfu5o2A" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-              </div>
-              <div class="gi-caption">Sci-Fi Subway Station — Environments 1, DAE year 2</div>
-            </div>
-
-            <div class="gi">
-              <div class="gi-head"><i class="fa-solid fa-cube"></i> kyoto-city.fbx</div>
-              <div class="gi-embed">
-                <iframe loading="lazy" src="https://sketchfab.com/models/0fd4b2be2ac14406bdb7b0d0d45050df/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
-              </div>
-              <div class="gi-caption">Kyoto City Scene — 3D Low Poly, DAE year 1</div>
-            </div>
-
-            <div class="gi">
-              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-04.fbx</div>
-              <div class="gi-embed">
-                <iframe loading="lazy" src="https://sketchfab.com/models/415f71f0c2be49979eb36b255826a810/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
-              </div>
-              <div class="gi-caption">3D Model — DAE</div>
-            </div>
-
-            <div class="gi">
-              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-05.fbx</div>
-              <div class="gi-embed">
-                <iframe loading="lazy" src="https://sketchfab.com/models/f9f622f4a80c40ac9ddfec572ad4142e/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
-              </div>
-              <div class="gi-caption">3D Model — DAE</div>
-            </div>
-
-            <div class="gi">
-              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-06.fbx</div>
-              <div class="gi-embed">
-                <iframe loading="lazy" src="https://sketchfab.com/models/46fab129a650486b84abbb2ec2665503/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
-              </div>
-              <div class="gi-caption">3D Model — DAE</div>
-            </div>
-
-            <div class="gi">
-              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-07.fbx</div>
-              <div class="gi-embed">
-                <iframe loading="lazy" src="https://sketchfab.com/models/f4b052c3cbaa4d21ba35652b556cc982/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
-              </div>
-              <div class="gi-caption">3D Model — DAE</div>
-            </div>
-
-            <div class="gi">
-              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-08.fbx</div>
-              <div class="gi-embed">
-                <iframe loading="lazy" src="https://sketchfab.com/models/94326636ad9a48c092987bc07f802830/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
-              </div>
-              <div class="gi-caption">3D Model — DAE</div>
-            </div>
-
-            <div class="gi">
-              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-09.fbx</div>
-              <div class="gi-embed">
-                <iframe loading="lazy" src="https://sketchfab.com/models/d55eca37a92a4e8298044c07434bac3d/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
-              </div>
-              <div class="gi-caption">3D Model — DAE</div>
-            </div>
-
-            <div class="gi">
-              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-10.fbx</div>
-              <div class="gi-embed">
-                <iframe loading="lazy" src="https://sketchfab.com/models/f063b8f5883a4d309b0cf3c13ea5df4d/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
-              </div>
-              <div class="gi-caption">3D Model — DAE</div>
-            </div>
-
-            <div class="gi">
-              <div class="gi-head"><i class="fa-solid fa-cube"></i> model-11.fbx</div>
-              <div class="gi-embed">
-                <iframe loading="lazy" src="https://sketchfab.com/models/df1c3b922fae447c8290904c0432b171/embed?preload=1&ui_controls=1&ui_infos=1&ui_watermark=1" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
-              </div>
-              <div class="gi-caption">3D Model — DAE</div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- ── music.tsx ── -->
-        <div class="section" id="sec-music">
-          <div class="music-section">
-            <h3>// Albums</h3>
-            <div class="albums-grid">
-              <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="352" loading="lazy" src="https://open.spotify.com/embed/album/3VZWYh7nKBPEAX6tyUvhmZ?utm_source=generator" width="100%"></iframe>
-              <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="352" loading="lazy" src="https://open.spotify.com/embed/album/72kmViO8jTcPQzj19VNh3R?utm_source=generator" width="100%"></iframe>
-            </div>
-
-            <h3>// Singles</h3>
-            <div class="music-grid">
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/3ZVw2wf8YghnWysfJTy6ln?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/6MMETOAQu8ycho87WtTlIS?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/4yKFRgoTzR5NZ89WXCVEmU?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/70R9ZN40gmC7qZjjN2D0hr?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/624ZuW347NazlEhVQxNB7a?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/5sMbx2r3d7DqcSAdYsBtZg?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/5rSYnKfE8l091ARpd1pNat?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/1v4JjJLVUjnrltLExqGgWF?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/4yJOrE0fMjoKFmQX2D4C1S?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/2PWsLKKQlCZt9RHDfoRx0Q?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/72nmewtAeivaVreAHtEl0P?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/76Qw9ASFu3dIeuJemebJqI?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/2R3nRK9D4CSMD5X7fMQuL8?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/6Wnp5xCGhlCIwyjYz2GxT7?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/4DgIIMfOdxEk04WPBCkekQ?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/62qlPe3gjZOumbJCupngpR?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/4GPgfUSu82d0lj46YpsgC5?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/70GMG3k628poEjD9H4iKWn?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/5amy4nCIpoFccAcyDT8GeQ?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/2B15OBnHXNAEdFVjH8xTKr?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/6ElraMOg1KhgoiTRQ0YmZM?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/6Mws1rpJpCjCIYexVT5FpN?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/5cM6wUElXat09aHTtVLCvN?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/4fAZa5Mi3vsQZpZEC67l5j?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/5veto8MUBYoyULXJbgdEsA?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/0Fc9O20o7wXgTckR4IKNRO?utm_source=generator" width="100%"></iframe></div>
-              <div class="sp-compact"><iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0" height="80" loading="lazy" src="https://open.spotify.com/embed/track/7FroVd6FweZR90kTe2Y1Zl?utm_source=generator" width="100%"></iframe></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── contact.ts ── -->
-        <div class="section" id="sec-contact">
-          <div class="contact-wrap">
-            <div class="form-file-head">Get in touch — I'll get back to you shortly.</div>
-            <form id="emailForm">
-              <div class="fg">
-                <label class="fl" for="name">Name</label>
-                <input class="fi" id="name" name="name" placeholder="Your name" required type="text" />
-              </div>
-              <div class="fg">
-                <label class="fl" for="email">Email</label>
-                <input class="fi" id="email" name="email" placeholder="your@email.com" required type="email" />
-              </div>
-              <div class="fg">
-                <label class="fl" for="subject">Subject</label>
-                <input class="fi" id="subject" name="subject" placeholder="Subject" required type="text" />
-              </div>
-              <div class="fg">
-                <label class="fl" for="message">Message</label>
-                <textarea class="fi fi-ta" id="message" name="message" placeholder="Hello Isaac, ..." required></textarea>
-              </div>
-              <button class="btn-submit" id="submitBtn" type="submit">Send message</button>
-              <div id="form-msg"></div>
-            </form>
-
-            <div class="social-links">
-              <a class="soc-link" href="https://github.com/isaacsauer" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
-              <a class="soc-link" href="https://www.linkedin.com/in/isaac-sauer/" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-              <a class="soc-link" href="https://zacsvae.itch.io/" target="_blank" title="itch.io"><i class="fa-brands fa-itch-io"></i></a>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /editor-area -->
-
-      <!-- Terminal Panel -->
-      <div class="term-panel" id="termPanel">
-        <div class="term-head" onclick="toggleTerminal()">
-          <span>TERMINAL</span>
-          <span style="font-size:11px">×</span>
-        </div>
-        <div class="term-out" id="termOut"></div>
-      </div>
-
-    </div><!-- /main-area -->
-  </div><!-- /ide-body -->
-
-  <!-- Status Bar -->
-  <div class="status-bar">
-    <div class="si" onclick="openCmd()"><i class="fa-solid fa-code-branch"></i> main</div>
-    <div class="si"><i class="fa-solid fa-circle-check"></i> 0</div>
-    <div class="si warn" title="TODO: fix segfault in production"><i class="fa-solid fa-triangle-exclamation"></i> 1</div>
-    <div class="si-spacer"></div>
-    <div class="si" id="sb-lang">TypeScript</div>
-    <div class="si">UTF-8</div>
-    <div class="si" id="sb-pos">Ln 1, Col 1</div>
-    <div class="si" onclick="toggleTerminal()"><i class="fa-solid fa-terminal"></i></div>
-  </div>
-
-</div><!-- /ide -->
-
-<!-- Command Palette -->
-<div class="cmd-overlay" id="cmdOverlay" onclick="closeCmd(event)">
-  <div class="cmd-box">
-    <div class="cmd-inp-wrap">
-      <i class="fa-solid fa-chevron-right"></i>
-      <input class="cmd-inp" id="cmdInput" placeholder="Go to file…" autocomplete="off" />
-    </div>
-    <div class="cmd-results" id="cmdResults"></div>
-    <div class="cmd-hint"><kbd>↑↓</kbd> navigate &nbsp;·&nbsp; <kbd>Enter</kbd> open &nbsp;·&nbsp; <kbd>Esc</kbd> close</div>
-  </div>
-</div>
-
-<!-- Project detail modal -->
-<div class="proj-modal" id="projModal" onclick="closeProjModal(event)">
-  <div class="pm-box" id="pmBox">
-    <div class="pm-head">
-      <span class="pm-title" id="pmTitle"></span>
-      <button class="pm-close" onclick="closeProjModal(null,true)">×</button>
-    </div>
-    <div class="pm-body" id="pmBody"></div>
-  </div>
-</div>
-
-<!-- Toast notification -->
-<div class="notif" id="notif"></div>
-
-<!-- Mobile Nav -->
-<div class="mobile-nav">
-  <div class="mn-item active" onclick="openSection('about',null);setMobileActive(this)"><i class="fa-brands fa-js"></i><span>about</span></div>
-  <div class="mn-item" onclick="openSection('experience',null);setMobileActive(this)"><i class="fa-solid fa-file-code"></i><span>exp</span></div>
-  <div class="mn-item" onclick="openSection('projects',null);setMobileActive(this)"><i class="fa-solid fa-folder"></i><span>projects</span></div>
-  <div class="mn-item" onclick="openSection('gallery',null);setMobileActive(this)"><i class="fa-solid fa-cube"></i><span>gallery</span></div>
-  <div class="mn-item" onclick="openSection('music',null);setMobileActive(this)"><i class="fa-solid fa-headphones"></i><span>music</span></div>
-  <div class="mn-item" onclick="openSection('contact',null);setMobileActive(this)"><i class="fa-solid fa-envelope"></i><span>contact</span></div>
-</div>
-
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="main.js"></script>
-
-</body>
+    </footer>
+    <script src="/site.js"></script>
+  </body>
 </html>

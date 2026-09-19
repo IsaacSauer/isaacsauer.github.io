@@ -439,7 +439,8 @@ select option { background: var(--bg-panel); }
   <div class="tb-sep"></div>
   <button class="btn btn-secondary" onclick="importJSON()">Import JSON</button>
   <button class="btn btn-secondary" onclick="copyJSON()">Copy JSON</button>
-  <button class="btn btn-primary" onclick="exportJSON()">Export JSON</button>
+  <button class="btn btn-secondary" onclick="exportJSON()">Export JSON</button>
+  <button class="btn btn-primary" onclick="saveJSON()">Save projects.json</button>
   <div class="tb-spacer"></div>
   <span id="saveStatus"></span>
   <input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleFile(event)">
@@ -481,6 +482,14 @@ select option { background: var(--bg-panel); }
           <div class="form-row">
             <label>varName</label>
             <input type="text" id="f-varName" placeholder="breachersVR" oninput="setField('varName', this.value)">
+          </div>
+          <div class="form-row">
+            <label>Filter category</label>
+            <select id="f-category" onchange="setField('category', this.value)">
+              <option value="game">Games</option>
+              <option value="systems">Engines &amp; Systems</option>
+              <option value="tool">Tools</option>
+            </select>
           </div>
           <div class="form-row">
             <label>Name (card)</label>
@@ -646,6 +655,7 @@ function selectProject(id) {
 
   document.getElementById('f-id').value = id;
   document.getElementById('f-varName').value = p.varName || '';
+  document.getElementById('f-category').value = p.category || 'game';
   document.getElementById('f-name').value = p.name || '';
   document.getElementById('f-title').value = p.title || '';
   document.getElementById('f-image').value = p.image || '';
@@ -837,6 +847,7 @@ function addProject() {
   while (projects[id]) id = `new-project-${n++}`;
   projects[id] = {
     varName: 'newProject',
+    category: 'game',
     lang: { label: 'C#', cls: 'lb-cs' },
     image: '',
     name: 'New Project',
@@ -951,6 +962,32 @@ function exportJSON() {
   a.click();
   URL.revokeObjectURL(url);
   setStatus('Exported projects.json');
+}
+
+async function saveJSON() {
+  if (!window.showSaveFilePicker) {
+    exportJSON();
+    setStatus('Direct save is unavailable — exported projects.json instead', 5000);
+    return;
+  }
+
+  try {
+    const handle = await window.showSaveFilePicker({
+      suggestedName: 'projects.json',
+      types: [{
+        description: 'JSON project data',
+        accept: { 'application/json': ['.json'] }
+      }]
+    });
+    const writable = await handle.createWritable();
+    await writable.write(JSON.stringify(toJSON(), null, 2) + '\n');
+    await writable.close();
+    setStatus('Saved projects.json', 4000);
+  } catch (error) {
+    if (error.name !== 'AbortError') {
+      alert('Could not save projects.json: ' + error.message);
+    }
+  }
 }
 
 function copyJSON() {
