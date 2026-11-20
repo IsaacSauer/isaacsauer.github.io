@@ -20,13 +20,13 @@ function projectUrl(id) {
   return `/projects/project/?id=${encodeURIComponent(id)}`;
 }
 
-function renderVideos(videos = []) {
+function renderVideos(videos = [], heading = 'Demos') {
   if (!videos.length) return '';
   const frames = videos.map(video => `<div>
     <div class="case-video"><iframe src="https://www.youtube.com/embed/${encodeURIComponent(video.id)}" title="${safeText(video.label || 'Project video')}" allowfullscreen loading="lazy"></iframe></div>
     ${videos.length > 1 ? `<p class="video-label">${safeText(video.label || 'Video')}</p>` : ''}
   </div>`).join('');
-  return `<h2>Demos</h2><div class="case-videos${videos.length === 1 ? ' single' : ''}">${frames}</div>`;
+  return `<h2>${safeText(heading)}</h2><div class="case-videos${videos.length === 1 ? ' single' : ''}">${frames}</div>`;
 }
 
 function renderAsset(project) {
@@ -47,7 +47,7 @@ function renderProject(id, project, entries) {
   document.querySelector('[data-title]').textContent = title;
   document.querySelector('[data-label]').textContent = project.meta?.text || 'Project';
   document.querySelector('[data-summary]').innerHTML = project.desc || '';
-  document.querySelector('[data-body]').innerHTML = `${renderAsset(project)}${project.body || ''}${renderVideos(project.videos)}`;
+  document.querySelector('[data-body]').innerHTML = `${renderAsset(project)}${project.body || ''}${renderVideos(project.videos, project.videosTitle)}`;
   document.querySelector('[data-meta]').innerHTML = `
     <div class="case-row"><b>Context</b><span>${safeText(project.meta?.text || 'Independent project')}</span></div>
     <div class="case-row"><b>Stack</b><span>${safeText(stack || 'Not specified')}</span></div>`;

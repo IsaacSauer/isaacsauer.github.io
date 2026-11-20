@@ -5,9 +5,7 @@
 **Game Developer & Music Producer**  
 Belgium · Triangle Factory · Forefront VR
 
-[www.zacsvae.com](https://www.zacsvae.com)
-
-Born in 2000. My passion is Game Development, Game Design, Sound Design and Music Production. Currently building Forefront VR at Triangle Factory — one of the most popular VR shooters on Meta Quest. Graduate of Digital Arts & Entertainment at Howest.
+Born in 2000. My passion is Game Development, Game Design, Sound Design and Music Production. Currently building Forefront VR, a 32-player VR shooter, at Triangle Factory, after shipping Breachers VR. Graduate of Digital Arts & Entertainment at Howest.
 
 ## Contents
 
@@ -26,7 +24,7 @@ Born in 2000. My passion is Game Development, Game Design, Sound Design and Musi
 | --- | --- |
 | Languages | C#, C++, Python, JavaScript, Java |
 | Engines | Unity, Unreal Engine, DirectX 11 |
-| Platforms | Meta Quest, SteamVR, PC |
+| Platforms | Meta Quest, SteamVR, Pico, PC, PSVR2 |
 | Audio | Wwise, FMOD, FL Studio |
 | Tools | Git, Visual Studio, Rider |
 
@@ -34,8 +32,20 @@ Born in 2000. My passion is Game Development, Game Design, Sound Design and Musi
 
 ### Triangle Factory
 
+**Game Programmer · Forefront VR**  
+2024 — present
+
+32-player VR shooter on Meta Quest, Steam and Pico. Worked on it from pre-production through Early Access, the 1.0 release and live updates.
+
+- Wwise integration and audio architecture, plus most of the game's sound implementation
+- Gameplay gadgets & weapons: zipline, claymores & mines, motion sensor, combat bow, hold breath
+- Multiplayer & platform: Quickplay, map rotation, Voice Patrol moderation, Pico, achievements
+- Cosmetics (weapon patterns, charms, import tools), haptics, bHaptics & Virtuix Omni One
+
+**Stack:** C# · Unity · Wwise · ECS · Meta Quest · SteamVR · Pico · bHaptics
+
 **Game Programmer · Breachers VR**  
-2022 — present
+2022 — 2024
 
 One of the most popular shooters on Meta Quest (2023).
 
@@ -54,11 +64,20 @@ Game Development · Kortrijk, Belgium · Graduated 2022
 
 ## Projects
 
+### Forefront VR
+
+![Forefront VR](https://img.youtube.com/vi/M11IZk0RmaQ/maxresdefault.jpg)
+
+**Triangle Factory · 2024–now**  
+**C# · Unity · Wwise · VR · Meta Quest · SteamVR · Pico · ECS**
+
+32-player VR shooter across land, sea and air. My main area was audio and Wwise; I also worked on gameplay gadgets, multiplayer, cosmetics and haptics. [Trailer](https://www.youtube.com/watch?v=M11IZk0RmaQ) · [Steam](https://store.steampowered.com/app/2981220/Forefront/) · [Meta Store](https://www.meta.com/experiences/forefront/28816918137899319)
+
 ### Breachers VR
 
 ![Breachers VR](images/breachers.jpg)
 
-**Triangle Factory · 2022–now**  
+**Triangle Factory · 2022–2024**  
 **C# · Unity · Wwise · VR · Meta Quest · SteamVR**
 
 One of the most popular VR shooters on Meta Quest (2023). Contributed to audio systems, gameplay mechanics, and server stability using Unity & Wwise.

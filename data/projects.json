@@ -1,4 +1,70 @@
 {
+  "forefront": {
+    "varName": "forefront",
+    "category": "game",
+    "lang": {
+      "label": "C#",
+      "cls": "lb-cs"
+    },
+    "image": "https://img.youtube.com/vi/M11IZk0RmaQ/maxresdefault.jpg",
+    "name": "Forefront VR",
+    "meta": {
+      "icon": "fa-solid fa-briefcase",
+      "text": "Triangle Factory · 2024–now"
+    },
+    "desc": "32-player VR shooter across land, sea and air on Quest, Steam &amp; Pico. Drove audio &amp; Wwise implementation, plus gameplay gadgets, multiplayer, cosmetics and haptics.",
+    "tags": [
+      "Unity",
+      "Wwise",
+      "VR",
+      "Meta Quest",
+      "SteamVR",
+      "Pico",
+      "ECS"
+    ],
+    "cardLinks": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Trailer",
+        "url": "https://www.youtube.com/watch?v=M11IZk0RmaQ"
+      },
+      {
+        "ico": "fa-brands fa-steam",
+        "label": "Steam",
+        "url": "https://store.steampowered.com/app/2981220/Forefront/"
+      }
+    ],
+    "title": "Forefront VR",
+    "videosTitle": "Trailers",
+    "videos": [
+      {
+        "id": "M11IZk0RmaQ",
+        "label": "1.0 Launch Trailer"
+      },
+      {
+        "id": "766ctGfBJsI",
+        "label": "Early Access Trailer"
+      }
+    ],
+    "body": "<p class=\"pm-p\">After <em>Breachers</em>, I moved onto <em>Forefront</em>: Triangle Factory's large-scale VR shooter with <strong>32-player battles</strong> across land, sea and air, cross-play between <strong>Meta Quest, SteamVR and Pico</strong>. I joined during pre-production in 2024 and worked on it through Early Access (November 2025), the <strong>1.0 release</strong> (April 2026) and the live updates after launch.</p>\n<p class=\"pm-p\">Over two years my main job was audio: I brought <strong>Wwise</strong> into the project and built most of the game's sound. I also worked on <strong>gameplay features</strong>, <strong>multiplayer and platform</strong> work, <strong>cosmetics</strong> and <strong>hardware support</strong>.</p>\n<h2 class=\"pm-h2\">Key Areas</h2>\n<h3 class=\"pm-h3\">Audio Architecture &amp; Wwise</h3>\n<p class=\"pm-p\">Integrated Wwise from scratch and built the audio pipeline around it. Gun sounds are set up as ScriptableObject collections and sent over RPCs straight to GameObjects. I also built a centralised AkGameObj update system that made per-frame audio cost about <strong>3× cheaper</strong>, and kept sound banks off the dedicated servers. I wrote in-house tools too: an in-game Wwise debug spawner, an AkAmbient placer, and a Wwise ID generator ported from Python to C#.</p>\n<h3 class=\"pm-h3\">Sound Design &amp; Implementation</h3>\n<p class=\"pm-p\">Implemented audio for almost every part of the game: tanks, APCs, AA tanks, helicopters, quads and boats (including first- and third-person perspectives), weapons, reloads, explosions, bullet whizzes and surface-based impacts and footsteps. I also did room tones and ambiences for each map, commander and soldier voicelines, a radio effect option, a sound settings menu, and UI, progression and end-of-game music.</p>\n<h3 class=\"pm-h3\">Gameplay Features</h3>\n<p class=\"pm-p\">Built the <strong>zipline gadget</strong> (spawning, grabbing, destroying), <strong>claymores &amp; mines</strong>, the <strong>motion sensor</strong> and the <strong>combat bow</strong> (string-pull haptics and left-handed support included). I also made the expanded sniper <strong>hold-breath</strong> mechanic, explosion and vehicle-impact camera shake, and the rush bomb. Early on I worked on server-authoritative ECS movement: jumping momentum, stamina sprinting, sliding and hand-based movement.</p>\n<h3 class=\"pm-h3\">Multiplayer &amp; Platform</h3>\n<p class=\"pm-p\">Built <strong>Quickplay</strong> with ping-based region cutoffs, rotating maps, idle kicking, in-combat spawn prevention and server-side hit validation. I ported Breachers' <strong>Voice Patrol</strong> moderation to Forefront's game servers. Platform work included the Pico SDK upgrades, a Pico sign-in fix after the ByteDance backend migration, platform achievements, and Steam &amp; Linux server builds.</p>\n<h3 class=\"pm-h3\">Cosmetics &amp; Live Content</h3>\n<p class=\"pm-p\">Built the <strong>weapon pattern system</strong>: a pattern editor, a dynamic weapon skin shader, a cosmetic manager and import tools. I also added weapon charms, a cosmetic inventory viewer, the horn DLC and support for supporter-pack content.</p>\n<h3 class=\"pm-h3\">Haptics &amp; Hardware</h3>\n<p class=\"pm-p\">Did a full haptics pass across weapons, gadgets and vehicles. I integrated the <strong>bHaptics</strong> vest (also on PS5) and the <strong>Virtuix Omni One</strong> treadmill, both hooked into the game's movement and events.</p>\n<h3 class=\"pm-h3\">Performance &amp; Stability</h3>\n<p class=\"pm-p\">Moved the effect pool onto the Job System, sped up the pose-grabbable system, limited SFX RPC traffic, and fixed a long list of null-refs, crashes and sync issues found in playtests.</p>",
+    "links": [
+      {
+        "ico": "fa-brands fa-youtube",
+        "label": "Trailer",
+        "url": "https://www.youtube.com/watch?v=M11IZk0RmaQ"
+      },
+      {
+        "ico": "fa-brands fa-steam",
+        "label": "Steam",
+        "url": "https://store.steampowered.com/app/2981220/Forefront/"
+      },
+      {
+        "ico": "fa-solid fa-arrow-up-right-from-square",
+        "label": "Meta Store",
+        "url": "https://www.meta.com/experiences/forefront/28816918137899319"
+      }
+    ]
+  },
   "breachers": {
     "varName": "breachers",
     "category": "game",
@@ -10,7 +76,7 @@
     "name": "Breachers VR",
     "meta": {
       "icon": "fa-solid fa-briefcase",
-      "text": "Triangle Factory · 2022–now"
+      "text": "Triangle Factory · 2022–2024"
     },
     "desc": "One of the most popular VR shooters on Meta Quest (2023). Contributed to audio systems, gameplay mechanics, and server stability using Unity &amp; Wwise.",
     "tags": [
@@ -34,6 +100,7 @@
       }
     ],
     "title": "Breachers VR",
+    "videosTitle": "Trailers",
     "videos": [
       {
         "id": "A1ksWrOgdFI",
