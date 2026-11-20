@@ -344,7 +344,11 @@ function initScrollRail() {
   const docTop = el => { let y = 0; for (; el; el = el.offsetParent) y += el.offsetTop; return y; };
   function measure() {
     rail.style.top = `${header ? header.getBoundingClientRect().height : 0}px`;
-    if (tl) { ext = RD.map((d, i) => { const t = docTop(d.el); return [t, t + d.el.offsetHeight, t]; }); pts = [[0, RD[0].e]]; RD.forEach((d, i) => pts.push([ext[i][0], d.e], [ext[i][1], d.s])); pts.push([root.scrollHeight, RD[RD.length - 1].s]); }
+    if (tl) {
+      ext = RD.map(d => { const t = docTop(d.el); return [t, t + d.el.offsetHeight, t]; });
+      // Months live on the page itself: each role's article spans its months, so the hero above the first role stays empty
+      pts = RD.flatMap((d, i) => [[ext[i][0], d.e], [ext[i][1], d.s]]);
+    }
     else {
       const hs = [...document.querySelectorAll('main h2')].filter(h => h.offsetParent).slice(0, 24);
       secs = hs.map(h => ({ y: docTop(h), n: h.textContent.replace(/\s+/g, ' ').trim() }));
@@ -352,9 +356,22 @@ function initScrollRail() {
     }
     dY = T.map(t => tl ? rOf(t.m) : t.m / 100 * root.scrollHeight); st.key = '';
   }
-  function monthAt(r) { for (let i = 1; i < pts.length; i++) if (r <= pts[i][0]) { const [r0, m0] = pts[i - 1], [r1, m1] = pts[i]; return r1 > r0 ? lerp(m0, m1, (r - r0) / (r1 - r0)) : m1; } return pts[pts.length - 1][1]; }
-  function rOf(m) { for (let i = 1; i < pts.length; i++) { const [r0, m0] = pts[i - 1], [r1, m1] = pts[i]; if (m <= m0 && m >= m1) return m0 === m1 ? r0 : lerp(r0, r1, (m0 - m) / (m0 - m1)); } return m > pts[0][1] ? 0 : root.scrollHeight; }
-  const top0 = () => parseFloat(rail.style.top) || 0, sForR = r => Math.max(0, (r - (tl ? top0() : 0)) / (1 + (innerHeight - (tl ? top0() : 0)) / maxS())), target = f => tl ? sForR(rOf(lerp(NOW, LO, f))) : f * maxS();
+  function monthAt(r) {
+    if (!pts.length || r <= pts[0][0]) return pts[0]?.[1] ?? NOW;
+    for (let i = 1; i < pts.length; i++) if (r <= pts[i][0]) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; return x1 > x0 ? lerp(y0, y1, (r - x0) / (x1 - x0)) : y1; }
+    return pts[pts.length - 1][1];
+  }
+  function rOf(m) {
+    if (!pts.length) return 0; if (m >= pts[0][1]) return pts[0][0];
+    for (let i = 1; i < pts.length; i++) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; if (m <= y0 && m >= y1) return y0 === y1 ? x0 : lerp(x0, x1, (y0 - m) / (y0 - y1)); }
+    return pts[pts.length - 1][0];
+  }
+  const top0 = () => parseFloat(rail.style.top) || 0;
+  // Hovered view = zoomed page map. Content is drawn at scale z (taller than the rail on long pages) and slides up by
+  // (H - span) * p, while the window glides down the rail: two speeds -> parallax, and the window keeps one fixed size.
+  const geo = (sp = span(), vh = innerHeight, dh = root.scrollHeight) => { const z = Math.max(sp / dh, Math.min(.45, 2.6 * sp / dh, .5 * sp / vh)), hT = top0(); return { z, hT, bh: (vh - hT) * z, b0: PAD + hT * z, rate: (sp - vh * z) / maxS() }; };
+  // Scroll position that puts the window's centre at rail y
+  const sAtBand = y => { const g = geo(); return clamp((y - g.bh / 2 - g.b0) / g.rate, 0, maxS()); };
   function roll(str) {
     if (str === st.txt) return; st.txt = str;
     const pat = str.replace(/\d/g, '0');
@@ -362,53 +379,68 @@ function initScrollRail() {
     const cols = read.querySelectorAll('.rd > span'); let k = 0;
     [...str].forEach(c => { if (/\d/.test(c)) cols[k++].style.transform = `translateY(-${c}em)`; });
   }
-  function label(f, gy) {
-    if (!tl) { const sec = secs.find((x, i) => Math.abs(secY[i] - gy) < 6); return `› ${sec ? sec.n.slice(0, 34) : `${Math.round(f * 100)}%`}`; }
-    const m = lerp(NOW, LO, f), near = MS.find(x => Math.abs(x.m - m) < 1.5), role = RD.find(d => m <= d.e && m >= d.s);
-    return `› ${f < .012 ? 'NOW' : fmt(m)}${near ? ` · ${near.n}` : role ? ` · ${role.name}` : ''}`;
+  function label(dy, gy) {
+    if (!tl) { const sec = secs.find((x, i) => Math.abs(secY[i] - gy) < 6); return `› ${sec ? sec.n.slice(0, 34) : `${Math.round(clamp(dy / root.scrollHeight) * 100)}%`}`; }
+    if (dy < pts[0][0]) return '› INTRO';
+    const m = monthAt(dy), near = MS.find(x => Math.abs(x.m - m) < 1.5), role = RD.find(d => m <= d.e && m >= d.s);
+    return `› ${m >= NOW - .5 ? 'NOW' : fmt(m)}${near ? ` · ${near.n}` : role ? ` · ${role.name}` : ''}`;
   }
   let secY = [];
   function frame(now) {
     st.raf = requestAnimationFrame(frame);
-    const dt = Math.min((now - st.last) / 1000, .1) || .016, s = scrollY, vh = innerHeight, dh = root.scrollHeight, p = clamp(s / maxS()), rT = tl ? top0() : 0, r = s + rT + (vh - rT) * p, sp = span(), reduce = rm.matches;
+    const dt = Math.min((now - st.last) / 1000, .1) || .016, s = scrollY, vh = innerHeight, dh = root.scrollHeight, p = clamp(s / maxS()), rT = tl ? top0() : 0, r = s + rT + PAD + (vh - rT - 2 * PAD) * p, sp = span(), reduce = rm.matches;
     st.last = now; st.vel += ((s - st.lastY) / dt - st.vel) * (1 - Math.exp(-6 * dt)); st.lastY = s;
     st.L = reduce ? st.target : Math.abs(st.target - st.L) < 5e-4 ? st.target : st.L + (st.target - st.L) * (1 - Math.exp(-9 * dt));
     const v = reduce ? 0 : clamp(Math.abs(st.vel) / 3000);
-    if (!reduce && Math.abs(st.vel) > 2600 && now > st.glitch) { st.glitch = now + 420; needle.classList.remove('glitch'); void needle.offsetWidth; needle.classList.add('glitch'); }
+    if (!reduce && !glide.on && Math.abs(st.vel) > 2600 && now > st.glitch) { st.glitch = now + 420; needle.classList.remove('glitch'); void needle.offsetWidth; needle.classList.add('glitch'); }
     const key = [s, st.L, v > .002, st.ghost, st.hover, sp, dh, vh].join();
     if (key === st.key) return; st.key = key; rail.style.visibility = dh - vh < 40 ? 'hidden' : '';
-    const L = ease(st.L), cm = tl ? monthAt(r) : p * 100, nY = tl ? clamp(lerp(r - s - rT, PAD + fOf(cm) * sp, L), PAD, PAD + sp) : PAD + p * sp, drift = nY - vh * p, Y = (dy, f) => lerp(dy - s - (tl ? rT : -drift), PAD + f * sp, L), gy = st.ghost;
+    const G = geo(sp, vh, dh), off = (dh * G.z - sp) * p, M = dy => PAD + dy * G.z - off; st.off = off; st.z = G.z;
+    const L = ease(st.L), cm = tl ? monthAt(r) : p * 100, nC = PAD + p * sp, drift = nC - vh * p, Y = dy => lerp(dy - s - (tl ? rT : -drift), M(dy), L), nY = lerp(nC, M(r), L), gy = st.ghost;
     // Dock-style magnifier: ticks swell around the pointer on top of the scroll-speed stretch
     const mag = y => gy === null ? 0 : Math.max(0, 1 - Math.abs(y - gy) / 54) ** 2;
     T.forEach((t, i) => {
-      const y = Y(dY[i], t.f), k = 1, d = Math.abs(dY[i] - r), w = d < 180 ? v * (1 - d / 180) ** 2 : 0, g = mag(y);
+      const y = Y(dY[i]), k = 1, d = Math.abs(dY[i] - r), w = d < 180 ? v * (1 - d / 180) ** 2 : 0, g = mag(y);
       rows[i].style.transform = `translate3d(0,${y.toFixed(1)}px,0)`;
       lines[i].style.transform = `scaleX(${(k * (1 + .6 * w + 1.3 * g)).toFixed(3)})`; lines[i].style.opacity = (k * Math.min(1, t.a + .6 * w + .7 * g)).toFixed(3);
       if (labs[i]) { labs[i].style.opacity = (k * (.5 + .5 * g)).toFixed(3); labs[i].style.transform = `translate3d(${(-7 * g).toFixed(1)}px,-50%,0)`; }
     });
-    RD.forEach((d, i) => { const a = Y(ext[i][2], fOf(d.e)), b = Y(ext[i][1], fOf(d.s)); roleEls[i].style.transform = `translate3d(0,${a}px,0)`; roleEls[i].style.height = `${Math.max(0, b - a)}px`; roleEls[i].classList.toggle('on', cm <= d.e + .5 && cm >= d.s - .5 && !RD.slice(0, i).some(o => cm <= o.e + .5 && cm >= o.s - .5)); });
-    MS.forEach((x, i) => { const y = Y(rOf(x.m), fOf(x.m)); msEls[i].style.transform = `translate3d(0,${y}px,0) rotate(45deg) scale(${1 + mag(y)})`; msEls[i].classList.toggle('past', cm >= x.m); });
-    secY = secs.map(x => Y(x.y, x.y / dh)); secEls.forEach((el, i) => { el.style.transform = `translate3d(0,${secY[i]}px,0) scale(${1 + .8 * mag(secY[i])})`; el.classList.toggle('past', r >= secs[i].y); });
-    const bt = tl ? PAD + fOf(monthAt(s + rT)) * sp : PAD + s / dh * sp, bb = tl ? PAD + fOf(monthAt(s + vh)) * sp : bt + vh / dh * sp;
-    band.style.transform = `translate3d(0,${bt}px,0)`; band.style.height = `${Math.max(2, bb - bt)}px`; band.style.opacity = L.toFixed(3);
+    RD.forEach((d, i) => { const a = Y(ext[i][2]), b = Y(ext[i][1]); roleEls[i].style.transform = `translate3d(0,${a}px,0)`; roleEls[i].style.height = `${Math.max(0, b - a)}px`; roleEls[i].classList.toggle('on', cm <= d.e + .5 && cm >= d.s - .5 && !RD.slice(0, i).some(o => cm <= o.e + .5 && cm >= o.s - .5)); });
+    MS.forEach((x, i) => { const y = Y(rOf(x.m)); msEls[i].style.transform = `translate3d(0,${y}px,0) rotate(45deg) scale(${1 + mag(y)})`; msEls[i].classList.toggle('past', cm >= x.m); });
+    secY = secs.map(x => Y(x.y)); secEls.forEach((el, i) => { el.style.transform = `translate3d(0,${secY[i]}px,0) scale(${1 + .8 * mag(secY[i])})`; el.classList.toggle('past', r >= secs[i].y); });
+    band.style.transform = `translate3d(0,${M(s + G.hT).toFixed(1)}px,0)`; band.style.height = `${Math.max(2, G.bh).toFixed(1)}px`; band.style.opacity = L.toFixed(3);
     fill.style.height = `${nY}px`; needle.style.transform = `translate3d(0,${nY}px,0)`; needle.style.opacity = tl ? 1 : clamp(p / .03).toFixed(3);
     needle.classList.toggle('above', nY > rail.clientHeight - 24);
     roll(tl ? fmtS(cm) : two(Math.round(p * 100)));
     rail.setAttribute('aria-valuenow', Math.round(p * 100)); if (tl) rail.setAttribute('aria-valuetext', fmt(cm));
     if (gy === null) { ghost.style.opacity = 0; tip.style.opacity = 0; }
-    else { const y = clamp(gy, PAD, PAD + sp); ghost.style.transform = `translate3d(0,${y}px,0)`; ghost.style.opacity = .9; tip.style.transform = `translate3d(0,${y}px,0) translateY(-50%)`; tip.textContent = label((y - PAD) / sp, y); tip.style.opacity = 1; }
+    else { const y = clamp(gy, PAD, PAD + sp); ghost.style.transform = `translate3d(0,${y}px,0)`; ghost.style.opacity = .9; tip.style.transform = `translate3d(0,${y}px,0) translateY(-50%)`; tip.textContent = label((y - PAD + st.off) / st.z, y); tip.style.opacity = 1; }
   }
+  // Eased programmatic scroll: long, soft glide instead of the native smooth-scroll lurch; any user input cancels it
+  const glide = { raf: 0, on: false };
+  const stopGlide = () => { cancelAnimationFrame(glide.raf); glide.on = false; };
+  function glideTo(top) {
+    stopGlide(); top = clamp(Math.round(top), 0, maxS());
+    const from = scrollY, dist = top - from;
+    if (Math.abs(dist) < 1) return;
+    if (rm.matches) { scrollTo({ top, behavior: 'instant' }); return; }
+    const dur = clamp(380 + Math.sqrt(Math.abs(dist)) * 16, 420, 1100), t0 = performance.now(), io = t => t < .5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
+    glide.on = true;
+    const step = now => { const t = clamp((now - t0) / dur); scrollTo({ top: from + dist * io(t), behavior: 'instant' }); if (t < 1) glide.raf = requestAnimationFrame(step); else glide.on = false; };
+    glide.raf = requestAnimationFrame(step);
+  }
+  ['wheel', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, () => glide.on && stopGlide(), { passive: true }));
   const intent = on => { clearTimeout(st.timer); st.timer = setTimeout(() => { st.hover = +on; st.target = +on; st.key = ''; }, 150); };
-  const fAt = y => clamp((y - rail.getBoundingClientRect().top - PAD) / span());
+  const railY = cy => cy - rail.getBoundingClientRect().top;
   rail.addEventListener('pointerenter', () => intent(true));
   rail.addEventListener('pointerleave', () => { st.ghost = null; if (!st.drag) intent(false); });
-  rail.addEventListener('pointermove', e => { st.ghost = e.clientY - rail.getBoundingClientRect().top; if (!st.drag) return; st.moved = Math.max(st.moved, Math.abs(e.clientY - st.startY)); if (st.moved > 4) scrollTo({ top: target(fAt(e.clientY)), behavior: 'instant' }); });
-  rail.addEventListener('pointerdown', e => { if (e.button) return; e.preventDefault(); Object.assign(st, { drag: true, startY: e.clientY, moved: 0, down: e.target, hover: 1 }); rail.setPointerCapture(e.pointerId); st.target = 1; });
+  rail.addEventListener('pointermove', e => { st.ghost = e.clientY - rail.getBoundingClientRect().top; if (!st.drag) return; st.moved = Math.max(st.moved, Math.abs(e.clientY - st.startY)); if (st.moved > 4) stopGlide(), scrollTo({ top: sAtBand(railY(e.clientY) - st.grab), behavior: 'instant' }); });
+  rail.addEventListener('pointerdown', e => { if (e.button) return; e.preventDefault(); const g = geo(), bt = g.b0 + scrollY * g.rate, y = railY(e.clientY); Object.assign(st, { drag: true, startY: e.clientY, moved: 0, down: e.target, hover: 1, grab: y >= bt && y <= bt + g.bh ? y - (bt + g.bh / 2) : 0 }); rail.setPointerCapture(e.pointerId); st.target = 1; });
   const up = e => {
     if (!st.drag) return; st.drag = false;
     const role = st.down?.closest('.rail-role'), b = rail.getBoundingClientRect(), inside = e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom;
     const hTop = (header?.offsetHeight || 0) + 24, gy = e.clientY - b.top, sec = !tl && secs.find((x, i) => Math.abs(secY[i] - gy) < 6);
-    if (st.moved <= 4) scrollTo({ top: role ? docTop(RD[roleEls.indexOf(role)].el) - hTop : sec ? sec.y - hTop : target(fAt(e.clientY)), behavior: 'smooth' });
+    if (st.moved <= 4) glideTo(role ? docTop(RD[roleEls.indexOf(role)].el) - hTop : sec ? sec.y - hTop : sAtBand(gy));
     if (!inside) { st.ghost = null; intent(false); }
   };
   rail.addEventListener('pointerup', up); rail.addEventListener('pointercancel', up);
